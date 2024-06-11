@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // To set device orientation
 import 'package:mental_wellness_app/views/login_screen.dart';
 import './home_page.dart';
 import 'package:get/get.dart';
 // import './persistent_bottom_bar_scaffold.dart';
 //import 'package:mental-wellness-app/persistent_bottom_bar_scaffold.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  // Set device orientation to be portrait only
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(MyApp());
+  });
+}
 
 class MyApp extends StatelessWidget {
   @override

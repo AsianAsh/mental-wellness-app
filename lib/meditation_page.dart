@@ -36,7 +36,15 @@ class MeditationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meditation'),
+        title: const Text(
+          'Meditation',
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        automaticallyImplyLeading: false, // Remove the back button
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

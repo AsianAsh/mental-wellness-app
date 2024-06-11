@@ -13,7 +13,7 @@ class RelaxingSoundsScreen extends StatelessWidget {
     ));
 
     return Scaffold(
-      backgroundColor: Colors.indigo[800],
+      // backgroundColor: Colors.indigo[800],
       body: Stack(
         children: [
           // Background image with fixed height
@@ -38,14 +38,14 @@ class RelaxingSoundsScreen extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
+                        const Expanded(
                           flex: 3,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(top: 16.0),
-                                child: const Text(
+                                padding: EdgeInsets.only(top: 16.0),
+                                child: Text(
                                   'Sounds',
                                   style: TextStyle(
                                     color: Colors.white,
@@ -54,8 +54,8 @@ class RelaxingSoundsScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 16),
-                              const Padding(
+                              SizedBox(height: 16),
+                              Padding(
                                 padding: EdgeInsets.only(left: 4.0),
                                 child: Text(
                                   'Relax Sounds',
@@ -66,8 +66,8 @@ class RelaxingSoundsScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 8),
-                              const Padding(
+                              SizedBox(height: 8),
+                              Padding(
                                 padding: EdgeInsets.only(left: 4.0),
                                 child: Text(
                                   'Help for focus, relax or sleep. \nMix sounds together.',
@@ -80,7 +80,7 @@ class RelaxingSoundsScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                             width:
                                 10), // Increased space between text and image
                         Padding(
