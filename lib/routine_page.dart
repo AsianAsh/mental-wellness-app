@@ -10,7 +10,7 @@ class RoutinePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(25.0),
+        padding: const EdgeInsets.all(16),
         child: Column(children: [
           // Daily Task Title + Profile Button
           Row(
@@ -41,52 +41,48 @@ class RoutinePage extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(
-            height: 15,
-          ),
+          // // // Random Words Page Button
+          // Row(children: [
+          //   Expanded(
+          //     child: ElevatedButton(
+          //       onPressed: () {
+          //         Navigator.push(
+          //           context,
+          //           MaterialPageRoute(builder: (context) => RandomWords()),
+          //         );
+          //       },
+          //       child: const Text('Go to Random Words'),
+          //     ),
+          //   ),
+          // ]),
 
-          // Random Words Page Button
-          Row(children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RandomWords()),
-                  );
-                },
-                child: const Text('Go to Random Words'),
-              ),
-            ),
-          ]),
+          // // // Sized Box for space between components
+          // const SizedBox(
+          //   height: 20,
+          // ),
 
-          // Sized Box for space between components
-          const SizedBox(
-            height: 20,
-          ),
-
-          // Search bar
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.blue[900],
-                borderRadius: BorderRadius.circular(15)),
-            padding: const EdgeInsets.all(12),
-            child: const Row(
-              children: [
-                Icon(
-                  Icons.search,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Text('Search',
-                    style: TextStyle(
-                      color: Colors.white,
-                    )),
-              ],
-            ),
-          ),
+          // // Search bar
+          // Container(
+          //   decoration: BoxDecoration(
+          //       color: Colors.blue[900],
+          //       borderRadius: BorderRadius.circular(15)),
+          //   padding: const EdgeInsets.all(12),
+          //   child: const Row(
+          //     children: [
+          //       Icon(
+          //         Icons.search,
+          //         color: Colors.white,
+          //       ),
+          //       SizedBox(
+          //         width: 5,
+          //       ),
+          //       Text('Search',
+          //           style: TextStyle(
+          //             color: Colors.white,
+          //           )),
+          //     ],
+          //   ),
+          // ),
 
           const SizedBox(
             height: 20,
@@ -97,7 +93,7 @@ class RoutinePage extends StatelessWidget {
               children: [
                 RoutineSection(
                   title: 'Morning',
-                  icon: Icons.wb_sunny,
+                  icon: Icons.sunny_snowing,
                   tasks: [
                     TaskCard(
                       icon: Icons.brightness_5,
@@ -117,7 +113,7 @@ class RoutinePage extends StatelessWidget {
                 ),
                 RoutineSection(
                   title: 'Day',
-                  icon: Icons.wb_cloudy,
+                  icon: Icons.sunny,
                   tasks: [
                     TaskCard(
                       icon: Icons.school,
@@ -137,10 +133,10 @@ class RoutinePage extends StatelessWidget {
                 ),
                 RoutineSection(
                   title: 'Evening',
-                  icon: Icons.nightlight_round,
+                  icon: Icons.nights_stay,
                   tasks: [
                     TaskCard(
-                      icon: Icons.bedtime,
+                      icon: Icons.nights_stay,
                       category: 'Sleep Story',
                       title: 'Calm Sleep',
                       description: '5 min story',
@@ -192,7 +188,7 @@ class RoutineSection extends StatelessWidget {
               title,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 24,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -204,24 +200,23 @@ class RoutineSection extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Row(
                       children: [
-                        Column(
-                          children: [
-                            Container(
-                              width: 16,
-                              height: 16,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Container(
-                              width: 2,
-                              height: 80,
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: 8),
+                        // Column(
+                        //   children: [
+                        //     Container(
+                        //       width: 16,
+                        //       height: 16,
+                        //       decoration: BoxDecoration(
+                        //         shape: BoxShape.circle,
+                        //         color: Colors.white,
+                        //       ),
+                        //     ),
+                        //     Container(
+                        //       width: 2,
+                        //       height: 80,
+                        //       color: Colors.white,
+                        //     ),
+                        //   ],
+                        // ),
                         Expanded(child: task),
                       ],
                     ),
@@ -233,7 +228,7 @@ class RoutineSection extends StatelessWidget {
   }
 }
 
-class TaskCard extends StatelessWidget {
+class TaskCard extends StatefulWidget {
   final IconData icon;
   final String category;
   final String title;
@@ -249,58 +244,94 @@ class TaskCard extends StatelessWidget {
   });
 
   @override
+  _TaskCardState createState() => _TaskCardState();
+}
+
+class _TaskCardState extends State<TaskCard> {
+  bool isChecked = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.blue[700],
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Icon(icon, color: Colors.white, size: 40),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      children: [
+        // Circular Checkbox
+        Checkbox(
+          value: isChecked,
+          onChanged: (bool? value) {
+            setState(() {
+              isChecked = value ?? false;
+            });
+          },
+          shape: CircleBorder(), // Make the checkbox circular
+          checkColor: Colors.white,
+          activeColor: Colors.blue, // Checkbox color when checked
+          materialTapTargetSize: MaterialTapTargetSize
+              .shrinkWrap, // Remove extra padding around checkbox
+        ),
+        Expanded(
+          child: Container(
+            // margin: const EdgeInsets.symmetric(vertical: 8.0),
+            padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+            decoration: BoxDecoration(
+              color: Colors.blue[700],
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
               children: [
-                Text(
-                  category,
-                  style: TextStyle(
-                    color: Colors.blue[300],
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(widget.icon, color: Colors.white, size: 22),
+                          const SizedBox(
+                              width:
+                                  8), // Add some spacing between icon and text
+                          Text(
+                            widget.category,
+                            style: TextStyle(
+                              color: Colors.blue[300],
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                          height:
+                              10), // Add some spacing between category row and title
+                      Text(
+                        widget.title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        widget.description,
+                        style: TextStyle(
+                          color: Colors.blue[100],
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  description,
-                  style: TextStyle(
-                    color: Colors.blue[100],
-                    fontSize: 16,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+                  child: Image.asset(
+                    widget.image,
+                    width: 80,
+                    height: 80,
                   ),
                 ),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Image.asset(
-              image,
-              width: 80,
-              height: 80,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
