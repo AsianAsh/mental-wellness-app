@@ -44,78 +44,122 @@ class ProfileScreen extends StatelessWidget {
           padding: const EdgeInsets.all(30),
           child: Column(
             children: [
-              // // Title, back button, dark mode
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     IconButton(
-              //         onPressed: () => Get.back(),
-              //         icon: Icon(Icons.arrow_left)),
-              //     Text('Profile',
-              //         style: Theme.of(context).textTheme.headlineMedium),
-              //     IconButton(
-              //         onPressed: () {},
-              //         icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode))
-              //   ],
-              // ),
-              // const SizedBox(height: 20),
-
-              // Profile Image
-              Stack(
+              Row(
+                // Profile Info
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: const Image(
-                            image: AssetImage('assets/images/gong_yoo.jpg'))),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Colors.indigo[50]),
-                      child: const Icon(
-                        Icons.create_outlined,
-                        color: Colors.black,
-                        size: 20,
+                  // Profile Image
+                  Stack(
+                    children: [
+                      SizedBox(
+                        width: 120,
+                        height: 120,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: const Image(
+                                image:
+                                    AssetImage('assets/images/gong_yoo.jpg'))),
                       ),
-                    ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          width: 35,
+                          height: 35,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: Colors.indigo[50]),
+                          child: const Icon(
+                            Icons.create_outlined,
+                            color: Colors.black,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                      width: 20), // Add spacing between image and text
+                  // Profile Info
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Ash Char',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                      Text('ashchar111@gmail.com',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(color: Colors.white)),
+                      const SizedBox(height: 10),
+
+                      // Level Indicator
+                      Text(
+                        'Lvl 13',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const SizedBox(height: 5),
+
+                      // XP Progress Bar
+                      Stack(
+                        children: [
+                          Container(
+                            width: 150, // Adjust the width as needed
+                            height: 20,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                          Container(
+                            width:
+                                90, // Adjust the width according to the current XP
+                            height: 20,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.blue,
+                            ),
+                          ),
+                          Positioned.fill(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                '450 / 1000 XP',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+
+                      // Row for Edit Profile Icon Button
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.edit, color: Colors.white),
+                            onPressed: () =>
+                                Get.to(() => const UpdateProfileScreen()),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
-              ),
-
-              const SizedBox(height: 10),
-
-              Text('Ash Char',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.bold)),
-
-              Text('ashchar111@gmail.com',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(color: Colors.white)),
-
-              const SizedBox(height: 20),
-
-              /// -- BUTTON
-              SizedBox(
-                width: 200,
-                child: ElevatedButton(
-                  onPressed: () => Get.to(() => const UpdateProfileScreen()),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.indigo[50],
-                      side: BorderSide.none,
-                      shape: const StadiumBorder()),
-                  child: const Text('Edit Profile',
-                      style: TextStyle(color: Colors.black)),
-                ),
               ),
 
               const SizedBox(height: 20),
@@ -129,12 +173,17 @@ class ProfileScreen extends StatelessWidget {
                   textColor: Colors.white,
                   onPress: () {}),
               ProfileMenuWidget(
-                  title: "Billing Details",
+                  title: "Manage Personal Data",
                   icon: Icons.wallet,
                   textColor: Colors.white,
                   onPress: () {}),
               ProfileMenuWidget(
-                  title: "User Management",
+                  title: "Send Feedback",
+                  icon: Icons.manage_accounts,
+                  textColor: Colors.white,
+                  onPress: () {}),
+              ProfileMenuWidget(
+                  title: "Support Resources",
                   icon: Icons.manage_accounts,
                   textColor: Colors.white,
                   onPress: () {}),
@@ -143,7 +192,12 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 10),
 
               ProfileMenuWidget(
-                  title: "Information",
+                  title: "Terms",
+                  icon: Icons.info,
+                  textColor: Colors.white,
+                  onPress: () {}),
+              ProfileMenuWidget(
+                  title: "Privacy Policy",
                   icon: Icons.info,
                   textColor: Colors.white,
                   onPress: () {}),

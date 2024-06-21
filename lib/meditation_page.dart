@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mental_wellness_app/views/breathing_play_screen.dart';
 import 'package:mental_wellness_app/views/meditation_detail_screen.dart';
 
 class MeditationPage extends StatelessWidget {
@@ -32,6 +33,52 @@ class MeditationPage extends StatelessWidget {
     ),
   ];
 
+  // Breathing Exercise Options
+  final List<BreathingExercise> breathingExercises = const [
+    BreathingExercise(
+      title: "Anxiety",
+      duration: "2 min",
+      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
+      audioPath: "",
+    ),
+    BreathingExercise(
+      title: "Anger",
+      duration: "3 min",
+      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
+      audioPath: "",
+    ),
+    BreathingExercise(
+      title: "Irritation",
+      duration: "3 min",
+      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
+      audioPath: "",
+    ),
+    BreathingExercise(
+      title: "Sadness",
+      duration: "3 min",
+      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
+      audioPath: "",
+    ),
+    BreathingExercise(
+      title: "Fear",
+      duration: "3 min",
+      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
+      audioPath: "",
+    ),
+    BreathingExercise(
+      title: "Worry",
+      duration: "4 min",
+      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
+      audioPath: "",
+    ),
+    BreathingExercise(
+      title: "Envy",
+      duration: "3 min",
+      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
+      audioPath: "",
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,51 +97,101 @@ class MeditationPage extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            // Recommended Exercise Section
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              elevation: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'lib/images/google.png', // Replace with your image path
-                      height: 60,
-                      width: 60,
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Recommended Exercise',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            'Try this new yoga routine to improve your flexibility.',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ],
+            // // Recommended Exercise Section
+            // Card(
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(15.0),
+            //   ),
+            //   elevation: 5,
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(15.0),
+            //     child: Row(
+            //       children: [
+            //         Image.asset(
+            //           'lib/images/google.png', // Replace with your image path
+            //           height: 60,
+            //           width: 60,
+            //         ),
+            //         const SizedBox(width: 10),
+            //         Expanded(
+            //           child: Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: [
+            //               const Text(
+            //                 'Recommended Exercise',
+            //                 style: TextStyle(
+            //                   fontSize: 20,
+            //                   fontWeight: FontWeight.bold,
+            //                 ),
+            //               ),
+            //               const SizedBox(height: 5),
+            //               Text(
+            //                 'Try this new yoga routine to improve your flexibility.',
+            //                 style: TextStyle(
+            //                   fontSize: 16,
+            //                   color: Colors.grey[700],
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+
+            // Breathing Exercises Section
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    child: Text(
+                      'What do you want to reduce?',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white70,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 150, // Adjust the height as needed
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: breathingExercises.length,
+                      itemBuilder: (context, index) {
+                        return BreathingExerciseCard(
+                            exercise: breathingExercises[index]);
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
 
-            const SizedBox(height: 10), // Add spacing between sections
+            const SizedBox(height: 20), // Add spacing between sections
 
+            // Meditation Exercise Section
+            // Meditation Exercise Title
+            Align(
+              alignment: Alignment.centerLeft,
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Text(
+                  'Meditation Exercises',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            // Meditation Options Grid
             Expanded(
               child: GridView.builder(
                 padding: const EdgeInsets.all(10),
@@ -306,6 +403,75 @@ class MeditationCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class BreathingExercise {
+  final String title;
+  final String duration;
+  final String imagePath;
+  final String audioPath;
+
+  const BreathingExercise({
+    required this.title,
+    required this.duration,
+    required this.imagePath,
+    required this.audioPath,
+  });
+}
+
+class BreathingExerciseCard extends StatelessWidget {
+  final BreathingExercise exercise;
+
+  const BreathingExerciseCard({super.key, required this.exercise});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      // Go to Selected Breathing Screen
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const BreathingPlayScreen(),
+          ),
+        );
+      },
+      child: Container(
+        width: 110, // Adjust the width as needed
+        margin: const EdgeInsets.symmetric(horizontal: 5.0),
+        decoration: BoxDecoration(
+          color: Colors.indigo[600],
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              exercise.title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            // const SizedBox(height: 5),
+            Text(
+              exercise.duration,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 12,
+              ),
+            ),
+            const SizedBox(height: 5),
+            Image.asset(
+              exercise.imagePath,
+              height: 80,
+            ),
+          ],
+        ),
       ),
     );
   }

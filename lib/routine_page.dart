@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mental_wellness_app/views/mood_tracker_screen.dart';
 import 'package:mental_wellness_app/views/profile_screen.dart';
 import './random_words.dart';
 import 'package:get/get.dart';
@@ -16,13 +17,35 @@ class RoutinePage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Wellness Routine',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  const Text(
+                    'Routine',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.whatshot,
+                        color: Colors.orange,
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        '20',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               IconButton(
                 onPressed: () {
@@ -155,6 +178,14 @@ class RoutinePage extends StatelessWidget {
                       title: 'Mood Tracker',
                       description: 'Track your mood',
                       image: 'assets/images/relaxing/relaxing_sounds_1.png',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MoodTrackerScreen(),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -234,6 +265,7 @@ class TaskCard extends StatefulWidget {
   final String title;
   final String description;
   final String image;
+  final VoidCallback? onTap; // Optional onTap callback
 
   TaskCard({
     required this.icon,
@@ -241,6 +273,7 @@ class TaskCard extends StatefulWidget {
     required this.title,
     required this.description,
     required this.image,
+    this.onTap,
   });
 
   @override
@@ -252,86 +285,89 @@ class _TaskCardState extends State<TaskCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        // Circular Checkbox
-        Checkbox(
-          value: isChecked,
-          onChanged: (bool? value) {
-            setState(() {
-              isChecked = value ?? false;
-            });
-          },
-          shape: CircleBorder(), // Make the checkbox circular
-          checkColor: Colors.white,
-          activeColor: Colors.blue, // Checkbox color when checked
-          materialTapTargetSize: MaterialTapTargetSize
-              .shrinkWrap, // Remove extra padding around checkbox
-        ),
-        Expanded(
-          child: Container(
-            // margin: const EdgeInsets.symmetric(vertical: 8.0),
-            padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-            decoration: BoxDecoration(
-              color: Colors.blue[700],
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(widget.icon, color: Colors.white, size: 22),
-                          const SizedBox(
-                              width:
-                                  8), // Add some spacing between icon and text
-                          Text(
-                            widget.category,
-                            style: TextStyle(
-                              color: Colors.blue[300],
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: widget.onTap, // Handle tap
+      child: Row(
+        children: [
+          // Circular Checkbox
+          Checkbox(
+            value: isChecked,
+            onChanged: (bool? value) {
+              setState(() {
+                isChecked = value ?? false;
+              });
+            },
+            shape: CircleBorder(), // Make the checkbox circular
+            checkColor: Colors.white,
+            activeColor: Colors.indigo[600], // Checkbox color when checked
+            materialTapTargetSize: MaterialTapTargetSize
+                .shrinkWrap, // Remove extra padding around checkbox
+          ),
+          // Task Card
+          Expanded(
+            child: Container(
+              // margin: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+              decoration: BoxDecoration(
+                color: Colors.indigo[600],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(widget.icon, color: Colors.white, size: 22),
+                            const SizedBox(
+                                width: 8), // Add spacing between icon and text
+                            Text(
+                              widget.category,
+                              style: TextStyle(
+                                color: Colors.indigo[100],
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
+                          ],
+                        ),
+                        const SizedBox(
+                            height:
+                                10), // Add some spacing between category row and title
+                        Text(
+                          widget.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
-                      ),
-                      const SizedBox(
-                          height:
-                              10), // Add some spacing between category row and title
-                      Text(
-                        widget.title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      Text(
-                        widget.description,
-                        style: TextStyle(
-                          color: Colors.blue[100],
-                          fontSize: 12,
+                        Text(
+                          widget.description,
+                          style: TextStyle(
+                            color: Colors.blue[100],
+                            fontSize: 12,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
-                  child: Image.asset(
-                    widget.image,
-                    width: 80,
-                    height: 80,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+                    child: Image.asset(
+                      widget.image,
+                      width: 80,
+                      height: 80,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
