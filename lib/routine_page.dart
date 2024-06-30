@@ -50,7 +50,7 @@ class RoutinePage extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   // Navigate to the ProfileScreen
-                  Get.to(const ProfileScreen());
+                  Get.to(ProfileScreen());
                 },
                 icon: const Icon(
                   Icons.person,

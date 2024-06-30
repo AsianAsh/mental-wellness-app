@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "925910089590",
+    "project_id": "zenmate-e5da8",
+    "storage_bucket": "zenmate-e5da8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925910089590:android:b1948568d56aea81138457",
+        "android_client_info": {
+          "package_name": "com.example.mental_wellness_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBD7_Y3thUJ-LNMB47BMEbVOpnnvbyzy4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

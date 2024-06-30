@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mental_wellness_app/util/emote_face.dart';
@@ -8,10 +9,12 @@ import 'routine_page.dart';
 import 'meditation_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
   // final _tab1navigatorKey = GlobalKey<NavigatorState>();
   // final _tab2navigatorKey = GlobalKey<NavigatorState>();
   // final _tab3navigatorKey = GlobalKey<NavigatorState>();
+
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   State<HomePage> createState() => _HomePageState();

@@ -1,14 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // To set device orientation
+import 'package:mental_wellness_app/auth/auth_screen.dart';
+import 'package:mental_wellness_app/auth/login_or_register_screen.dart';
+import 'package:mental_wellness_app/services/firestore.dart';
 import 'package:mental_wellness_app/views/login_screen.dart';
 import './home_page.dart';
 import 'package:get/get.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 // import './persistent_bottom_bar_scaffold.dart';
 //import 'package:mental-wellness-app/persistent_bottom_bar_scaffold.dart';
 
-void main() {
-  // Set device orientation to be portrait only
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Update logged in member's lastActive field when app starts
+  await FirestoreService().updateLastActive();
+  // Set device orientation to be portrait only
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -18,6 +28,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -25,15 +37,6 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.indigo[700],
           scaffoldBackgroundColor:
               Colors.indigo[800], // Default bg color for all screens
-          // textTheme: TextTheme(
-          //   bodyLarge: TextStyle(color: Colors.white),
-          //   bodyMedium: TextStyle(color: Colors.white),
-          //   bodySmall: TextStyle(color: Colors.white),
-          //   headline3: TextStyle(color: Colors.white),
-          //   headline4: TextStyle(color: Colors.white),
-          //   headline5: TextStyle(color: Colors.white),
-          //   headline6: TextStyle(color: Colors.white),
-          // ),
           appBarTheme: AppBarTheme(
             backgroundColor: Colors.indigo[600],
 
@@ -51,8 +54,8 @@ class MyApp extends StatelessWidget {
           //   color: Colors.white, // Default icon color
           // ),
         ),
-        // home: const HomePage());
-        home: LoginScreen());
+        debugShowCheckedModeBanner: false,
+        home: const AuthScreen());
     // routes:
     // {}
     // ;

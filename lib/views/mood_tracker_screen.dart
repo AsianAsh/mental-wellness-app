@@ -3,7 +3,7 @@ import 'package:mental_wellness_app/util/emote_face.dart';
 import 'package:intl/intl.dart';
 
 class MoodTrackerScreen extends StatefulWidget {
-  const MoodTrackerScreen({super.key});
+  const MoodTrackerScreen({Key? key}) : super(key: key);
 
   @override
   _MoodTrackerScreenState createState() => _MoodTrackerScreenState();
@@ -81,16 +81,8 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.blue[900],
       appBar: AppBar(
-        title: const Text(
-          'Mood Tracker',
-          style: TextStyle(
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
+        title: const Text('Mood Tracker'),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -139,7 +131,7 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
                       fontSize: 12,
                     ),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 20),
                   SafeArea(
                     child: Column(
                       children: [
@@ -150,9 +142,7 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
                             // bad
                             Column(
                               children: [
-                                EmoticonFace(
-                                  emoticonFace: '😒',
-                                ),
+                                EmoticonFace(emoticonFace: '😒'),
                                 SizedBox(height: 5),
                                 Text('Bad',
                                     style: TextStyle(
@@ -164,9 +154,7 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
                             // fine
                             Column(
                               children: [
-                                EmoticonFace(
-                                  emoticonFace: '😐',
-                                ),
+                                EmoticonFace(emoticonFace: '😐'),
                                 SizedBox(height: 5),
                                 Text('Fine',
                                     style: TextStyle(
@@ -178,9 +166,7 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
                             // good
                             Column(
                               children: [
-                                EmoticonFace(
-                                  emoticonFace: '😀',
-                                ),
+                                EmoticonFace(emoticonFace: '😀'),
                                 SizedBox(height: 5),
                                 Text('Good',
                                     style: TextStyle(
@@ -192,90 +178,42 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
                             // excellent
                             Column(
                               children: [
-                                EmoticonFace(
-                                  emoticonFace: '😎',
-                                ),
+                                EmoticonFace(emoticonFace: '😎'),
                                 SizedBox(height: 5),
-                                Text(
-                                  'Fantastic',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
+                                Text('Fantastic',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    )),
                               ],
                             ),
                           ],
                         ),
-
-                        SizedBox(height: 12),
-
-                        //Add Note Button
-                        isAddingNote
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    DateFormat.yMMMMd().format(DateTime.now()),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  TextField(
-                                    controller: _noteController,
-                                    decoration: InputDecoration(
-                                      hintText:
-                                          'Write here your thoughts and emotions',
-                                      hintStyle:
-                                          TextStyle(color: Colors.white70),
-                                      filled: true,
-                                      fillColor: Colors.indigo[400],
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                      suffixIcon: IconButton(
-                                        icon: Icon(Icons.add,
-                                            color: Colors.white),
-                                        onPressed: () {
-                                          // Handle note submission
-                                        },
-                                      ),
-                                    ),
-                                    style: TextStyle(color: Colors.white),
-                                    maxLines: 3,
-                                  ),
-                                ],
-                              )
-                            : Align(
-                                alignment: Alignment.center,
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      _showAddNoteBottomSheet(context);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            16), // Adjust the radius as needed
-                                      ),
-                                    ),
-                                    child: Text(isNoteFilled
-                                        ? 'Edit Note'
-                                        : 'Add Note'),
-                                  ),
-                                ),
-                              )
                       ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _showAddNoteBottomSheet(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                16), // Adjust the radius as needed
+                          ),
+                        ),
+                        child: Text(isNoteFilled ? 'Edit Note' : 'Add Note'),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-
+            // Tracker History Card
             SizedBox(height: 20),
 
             // Tracker History Card
