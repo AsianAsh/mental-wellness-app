@@ -23,26 +23,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  // Validation function
-  bool validateNameInputs() {
-    if (firstNameController.text.trim().isEmpty) {
-      displayErrorMessage("First name cannot be empty", context);
-      return false;
-    }
-    if (lastNameController.text.trim().isEmpty) {
-      displayErrorMessage("Last name cannot be empty", context);
-      return false;
-    }
-    if (firstNameController.text.length > 50) {
-      displayErrorMessage("First name cannot exceed 50 characters", context);
-      return false;
-    }
-    if (lastNameController.text.length > 50) {
-      displayErrorMessage("Last name cannot exceed 50 characters", context);
-      return false;
-    }
-    return true;
-  }
+  // // Validation function
+  // Moved to helpers to be reusable for both register and update profile.
+  // bool validateNameInputs() {
+  //   if (firstNameController.text.trim().isEmpty) {
+  //     displayErrorMessage("First name cannot be empty", context);
+  //     return false;
+  //   }
+  //   if (lastNameController.text.trim().isEmpty) {
+  //     displayErrorMessage("Last name cannot be empty", context);
+  //     return false;
+  //   }
+  //   if (firstNameController.text.length > 50) {
+  //     displayErrorMessage("First name cannot exceed 50 characters", context);
+  //     return false;
+  //   }
+  //   if (lastNameController.text.length > 50) {
+  //     displayErrorMessage("Last name cannot exceed 50 characters", context);
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
   String capitalize(String name) {
     return name.split(' ').map((word) {
@@ -87,6 +88,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // if (!validateNameInputs()) {
     //   return;
     // }
+    if (!validateNameFields(
+        firstNameController.text, lastNameController.text, context)) {
+      return;
+    }
 
     // show loading circle
     showDialog(

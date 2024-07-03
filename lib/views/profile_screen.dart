@@ -12,20 +12,30 @@ import 'package:mental_wellness_app/views/rewards_screen.dart';
 import 'package:mental_wellness_app/views/terms_screen.dart';
 import 'package:mental_wellness_app/views/update_profile_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  // Changed to StatefulWidget
   ProfileScreen({Key? key}) : super(key: key);
 
-  // // current logged in user
-  // final User? currentUser = FirebaseAuth.instance.currentUser;
-  final FirestoreService _firestoreService = FirestoreService();
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
 
-  // // future to fetch user details
-  // Future<DocumentSnapshot<Map<String, dynamic>>> getUserDetails() async {
-  //   return await FirebaseFirestore.instance
-  //       .collection("Members")
-  //       .doc(currentUser!.uid)
-  //       .get();
-  // }
+class _ProfileScreenState extends State<ProfileScreen> {
+  final FirestoreService _firestoreService = FirestoreService();
+  late Future<DocumentSnapshot<Map<String, dynamic>>>
+      _userDetailsFuture; // Added
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData(); // Added
+  }
+
+  void _loadUserData() {
+    setState(() {
+      _userDetailsFuture = _firestoreService.getMemberDetails(); // Added
+    });
+  }
 
   void logout(BuildContext context) {
     FirebaseAuth.instance.signOut();
@@ -49,15 +59,13 @@ class ProfileScreen extends StatelessWidget {
               iconSize: 25.0,
               icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode)),
           Container(
-            // width: 38.0, // Adjust the width as needed
-            // height: 38.0, // Adjust the height as needed
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.indigo[50]?.withOpacity(0.1),
             ),
             child: IconButton(
               onPressed: () => Get.back(),
-              iconSize: 28.0, // Adjust the icon size as needed
+              iconSize: 28.0,
               icon: const Icon(Icons.close),
             ),
           ),
@@ -67,14 +75,12 @@ class ProfileScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-          future: _firestoreService.getMemberDetails(), //current logged in user
+          future: _userDetailsFuture, // Modified to use _userDetailsFuture
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-
-              // error
             } else if (snapshot.hasError) {
               return Center(
                 child: Text('Error: ${snapshot.error}'),
@@ -91,7 +97,6 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Row(
-                      // Profile Info
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Profile Image
@@ -121,8 +126,13 @@ class ProfileScreen extends StatelessWidget {
                                     color: Colors.black,
                                     size: 20,
                                   ),
-                                  onPressed: () =>
-                                      Get.to(() => const UpdateProfileScreen()),
+                                  onPressed: () async {
+                                    final result = await Get.to(
+                                        () => const UpdateProfileScreen());
+                                    if (result == true) {
+                                      _loadUserData(); // Reload data on return
+                                    }
+                                  },
                                 ),
                               ),
                             ),
@@ -169,7 +179,6 @@ class ProfileScreen extends StatelessWidget {
                                       .bodyMedium
                                       ?.copyWith(color: Colors.white)),
                               const SizedBox(height: 10),
-
                               // Level Indicator
                               Text(
                                 'Lvl ${user?['level'] ?? 1}',
@@ -183,7 +192,6 @@ class ProfileScreen extends StatelessWidget {
                                     ),
                               ),
                               const SizedBox(height: 5),
-
                               // XP Progress Bar
                               Stack(
                                 children: [
@@ -224,7 +232,6 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 20),
                     const Divider(),
                     const SizedBox(height: 10),
@@ -254,11 +261,6 @@ class ProfileScreen extends StatelessWidget {
                           Get.to(() =>
                               const RewardsScreen()); // Navigate to FriendsListPage
                         }),
-                    // ProfileMenuWidget(
-                    //     title: "Settings",
-                    //     icon: Icons.settings,
-                    //     textColor: Colors.white,
-                    //     onPress: () {}),
                     ProfileMenuWidget(
                         title: "Wellness Support",
                         icon: Icons.local_hospital,
@@ -283,10 +285,8 @@ class ProfileScreen extends StatelessWidget {
                             },
                           );
                         }),
-
                     const Divider(),
                     const SizedBox(height: 10),
-
                     ProfileMenuWidget(
                         title: "Personal Data",
                         icon: Icons.person,
@@ -342,7 +342,6 @@ class ProfileScreen extends StatelessWidget {
                           Get.to(() =>
                               const PrivacyPolicyScreen()); // Navigate to FriendsListPage
                         }),
-
                     ProfileMenuWidget(
                         title: "Logout",
                         icon: Icons.logout,
@@ -360,14 +359,8 @@ class ProfileScreen extends StatelessWidget {
                               // Template onPress code
                               // onPressed: () =>
                               //     // AuthenticationRepository.instance.logout(),
-
                               // Navigate to login screen
                               onPressed: () {
-                                // Navigator.pushReplacement(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) => LoginScreen()),
-                                // );
                                 Navigator.pop(context);
                                 // Logout
                                 logout(context);

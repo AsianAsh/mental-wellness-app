@@ -138,7 +138,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
                 if (isSuccess) {
-                  Get.back();
+                  Get.back(result: true); // Pass a result to indicate success
                 }
               },
               child: const Text('OK'),

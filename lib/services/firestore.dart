@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mental_wellness_app/models/breathing_exercise.dart';
+import 'package:mental_wellness_app/models/meditation_exercise.dart';
 
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -77,5 +79,35 @@ class FirestoreService {
     } else {
       throw Exception("Member not logged in");
     }
+  }
+
+  /// Method to fetch all available breathing exercises from Firestore
+  /// data is mapped according to breathing exercise model
+  Future<List<BreathingExercise>> fetchBreathingExercises() async {
+    QuerySnapshot querySnapshot =
+        await _firestore.collection('breathing_exercise').get();
+    return querySnapshot.docs.map((doc) {
+      return BreathingExercise(
+        title: doc['title'],
+        duration: doc['duration'],
+        imagePath: doc['imagePath'],
+        audioPath: doc['audioPath'],
+      );
+    }).toList();
+  }
+
+  /// Method to fetch all available meditation exercises from Firestore
+  /// data is mapped according to meditation exercise model
+  Future<List<MeditationExercise>> fetchMeditationExercises() async {
+    QuerySnapshot querySnapshot =
+        await _firestore.collection('meditation_exercise').get();
+    return querySnapshot.docs.map((doc) {
+      return MeditationExercise(
+        title: doc['title'],
+        author: doc['author'],
+        imagePath: doc['imagePath'],
+        duration: doc['duration'],
+      );
+    }).toList();
   }
 }

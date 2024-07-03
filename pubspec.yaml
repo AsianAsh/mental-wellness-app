@@ -42,6 +42,8 @@ dependencies:
   firebase_auth: ^5.1.1
   cloud_firestore: ^5.0.2
   country_picker: ^2.0.26
+  path_provider: ^2.1.3
+  audioplayers: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -73,7 +75,10 @@ flutter:
     - assets/images/relaxing/relaxing_sounds_4.png
     - assets/images/test1.jpg
     - assets/images/test2.jpg
-    - lib/images/
+    - assets/images/breathing/anger.png
+    - assets/images/breathing/anxiety.png
+    - assets/audio/breathing/anger.mp3
+    - assets/audio/breathing/anxiety.mp3
 
   # To add assets to your application, add an assets section, like this:
   # assets:

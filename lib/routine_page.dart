@@ -1,11 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:mental_wellness_app/views/mood_tracker_screen.dart';
 import 'package:mental_wellness_app/views/profile_screen.dart';
-import './random_words.dart';
 import 'package:get/get.dart';
 
-class RoutinePage extends StatelessWidget {
+class RoutinePage extends StatefulWidget {
   const RoutinePage({Key? key}) : super(key: key);
+
+  @override
+  _RoutinePageState createState() => _RoutinePageState();
+}
+
+class _RoutinePageState extends State<RoutinePage> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _preloadImages();
+  }
+
+  void _preloadImages() {
+    // List of image assets to preload
+    const List<String> imageAssets = [
+      'assets/images/relaxing/relaxing_sounds_1.png',
+    ];
+
+    for (String imagePath in imageAssets) {
+      precacheImage(AssetImage(imagePath), context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,55 +78,8 @@ class RoutinePage extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              // Icon(
-              //   Icons.person,
-              //   color: Colors.white,
-              // ),
             ],
           ),
-
-          // // // Random Words Page Button
-          // Row(children: [
-          //   Expanded(
-          //     child: ElevatedButton(
-          //       onPressed: () {
-          //         Navigator.push(
-          //           context,
-          //           MaterialPageRoute(builder: (context) => RandomWords()),
-          //         );
-          //       },
-          //       child: const Text('Go to Random Words'),
-          //     ),
-          //   ),
-          // ]),
-
-          // // // Sized Box for space between components
-          // const SizedBox(
-          //   height: 20,
-          // ),
-
-          // // Search bar
-          // Container(
-          //   decoration: BoxDecoration(
-          //       color: Colors.blue[900],
-          //       borderRadius: BorderRadius.circular(15)),
-          //   padding: const EdgeInsets.all(12),
-          //   child: const Row(
-          //     children: [
-          //       Icon(
-          //         Icons.search,
-          //         color: Colors.white,
-          //       ),
-          //       SizedBox(
-          //         width: 5,
-          //       ),
-          //       Text('Search',
-          //           style: TextStyle(
-          //             color: Colors.white,
-          //           )),
-          //     ],
-          //   ),
-          // ),
 
           const SizedBox(
             height: 20,
@@ -231,23 +205,6 @@ class RoutineSection extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Row(
                       children: [
-                        // Column(
-                        //   children: [
-                        //     Container(
-                        //       width: 16,
-                        //       height: 16,
-                        //       decoration: BoxDecoration(
-                        //         shape: BoxShape.circle,
-                        //         color: Colors.white,
-                        //       ),
-                        //     ),
-                        //     Container(
-                        //       width: 2,
-                        //       height: 80,
-                        //       color: Colors.white,
-                        //     ),
-                        //   ],
-                        // ),
                         Expanded(child: task),
                       ],
                     ),
@@ -306,7 +263,6 @@ class _TaskCardState extends State<TaskCard> {
           // Task Card
           Expanded(
             child: Container(
-              // margin: const EdgeInsets.symmetric(vertical: 8.0),
               padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
               decoration: BoxDecoration(
                 color: Colors.indigo[600],

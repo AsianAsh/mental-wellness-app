@@ -1,81 +1,70 @@
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mental_wellness_app/models/meditation_exercise.dart';
+// import 'package:mental_wellness_app/models/breathing_list_provider.dart';
 import 'package:mental_wellness_app/views/breathing_play_screen.dart';
 import 'package:mental_wellness_app/views/meditation_detail_screen.dart';
+import 'package:mental_wellness_app/models/breathing_exercise.dart';
+
+import 'package:get/get.dart';
+import 'package:mental_wellness_app/controllers/breathing_exercise_controller.dart';
 
 class MeditationPage extends StatelessWidget {
-  const MeditationPage({super.key});
+  MeditationPage({super.key});
 
-  final List<Meditation> meditations = const [
-    Meditation(
+  final BreathingExerciseController controller =
+      Get.put(BreathingExerciseController());
+
+  // // get breathing playlist provider
+  // late final dynamic playlistProvider;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   // get breathing playlist provider
+  //   playlistProvider = Provider.of<PlaylistProvider>(context, listen: false);
+  // }
+
+  // // got to a breathing exercise
+  // void goToBreathingExercise(int breathingExerciseIndex) {
+  //   // update current exefcise index
+  //   playlistProvider.currentBreathingExerciseIndex = breathingExerciseIndex;
+
+  //   // navigate to breathing exercise screen
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => BreathingPlayScreen(),
+  //     ),
+  //   );
+  // }
+
+  final List<MeditationExercise> meditations = const [
+    MeditationExercise(
       title: "A Woodland Stroll to Sleep",
       author: "Prof. Megan Reitz",
       imagePath: "assets/images/meditation_1.jpg",
       duration: "34 min",
     ),
-    Meditation(
+    MeditationExercise(
       title: "Soften Into Sleep",
       author: "Chibs Okereke",
       imagePath: "assets/images/meditation_1.jpg",
       duration: "30 min",
     ),
-    Meditation(
+    MeditationExercise(
       title: "Falling Back to Sleep With Ease",
       author: "Dr. Eric López, Ph.D.",
       imagePath: "assets/images/meditation_1.jpg",
       duration: "15 min",
     ),
-    Meditation(
+    MeditationExercise(
       title: "Journey to Rest on the Mountaintop",
       author: "Dr. Eric López, Ph.D.",
       imagePath: "assets/images/meditation_1.jpg",
       duration: "30 min",
-    ),
-  ];
-
-  // Breathing Exercise Options
-  final List<BreathingExercise> breathingExercises = const [
-    BreathingExercise(
-      title: "Anxiety",
-      duration: "2 min",
-      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
-      audioPath: "",
-    ),
-    BreathingExercise(
-      title: "Anger",
-      duration: "3 min",
-      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
-      audioPath: "",
-    ),
-    BreathingExercise(
-      title: "Irritation",
-      duration: "3 min",
-      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
-      audioPath: "",
-    ),
-    BreathingExercise(
-      title: "Sadness",
-      duration: "3 min",
-      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
-      audioPath: "",
-    ),
-    BreathingExercise(
-      title: "Fear",
-      duration: "3 min",
-      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
-      audioPath: "",
-    ),
-    BreathingExercise(
-      title: "Worry",
-      duration: "4 min",
-      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
-      audioPath: "",
-    ),
-    BreathingExercise(
-      title: "Envy",
-      duration: "3 min",
-      imagePath: "assets/images/relaxing/relaxing_sounds_1.png",
-      audioPath: "",
     ),
   ];
 
@@ -93,53 +82,17 @@ class MeditationPage extends StatelessWidget {
         ),
         automaticallyImplyLeading: false, // Remove the back button
       ),
-      body: Padding(
+      body:
+          // Consumer<BreathingListProvider>(
+          //   builder: (context, value, child){
+          //     final List<BreathingExercise> playlist = value.playlist;
+          //   },
+          // ),
+
+          Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            // // Recommended Exercise Section
-            // Card(
-            //   shape: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.circular(15.0),
-            //   ),
-            //   elevation: 5,
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(15.0),
-            //     child: Row(
-            //       children: [
-            //         Image.asset(
-            //           'lib/images/google.png', // Replace with your image path
-            //           height: 60,
-            //           width: 60,
-            //         ),
-            //         const SizedBox(width: 10),
-            //         Expanded(
-            //           child: Column(
-            //             crossAxisAlignment: CrossAxisAlignment.start,
-            //             children: [
-            //               const Text(
-            //                 'Recommended Exercise',
-            //                 style: TextStyle(
-            //                   fontSize: 20,
-            //                   fontWeight: FontWeight.bold,
-            //                 ),
-            //               ),
-            //               const SizedBox(height: 5),
-            //               Text(
-            //                 'Try this new yoga routine to improve your flexibility.',
-            //                 style: TextStyle(
-            //                   fontSize: 16,
-            //                   color: Colors.grey[700],
-            //                 ),
-            //               ),
-            //             ],
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-
             // Breathing Exercises Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -158,22 +111,71 @@ class MeditationPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  // StreamBuilder<QuerySnapshot>(
+                  //   stream: FirebaseFirestore.instance
+                  //       .collection('breathing_exercise')
+                  //       .snapshots(),
+                  //   builder: (context, snapshot) {
+                  //     if (!snapshot.hasData) {
+                  //       return const Center(child: CircularProgressIndicator());
+                  //     }
+
+                  //     final exercises = snapshot.data!.docs.map((doc) {
+                  //       return BreathingExercise(
+                  //         title: doc['title'],
+                  //         duration: doc['duration'],
+                  //         imagePath: doc['imagePath'],
+                  //         audioPath: doc['audioPath'],
+                  //       );
+                  //     }).toList();
+
+                  //     return SizedBox(
+                  //       height: 150,
+                  //       child: ListView.builder(
+                  //         scrollDirection: Axis.horizontal,
+                  //         itemCount: exercises.length,
+                  //         itemBuilder: (context, index) {
+                  //           return BreathingExerciseCard(
+                  //             exercise: exercises[index],
+                  //             onTap: () {
+                  //               Navigator.push(
+                  //                 context,
+                  //                 MaterialPageRoute(
+                  //                   builder: (context) => BreathingPlayScreen(
+                  //                     exercise: exercises[index],
+                  //                   ),
+                  //                 ),
+                  //               );
+                  //             },
+                  //           );
+                  //         },
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
+                  // new
                   SizedBox(
                     height: 150, // Adjust the height as needed
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: breathingExercises.length,
-                      itemBuilder: (context, index) {
-                        return BreathingExerciseCard(
-                            exercise: breathingExercises[index]);
-                      },
-                    ),
+                    child: Obx(() {
+                      if (controller.isLoading.value) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else {
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: controller.breathingExercises.length,
+                          itemBuilder: (context, index) {
+                            return BreathingExerciseCard(
+                              exercise: controller.breathingExercises[index],
+                            );
+                          },
+                        );
+                      }
+                    }),
                   ),
                 ],
               ),
             ),
-
-            const SizedBox(height: 20), // Add spacing between sections
+            const SizedBox(height: 20), // Add spacing between sections
 
             // Meditation Exercise Section
             // Meditation Exercise Title
@@ -207,44 +209,6 @@ class MeditationPage extends StatelessWidget {
                 },
               ),
             ),
-
-            // Expanded(
-            //   child: GridView.count(
-            //     crossAxisCount: 2,
-            //     crossAxisSpacing: 10,
-            //     mainAxisSpacing: 10,
-            //     children: const [
-            //       DashboardItem(
-            //         title: 'Spiritual Growth',
-            //         subtitle: 'Ongoing - 2nd Set\n52% remaining',
-            //         isOngoing: true,
-            //         imagePath:
-            //             'lib/images/google.png', // Replace with your image path
-            //       ),
-            //       DashboardItem(
-            //         title: 'Mind Training',
-            //         subtitle: '3 sets - Done\nCompleted 100%',
-            //         isOngoing: false,
-            //         imagePath:
-            //             'lib/images/google.png', // Replace with your image path
-            //       ),
-            //       DashboardItem(
-            //         title: 'Me. Wellbeing',
-            //         subtitle: '3 sets - Done\nCompleted 100%',
-            //         isOngoing: false,
-            //         imagePath:
-            //             'lib/images/google.png', // Replace with your image path
-            //       ),
-            //       DashboardItem(
-            //         title: 'Intro',
-            //         subtitle: '10 minutes - Done\nCompleted 100%',
-            //         isOngoing: false,
-            //         imagePath:
-            //             'lib/images/google.png', // Replace with your image path
-            //       ),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -252,88 +216,23 @@ class MeditationPage extends StatelessWidget {
   }
 }
 
-// class DashboardItem extends StatelessWidget {
+// Replaced by the model file of the name MeditationExercise instead of Meditation
+// class Meditation {
 //   final String title;
-//   final String subtitle;
-//   final bool isOngoing;
+//   final String author;
 //   final String imagePath;
+//   final String duration;
 
-//   const DashboardItem({
-//     super.key,
+//   const Meditation({
 //     required this.title,
-//     required this.subtitle,
-//     required this.isOngoing,
+//     required this.author,
 //     required this.imagePath,
+//     required this.duration,
 //   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(15.0),
-//       ),
-//       elevation: 5,
-//       child: Padding(
-//         padding: const EdgeInsets.all(15.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             if (isOngoing)
-//               Align(
-//                 alignment: Alignment.topRight,
-//                 child: Image.asset(
-//                   imagePath,
-//                   height: 40,
-//                   width: 40,
-//                 ),
-//               ),
-//             Text(
-//               title,
-//               style: TextStyle(
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.bold,
-//               ),
-//             ),
-//             SizedBox(height: 5),
-//             Text(
-//               subtitle,
-//               style: TextStyle(
-//                 fontSize: 16,
-//                 color: Colors.grey[700],
-//               ),
-//             ),
-//             if (!isOngoing)
-//               Align(
-//                 alignment: Alignment.bottomRight,
-//                 child: Image.asset(
-//                   imagePath,
-//                   height: 40,
-//                   width: 40,
-//                 ),
-//               ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
 // }
 
-class Meditation {
-  final String title;
-  final String author;
-  final String imagePath;
-  final String duration;
-
-  const Meditation({
-    required this.title,
-    required this.author,
-    required this.imagePath,
-    required this.duration,
-  });
-}
-
 class MeditationCard extends StatelessWidget {
-  final Meditation meditation;
+  final MeditationExercise meditation;
 
   const MeditationCard({required this.meditation, super.key});
 
@@ -408,34 +307,45 @@ class MeditationCard extends StatelessWidget {
   }
 }
 
-class BreathingExercise {
-  final String title;
-  final String duration;
-  final String imagePath;
-  final String audioPath;
+// class BreathingExercise {
+//   final String title;
+//   final int duration;
+//   final String imagePath;
+//   final String audioPath;
 
-  const BreathingExercise({
-    required this.title,
-    required this.duration,
-    required this.imagePath,
-    required this.audioPath,
-  });
-}
+//   const BreathingExercise({
+//     required this.title,
+//     required this.duration,
+//     required this.imagePath,
+//     required this.audioPath,
+//   });
+
+//   String getDurationText() {
+//     return '${duration ~/ 60} min';
+//   }
+// }
 
 class BreathingExerciseCard extends StatelessWidget {
   final BreathingExercise exercise;
+  // final VoidCallback onTap;
 
-  const BreathingExerciseCard({super.key, required this.exercise});
+  const BreathingExerciseCard(
+      // {required this.exercise, required this.onTap, super.key});
+      //new
+      {required this.exercise,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // Go to Selected Breathing Screen
+      //onTap: onTap,
+      //new
       onTap: () {
+        // Navigate to BreathingPlayScreen with the exercise details
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const BreathingPlayScreen(),
+            builder: (context) => BreathingPlayScreen(exercise: exercise),
           ),
         );
       },
@@ -459,16 +369,20 @@ class BreathingExerciseCard extends StatelessWidget {
             ),
             // const SizedBox(height: 5),
             Text(
-              exercise.duration,
+              exercise.getDurationText(),
               style: const TextStyle(
                 color: Colors.white70,
                 fontSize: 12,
               ),
             ),
-            const SizedBox(height: 5),
-            Image.asset(
-              exercise.imagePath,
-              height: 80,
+            const SizedBox(height: 8),
+            ClipOval(
+              child: Image.asset(
+                exercise.imagePath,
+                height: 80,
+                width: 80,
+                fit: BoxFit.cover,
+              ),
             ),
           ],
         ),
@@ -476,3 +390,144 @@ class BreathingExerciseCard extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:mental_wellness_app/controllers/breathing_exercise_controller.dart';
+// import 'package:mental_wellness_app/models/breathing_exercise.dart';
+// import 'package:mental_wellness_app/views/breathing_play_screen.dart';
+
+// class MeditationPage extends StatelessWidget {
+//   MeditationPage({Key? key}) : super(key: key);
+
+//   final BreathingExerciseController controller =
+//       Get.put(BreathingExerciseController());
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text(
+//           'Meditation',
+//           style: TextStyle(
+//             fontSize: 26,
+//             fontWeight: FontWeight.bold,
+//             color: Colors.white,
+//           ),
+//         ),
+//         automaticallyImplyLeading: false, // Remove the back button
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(8.0),
+//         child: Column(
+//           children: [
+//             // Breathing Exercises Section
+//             Padding(
+//               padding: const EdgeInsets.symmetric(horizontal: 5),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   const Padding(
+//                     padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+//                     child: Text(
+//                       'What do you want to reduce?',
+//                       style: TextStyle(
+//                         fontSize: 20,
+//                         fontWeight: FontWeight.bold,
+//                         color: Colors.white70,
+//                       ),
+//                     ),
+//                   ),
+//                   const SizedBox(height: 10),
+//                   SizedBox(
+//                     height: 150, // Adjust the height as needed
+//                     child: Obx(() {
+//                       if (controller.isLoading.value) {
+//                         return const Center(child: CircularProgressIndicator());
+//                       } else {
+//                         return ListView.builder(
+//                           scrollDirection: Axis.horizontal,
+//                           itemCount: controller.breathingExercises.length,
+//                           itemBuilder: (context, index) {
+//                             return BreathingExerciseCard(
+//                               exercise: controller.breathingExercises[index],
+//                             );
+//                           },
+//                         );
+//                       }
+//                     }),
+//                   ),
+//                 ],
+//               ),
+//             ),
+
+//             const SizedBox(height: 20), // Add spacing between sections
+
+//             // Other Sections...
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class BreathingExerciseCard extends StatelessWidget {
+//   final BreathingExercise exercise;
+
+//   const BreathingExerciseCard({super.key, required this.exercise});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: () {
+//         // Navigate to BreathingPlayScreen with the exercise details
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(
+//             builder: (context) => BreathingPlayScreen(exercise: exercise),
+//           ),
+//         );
+//       },
+//       child: Container(
+//         width: 110, // Adjust the width as needed
+//         margin: const EdgeInsets.symmetric(horizontal: 5.0),
+//         decoration: BoxDecoration(
+//           color: Colors.indigo[600],
+//           borderRadius: BorderRadius.circular(15.0),
+//         ),
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Text(
+//               exercise.title,
+//               style: const TextStyle(
+//                 color: Colors.white,
+//                 fontSize: 16,
+//                 fontWeight: FontWeight.bold,
+//               ),
+//             ),
+//             Text(
+//               exercise.getDurationText(),
+//               style: const TextStyle(
+//                 color: Colors.white70,
+//                 fontSize: 12,
+//               ),
+//             ),
+//             const SizedBox(height: 5),
+//             ClipOval(
+//               child: Image.asset(
+//                 exercise.imagePath,
+//                 height: 80,
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

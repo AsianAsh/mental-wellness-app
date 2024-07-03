@@ -1,9 +1,12 @@
 import 'dart:math';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:mental_wellness_app/models/breathing_exercise.dart';
 
 class BreathingPlayScreen extends StatefulWidget {
-  const BreathingPlayScreen({super.key});
+  final BreathingExercise exercise;
+
+  const BreathingPlayScreen({required this.exercise, super.key});
 
   @override
   _BreathingPlayScreenState createState() => _BreathingPlayScreenState();
@@ -15,35 +18,62 @@ class _BreathingPlayScreenState extends State<BreathingPlayScreen>
   late Animation<double> _sineAnimation;
   bool isPlaying = false; // Track whether the animation is playing
 
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  Duration _currentDuration = Duration.zero;
+  Duration _totalDuration = Duration.zero;
+
   @override
   void initState() {
+    super.initState();
+
+    // Initialize the animation controller and animation
     _sineAnimController =
         AnimationController(vsync: this, duration: Duration(seconds: 1));
-
     _sineAnimation = Tween<double>(begin: 0, end: 2 * pi).animate(
         CurvedAnimation(parent: _sineAnimController, curve: Curves.linear));
 
-    // _sineAnimController.forward();
-    // _sineAnimController.repeat();
+    // Set the total duration from the exercise object
+    _totalDuration = Duration(seconds: widget.exercise.duration);
 
-    super.initState();
+    // Listen to audio player duration and position changes
+    _audioPlayer.onDurationChanged.listen((Duration duration) {
+      setState(() {
+        _totalDuration = duration;
+      });
+    });
+
+    _audioPlayer.onPositionChanged.listen((Duration position) {
+      setState(() {
+        _currentDuration = position;
+      });
+    });
   }
 
   @override
   void dispose() {
     _sineAnimController.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
-  void _togglePlayPause() {
+  void _togglePlayPause() async {
     setState(() {
       if (isPlaying) {
         _sineAnimController.stop();
+        _audioPlayer.pause();
       } else {
         _sineAnimController.repeat();
+        _audioPlayer.play(AssetSource(widget.exercise.audioPath));
       }
       isPlaying = !isPlaying;
     });
+  }
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return '$minutes:$seconds';
   }
 
   @override
@@ -52,12 +82,6 @@ class _BreathingPlayScreenState extends State<BreathingPlayScreen>
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back),
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        // ),
         automaticallyImplyLeading: false, // Remove default back button
         actions: [
           Padding(
@@ -86,7 +110,7 @@ class _BreathingPlayScreenState extends State<BreathingPlayScreen>
               ),
               SizedBox(height: 5),
               Text(
-                '2 MIN',
+                widget.exercise.getDurationText(),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 10,
@@ -96,15 +120,14 @@ class _BreathingPlayScreenState extends State<BreathingPlayScreen>
           ),
           const SizedBox(height: 30),
           // Title
-          const Text(
-            'Anxiety',
-            style: TextStyle(
+          Text(
+            widget.exercise.title,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
-
           const Text(
             'Relax and Breathe deeply',
             style: TextStyle(
@@ -123,24 +146,46 @@ class _BreathingPlayScreenState extends State<BreathingPlayScreen>
               ),
             ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 100),
+          // Audio duration progress
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 43),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // start time
+                Text(_formatDuration(_currentDuration)),
+                // end time
+                Text(_formatDuration(_totalDuration)),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: SliderTheme(
+              data: SliderTheme.of(context).copyWith(
+                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
+              ),
+              child: Slider(
+                min: 0,
+                max: _totalDuration.inSeconds.toDouble(),
+                value: _currentDuration.inSeconds.toDouble(),
+                onChanged: (value) {
+                  setState(() {
+                    _audioPlayer.seek(Duration(seconds: value.toInt()));
+                  });
+                },
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
           // Start button
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  _togglePlayPause();
-                  // setState(() {
-                  //   if (_sineAnimController.isAnimating) {
-                  //     _sineAnimController.stop();
-                  //   } else {
-                  //     _sineAnimController.repeat();
-                  //   }
-                  //   isPlaying = !isPlaying; // Toggle the isPlaying state
-                  // });
-                },
+                onPressed: _togglePlayPause,
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(16), // Add padding for the button
                   backgroundColor: Colors.indigo, // Button color
@@ -160,50 +205,6 @@ class _BreathingPlayScreenState extends State<BreathingPlayScreen>
               ),
             ),
           ),
-          // const SizedBox(height: 30),
-          // // Playback Controls
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     IconButton(
-          //       icon: Icon(Icons.fast_rewind),
-          //       iconSize: 40,
-          //       color: Colors.white,
-          //       onPressed: () {},
-          //     ),
-          //     const SizedBox(width: 30),
-          //     ElevatedButton(
-          //       onPressed: () {
-          //         setState(() {
-          //           if (_sineAnimController.isAnimating) {
-          //             _sineAnimController.stop();
-          //           } else {
-          //             _sineAnimController.repeat();
-          //           }
-          //           isPlaying = !isPlaying; // Toggle the isPlaying state
-          //         });
-          //       },
-          //       style: ElevatedButton.styleFrom(
-          //         shape: CircleBorder(), backgroundColor: Colors.blue,
-          //         padding: EdgeInsets.all(24), // Button color
-          //       ),
-          //       child: Icon(
-          //         _sineAnimController.isAnimating
-          //             ? Icons.pause
-          //             : Icons.play_arrow,
-          //         size: 40,
-          //         color: Colors.white,
-          //       ),
-          //     ),
-          //     const SizedBox(width: 30),
-          //     IconButton(
-          //       icon: Icon(Icons.fast_forward),
-          //       iconSize: 40,
-          //       color: Colors.white,
-          //       onPressed: () {},
-          //     ),
-          //   ],
-          // ),
         ],
       ),
       backgroundColor: Colors.indigo[800],
@@ -242,14 +243,6 @@ class SinePainter extends CustomPainter {
       ..shader = LinearGradient(colors: [
         Colors.white70,
         Colors.white70,
-        // Colors.blue,
-        // Colors.redAccent,
-        // Colors.blue[200]!,
-        // Colors.blue[100]!,
-        // Colors.green[500]!,
-        // Colors.red[50]!,
-        // Colors.blue[100]!,
-        // Colors.blue[200]!,
       ], begin: Alignment.topRight, end: Alignment.bottomLeft)
           .createShader(Rect.fromLTWH(10, 0, size.width, size.height))
       ..strokeWidth = 5

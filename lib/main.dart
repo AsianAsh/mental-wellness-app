@@ -17,7 +17,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // Update logged in member's lastActive field when app starts
-  await FirestoreService().updateLastActive();
+  // await FirestoreService().updateLastActive();
   // Set device orientation to be portrait only
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

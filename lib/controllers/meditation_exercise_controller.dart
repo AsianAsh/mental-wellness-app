@@ -1,0 +1,35 @@
+import 'package:get/get.dart';
+import 'package:mental_wellness_app/models/meditation_exercise.dart';
+import 'package:mental_wellness_app/services/firestore.dart';
+
+class MeditationExerciseController extends GetxController {
+  var meditationExercises = <MeditationExercise>[].obs;
+  var isLoading = true.obs;
+
+  final FirestoreService _firestoreService = FirestoreService();
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchMeditationExercises();
+  }
+
+  void fetchMeditationExercises() async {
+    try {
+      isLoading(true);
+      var exercises = await _firestoreService.fetchMeditationExercises();
+      meditationExercises.assignAll(exercises);
+    } finally {
+      isLoading(false);
+    }
+  }
+}
+
+// Simpler solution
+// class BreathingExerciseController {
+//   final FirestoreService _firestoreService = FirestoreService();
+
+//   Future<List<BreathingExercise>> getBreathingExercises() {
+//     return _firestoreService.getBreathingExercises();
+//   }
+// }
