@@ -18,7 +18,10 @@ class MeditationExerciseController extends GetxController {
     try {
       isLoading(true);
       var exercises = await _firestoreService.fetchMeditationExercises();
+      print('Fetched ${exercises.length} meditation exercises');
       meditationExercises.assignAll(exercises);
+    } catch (e) {
+      print('Error fetching meditation exercises: $e');
     } finally {
       isLoading(false);
     }

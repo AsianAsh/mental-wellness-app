@@ -79,6 +79,8 @@ flutter:
     - assets/images/breathing/anxiety.png
     - assets/audio/breathing/anger.mp3
     - assets/audio/breathing/anxiety.mp3
+    - assets/images/meditation/
+    - assets/audio/meditation/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -101,13 +101,21 @@ class FirestoreService {
   Future<List<MeditationExercise>> fetchMeditationExercises() async {
     QuerySnapshot querySnapshot =
         await _firestore.collection('meditation_exercise').get();
-    return querySnapshot.docs.map((doc) {
-      return MeditationExercise(
-        title: doc['title'],
-        author: doc['author'],
-        imagePath: doc['imagePath'],
-        duration: doc['duration'],
-      );
-    }).toList();
+    List<MeditationExercise> exercises = [];
+    for (var doc in querySnapshot.docs) {
+      try {
+        print('Fetched doc: ${doc.id}');
+        exercises.add(MeditationExercise(
+          title: doc['title'] ?? 'Untitled',
+          description: doc['description'] ?? 'No description',
+          imagePath: doc['imagePath'] ?? 'assets/images/default.jpg',
+          audioPath: doc['audioPath'] ?? '',
+          duration: doc['duration'] ?? '0',
+        ));
+      } catch (e) {
+        print('Error parsing document ${doc.id}: $e');
+      }
+    }
+    return exercises;
   }
 }

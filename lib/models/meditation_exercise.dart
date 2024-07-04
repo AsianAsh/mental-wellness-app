@@ -1,13 +1,19 @@
 class MeditationExercise {
   final String title;
-  final String author;
+  final String description;
   final String imagePath;
-  final String duration;
+  final String audioPath;
+  final int duration;
 
   const MeditationExercise({
     required this.title,
-    required this.author,
+    required this.description,
     required this.imagePath,
+    required this.audioPath,
     required this.duration,
   });
+
+  String getDurationText() {
+    return '${duration ~/ 60} min';
+  }
 }

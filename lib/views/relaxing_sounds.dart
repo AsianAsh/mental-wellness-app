@@ -38,73 +38,67 @@ class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
             child: Column(
               children: [
                 // Top section with title, description, and image
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Expanded(
-                          flex: 3,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 16.0),
-                                child: Text(
-                                  'Sounds',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Expanded(
+                        flex: 3,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 16.0),
+                              child: Text(
+                                'Sounds',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ),
-                              SizedBox(height: 16),
-                              Padding(
-                                padding: EdgeInsets.only(left: 4.0),
-                                child: Text(
-                                  'Relax Sounds',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Padding(
-                                padding: EdgeInsets.only(left: 4.0),
-                                child: Text(
-                                  'Help for focus, relax or sleep. \nMix sounds together.',
-                                  style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                            width:
-                                10), // Increased space between text and image
-                        Padding(
-                          padding: const EdgeInsets.only(top: 25.0),
-                          child: Expanded(
-                            flex: 2,
-                            child: Align(
-                              alignment: Alignment.bottomRight,
-                              child: Image.asset(
-                                'assets/images/relaxing/relaxing_sounds_4.png',
-                                height: 152, // Use original height if needed
-                                fit: BoxFit.contain,
                               ),
                             ),
+                            SizedBox(height: 16),
+                            Padding(
+                              padding: EdgeInsets.only(left: 4.0),
+                              child: Text(
+                                'Relax Sounds',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Padding(
+                              padding: EdgeInsets.only(left: 4.0),
+                              child: Text(
+                                'Help for focus, relax or sleep. \nMix sounds together.',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                          width: 10), // Increased space between text and image
+                      Padding(
+                        padding: const EdgeInsets.only(top: 25.0),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: Image.asset(
+                            'assets/images/relaxing/relaxing_sounds_4.png',
+                            height: 152, // Use original height if needed
+                            fit: BoxFit.contain,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 // Sliders for different sounds
