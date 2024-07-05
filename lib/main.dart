@@ -5,7 +5,9 @@ import 'package:flutter/services.dart'; // To set device orientation
 import 'package:mental_wellness_app/auth/auth_screen.dart';
 import 'package:mental_wellness_app/auth/login_or_register_screen.dart';
 import 'package:mental_wellness_app/services/firestore.dart';
+import 'package:mental_wellness_app/state/audio_player_state.dart';
 import 'package:mental_wellness_app/views/login_screen.dart';
+import 'package:provider/provider.dart';
 import './home_page.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,30 +34,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-        theme: ThemeData(
-          primaryColor: Colors.indigo[700],
-          scaffoldBackgroundColor:
-              Colors.indigo[800], // Default bg color for all screens
-          appBarTheme: AppBarTheme(
-            backgroundColor: Colors.indigo[600],
+    return MultiProvider(
+      // manage state of audio player across different screens
+      providers: [
+        // provides AudioPlayerState instance to the entire application
+        ChangeNotifierProvider(create: (_) => AudioPlayerState()),
+        // other providers here if needed
+      ],
+      child: GetMaterialApp(
+          theme: ThemeData(
+            primaryColor: Colors.indigo[700],
+            scaffoldBackgroundColor:
+                Colors.indigo[800], // Default bg color for all screens
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.indigo[600],
 
-            titleTextStyle:
-                const TextStyle(color: Colors.black, fontSize: 18.0),
-            centerTitle: true, // Centering the title in the AppBar
-            iconTheme: const IconThemeData(
-                color: Colors.white), // Ensures AppBar uses primary color
+              titleTextStyle:
+                  const TextStyle(color: Colors.black, fontSize: 18.0),
+              centerTitle: true, // Centering the title in the AppBar
+              iconTheme: const IconThemeData(
+                  color: Colors.white), // Ensures AppBar uses primary color
+            ),
           ),
-          // textTheme: TextTheme(
-          //   bodyText1: TextStyle(color: Colors.white), // Default text color
-          //   bodyText2: TextStyle(color: Colors.white), // Default text color
-          // ),
-          // iconTheme: IconThemeData(
-          //   color: Colors.white, // Default icon color
-          // ),
-        ),
-        debugShowCheckedModeBanner: false,
-        home: const AuthScreen());
+          debugShowCheckedModeBanner: false,
+          home: const AuthScreen()),
+    );
     // routes:
     // {}
     // ;

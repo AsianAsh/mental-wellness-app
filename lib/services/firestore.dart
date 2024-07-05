@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mental_wellness_app/models/breathing_exercise.dart';
 import 'package:mental_wellness_app/models/meditation_exercise.dart';
+import 'package:mental_wellness_app/models/sleep_music.dart';
+import 'package:mental_wellness_app/models/sleep_story.dart';
 
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -117,5 +119,32 @@ class FirestoreService {
       }
     }
     return exercises;
+  }
+
+  /// Method to fetch all available sleep stories from Firestore
+  Future<List<SleepStory>> fetchSleepStories() async {
+    QuerySnapshot querySnapshot =
+        await _firestore.collection('sleep_story').get();
+    return querySnapshot.docs.map((doc) {
+      return SleepStory(
+        title: doc['title'],
+        imagePath: doc['imagePath'],
+        audioPath: doc['audioPath'],
+        duration: doc['duration'],
+      );
+    }).toList();
+  }
+
+  /// Method to fetch all available sleep music from Firestore
+  Future<List<SleepMusic>> fetchSleepMusic() async {
+    QuerySnapshot querySnapshot =
+        await _firestore.collection('sleep_music').get();
+    return querySnapshot.docs.map((doc) {
+      return SleepMusic(
+        title: doc['title'],
+        audioPath: doc['audioPath'],
+        duration: doc['duration'],
+      );
+    }).toList();
   }
 }

@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mental_wellness_app/state/audio_player_state.dart';
 import 'package:mental_wellness_app/views/relaxing_sounds.dart';
 import 'package:mental_wellness_app/views/sleep_screen.dart';
-import 'routine_page.dart';
-import 'meditation_page.dart';
+import 'package:mental_wellness_app/widgets/persistent_audio_player.dart';
+import 'package:provider/provider.dart';
+import 'views/routine_page.dart';
+import 'views/meditation_page.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -17,10 +20,10 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const RoutinePage(),
+    RoutinePage(),
     MeditationPage(),
     SleepScreen(),
-    const RelaxingSoundsScreen(),
+    RelaxingSoundsScreen(),
   ];
 
   @override
@@ -48,29 +51,80 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed, // Allows more than 3 navbar items
-        currentIndex: _currentIndex,
-        onTap: _onItemTapped,
-        backgroundColor:
-            Colors.indigo[600], // Set the background color to indigo
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Today'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.self_improvement), label: 'Meditation'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.night_shelter), label: 'Sleep Stories'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.music_note_rounded), label: 'Sounds'),
-        ],
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white38,
-      ),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
+    return ChangeNotifierProvider(
+      create: (context) => AudioPlayerState(),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            IndexedStack(
+              index: _currentIndex,
+              children: _pages,
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: PersistentAudioPlayer(),
+            ),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type:
+              BottomNavigationBarType.fixed, // Allows more than 3 navbar items
+          currentIndex: _currentIndex,
+          onTap: _onItemTapped,
+          backgroundColor:
+              Colors.indigo[600], // Set the background color to indigo
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Today'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.self_improvement), label: 'Meditation'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.night_shelter), label: 'Sleep Stories'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.music_note_rounded), label: 'Sounds'),
+          ],
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white38,
+        ),
+        // body: IndexedStack(
+        //   index: _currentIndex,
+        //   children: _pages,
+        // ),
       ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     body: Stack(
+  //       children: [
+  //         _pages[_currentIndex],
+  //         Align(
+  //           alignment: Alignment.bottomCenter,
+  //           child: PersistentAudioPlayer(),
+  //         ),
+  //       ],
+  //     ),
+  //     bottomNavigationBar: BottomNavigationBar(
+  //         currentIndex: _currentIndex,
+  //         onTap: (index) {
+  //           setState(() {
+  //             _currentIndex = index;
+  //           });
+  //         },
+  //         backgroundColor:
+  //             Colors.indigo[600], // Set the background color to indigo
+  //         items: [
+  //           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Today'),
+  //           BottomNavigationBarItem(
+  //               icon: Icon(Icons.self_improvement), label: 'Meditation'),
+  //           BottomNavigationBarItem(
+  //               icon: Icon(Icons.night_shelter), label: 'Sleep Stories'),
+  //           BottomNavigationBarItem(
+  //               icon: Icon(Icons.music_note_rounded), label: 'Sounds'),
+  //         ],
+  //         selectedItemColor: Colors.white,
+  //         unselectedItemColor: Colors.white38),
+  //   );
+  // }
 }

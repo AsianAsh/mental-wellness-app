@@ -44,6 +44,8 @@ dependencies:
   country_picker: ^2.0.26
   path_provider: ^2.1.3
   audioplayers: ^6.0.0
+  provider: ^6.1.2
+  marquee: ^2.2.3
 
 dev_dependencies:
   flutter_test:
@@ -81,6 +83,9 @@ flutter:
     - assets/audio/breathing/anxiety.mp3
     - assets/images/meditation/
     - assets/audio/meditation/
+    - assets/images/sleep_story/
+    - assets/audio/sleep_story/
+    - assets/audio/sleep_music/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
