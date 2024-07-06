@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mental_wellness_app/models/breathing_exercise.dart';
 import 'package:mental_wellness_app/models/meditation_exercise.dart';
+import 'package:mental_wellness_app/models/relaxing_sound.dart';
 import 'package:mental_wellness_app/models/sleep_music.dart';
 import 'package:mental_wellness_app/models/sleep_story.dart';
 
@@ -144,6 +145,18 @@ class FirestoreService {
         title: doc['title'],
         audioPath: doc['audioPath'],
         duration: doc['duration'],
+      );
+    }).toList();
+  }
+
+  /// Method to fetch all available relaxing background noises/sounds from Firestore
+  Future<List<RelaxingSound>> fetchRelaxingSounds() async {
+    QuerySnapshot querySnapshot =
+        await _firestore.collection('relaxing_sound').get();
+    return querySnapshot.docs.map((doc) {
+      return RelaxingSound(
+        title: doc['title'],
+        audioPath: doc['audioPath'],
       );
     }).toList();
   }
