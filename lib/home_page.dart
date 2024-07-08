@@ -9,7 +9,7 @@ import 'views/routine_page.dart';
 import 'views/meditation_page.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  HomePage({super.key});
   final user = FirebaseAuth.instance.currentUser!;
 
   @override

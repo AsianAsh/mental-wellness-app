@@ -257,7 +257,6 @@
 
 // sleep_screen.dart
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mental_wellness_app/controllers/sleep_music_controller.dart';
 import 'package:mental_wellness_app/controllers/sleep_story_controller.dart';
@@ -301,25 +300,7 @@ class SleepScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 8),
-            // SizedBox(
-            //   height: 265,
-            //   // Display a sleep story card widget for every sleep story doc in Firestore
-            //   child: Obx(() {
-            //     if (controller.isLoading.value) {
-            //       return Center(child: CircularProgressIndicator());
-            //     } else {
-            //       return ListView.builder(
-            //         scrollDirection: Axis.horizontal,
-            //         itemCount: controller.sleepStories.length,
-            //         itemBuilder: (context, index) {
-            //           return StoryCard(
-            //             sleepStory: controller.sleepStories[index],
-            //           );
-            //         },
-            //       );
-            //     }
-            //   }),
-            // ),
+            // Display a sleep story card widget for every sleep story doc in Firestore
             SizedBox(
               height: 265, // height for two rows of story cards
               child: Obx(() {
@@ -365,24 +346,6 @@ class SleepScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            // const SizedBox(height: 5),
-            // Expanded(
-            //   child: ListView(
-            //     children: [
-            //       MusicTile(
-            //           // title: 'Sweet sleep',
-            //           // description: 'Music with soft and binaural pads',
-            //           // duration: '15:09',
-            //           ),
-            //       MusicTile(
-            //           // title: 'Ambient sleep',
-            //           // description: 'Gentle bells and flute',
-            //           // duration: '15:22',
-            //           ),
-            //       // more MusicTile widgets here
-            //     ],
-            //   ),
-            // ),
             Expanded(
               child: Obx(() {
                 if (sleepMusicController.isLoading.value) {
@@ -398,7 +361,7 @@ class SleepScreen extends StatelessWidget {
                                   sleepMusicController.sleepMusic[index]),
                           if (index ==
                               sleepMusicController.sleepMusic.length - 1)
-                            SizedBox(
+                            const SizedBox(
                                 height: 45), // Add space before the last item
                         ],
                       );

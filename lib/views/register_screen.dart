@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:mental_wellness_app/helper/helper_functions.dart';
-import 'package:mental_wellness_app/home_page.dart';
+import 'package:mental_wellness_app/services/firestore.dart';
 import 'package:mental_wellness_app/util/login_icon_tile.dart';
 import 'package:mental_wellness_app/util/my_button.dart';
 import 'package:mental_wellness_app/util/my_textfield.dart';
@@ -23,28 +22,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  // // Validation function
-  // Moved to helpers to be reusable for both register and update profile.
-  // bool validateNameInputs() {
-  //   if (firstNameController.text.trim().isEmpty) {
-  //     displayErrorMessage("First name cannot be empty", context);
-  //     return false;
-  //   }
-  //   if (lastNameController.text.trim().isEmpty) {
-  //     displayErrorMessage("Last name cannot be empty", context);
-  //     return false;
-  //   }
-  //   if (firstNameController.text.length > 50) {
-  //     displayErrorMessage("First name cannot exceed 50 characters", context);
-  //     return false;
-  //   }
-  //   if (lastNameController.text.length > 50) {
-  //     displayErrorMessage("Last name cannot exceed 50 characters", context);
-  //     return false;
-  //   }
-  //   return true;
-  // }
-
   String capitalize(String name) {
     return name.split(' ').map((word) {
       if (word.isNotEmpty) {
@@ -54,34 +31,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     }).join(' ');
   }
-
-  // void registerUser() async {
-  //   // loading circle
-  //   showDialog(
-  //     ...
-  //   );
-
-  //   // attempt sign up
-  //   try {
-  //     // check if password and confirm password the same
-  //     ...
-
-  //     // pop loading circle when done signing in
-  //     Navigator.pop(context);
-  //   } on FirebaseAuthException catch (e) {
-  //     // pop loading circle when done signing in
-  //     Navigator.pop(context);
-  //     if (e.code == 'user-not-found') {
-  //       wrongEmailMsg();
-  //     } else if (e.code == 'wrong-password') {
-  //       wrongPasswordMsg();
-  //     } else if (e.code == 'invalid-credential') {
-  //       invalidCredsMsg();
-  //     } else {
-  //       print('An error occurred: ${e.message}');
-  //     }
-  //   }
-  // }
 
   void registerUser() async {
     // // Validate first and last name inputs
@@ -121,6 +70,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         // create user document which acts as user account and add to firestore
         await createUserDocument(userCredential);
+
+        // Update routine after successful registration
+        await FirestoreService().updateDailyRoutine();
 
         // pop loading circle
         if (context.mounted) Navigator.pop(context);
@@ -335,17 +287,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ]),
                 ),
 
-                const SizedBox(height: 20),
+                // const SizedBox(height: 20),
 
-                // google + apple sign in buttons
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SquareTile(imagePath: 'lib/images/google.png'),
-                    SizedBox(width: 25),
-                    SquareTile(imagePath: 'lib/images/apple.png'),
-                  ],
-                ),
+                // // google + apple sign in buttons
+                // const Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     SquareTile(imagePath: 'lib/images/google.png'),
+                //     SizedBox(width: 25),
+                //     SquareTile(imagePath: 'lib/images/apple.png'),
+                //   ],
+                // ),
 
                 const SizedBox(height: 20),
 

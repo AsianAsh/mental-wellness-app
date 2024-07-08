@@ -148,55 +148,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Row(
                                 children: [
                                   Text(
-                                      '${user?['firstName'] ?? ''} ${user?['lastName'] ?? ''}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall
-                                          ?.copyWith(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                          )),
-                                  const SizedBox(width: 8),
-                                  const Icon(
-                                    Icons.whatshot,
-                                    color: Colors.orange,
-                                  ),
-                                  const SizedBox(width: 2),
-                                  Text(
-                                    '${user?['dailyStreak'] ?? 0}', // Daily streak count
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    '${user?['firstName'] ?? ''} ${user?['lastName'] ?? ''}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                        ),
                                   ),
                                 ],
                               ),
-                              Text(user?['email'] ?? '',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(color: Colors.white)),
-                              const SizedBox(height: 10),
-                              // Level Indicator
                               Text(
-                                'Lvl ${user?['level'] ?? 1}',
+                                user?['email'] ?? '',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    ?.copyWith(color: Colors.white),
+                              ),
+                              const SizedBox(height: 10),
+                              // Level Indicator
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Lvl ${user?['level'] ?? 1}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  // const SizedBox(width: 8),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.whatshot,
+                                        color: Colors.orange,
+                                      ),
+                                      const SizedBox(width: 2),
+                                      Text(
+                                        '${user?['dailyStreak'] ?? 0}', // Daily streak count
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 5),
                               // XP Progress Bar
                               Stack(
                                 children: [
                                   Container(
-                                    width: 150, // Adjust the width as needed
+                                    width: 160, // Adjust the width as needed
                                     height: 20,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -463,8 +476,7 @@ class FeedbackForm extends StatelessWidget {
             controller: _feedbackController,
             maxLines: 5,
             decoration: InputDecoration(
-              hintText:
-                  'What should we do to improve the BetterMe: Mental Health app?',
+              hintText: 'What can we do to improve the ZenMate app?',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),

@@ -1,5 +1,7 @@
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:mental_wellness_app/models/breathing_exercise.dart';
 import 'package:mental_wellness_app/models/meditation_exercise.dart';
 import 'package:mental_wellness_app/models/relaxing_sound.dart';
@@ -63,7 +65,7 @@ class FirestoreService {
   /// Add member feedback message to Feedback collection in Firestore DB
   Future<void> addFeedback(String feedback) async {
     if (_currentUser != null) {
-      await _firestore.collection('Feedback').add({
+      await _firestore.collection('feedback').add({
         'memberId': _currentUser.uid,
         'feedback': feedback,
         'createdAt': Timestamp.now(),
@@ -159,5 +161,62 @@ class FirestoreService {
         audioPath: doc['audioPath'],
       );
     }).toList();
+  }
+
+  // Takes current user's daily routine field (has daily tasks) and updates/refreshes it if needed
+  Future<void> updateDailyRoutine() async {
+    if (_currentUser != null) {
+      DocumentReference memberRef =
+          _firestore.collection('Members').doc(_currentUser.uid);
+
+      DocumentSnapshot memberSnapshot = await memberRef.get();
+      Map<String, dynamic> memberData =
+          memberSnapshot.data() as Map<String, dynamic>;
+
+      String todayDate = DateFormat('d MMMM yyyy').format(DateTime.now());
+
+      if (memberData['routine'] == null ||
+          memberData['routine']['date'] != todayDate) {
+        String newBreathingExerciseId =
+            await _getRandomDocumentId('breathing_exercise');
+        String newSleepStoryId = await _getRandomDocumentId('sleep_story');
+
+        Map<String, dynamic> newRoutine = {
+          'date': todayDate,
+          'tasks': [
+            {
+              'category': 'Breathe',
+              'completed': false,
+              'id': newBreathingExerciseId
+            },
+            {
+              'category': 'Sleep Story',
+              'completed': false,
+              'id': newSleepStoryId
+            },
+            {
+              'category': 'Mood Tracker',
+              'completed': false,
+            },
+          ]
+        };
+
+        await memberRef.update({'routine': newRoutine});
+      }
+    } else {
+      throw Exception("User not logged in");
+    }
+  }
+
+  // For selecting random document from collections for tasks in daily routine.
+  // Example: Daily routine is refreshed and this is called to select a
+  //          meditation exercise as the new routine task.
+  Future<String> _getRandomDocumentId(String collectionName) async {
+    QuerySnapshot querySnapshot =
+        await _firestore.collection(collectionName).get();
+    List<DocumentSnapshot> documents = querySnapshot.docs;
+    Random random = Random();
+    int randomIndex = random.nextInt(documents.length);
+    return documents[randomIndex].id;
   }
 }

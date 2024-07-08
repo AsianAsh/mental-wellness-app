@@ -3,12 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // To set device orientation
 import 'package:mental_wellness_app/auth/auth_screen.dart';
-import 'package:mental_wellness_app/auth/login_or_register_screen.dart';
 import 'package:mental_wellness_app/services/firestore.dart';
 import 'package:mental_wellness_app/state/audio_player_state.dart';
-import 'package:mental_wellness_app/views/login_screen.dart';
 import 'package:provider/provider.dart';
-import './home_page.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -24,8 +21,11 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]).then((_) {
+  ]).then((_) async {
     runApp(MyApp());
+    if (FirebaseAuth.instance.currentUser != null) {
+      await FirestoreService().updateDailyRoutine();
+    }
   });
 }
 

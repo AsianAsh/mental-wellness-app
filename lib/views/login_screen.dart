@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:mental_wellness_app/helper/helper_functions.dart';
-import 'package:mental_wellness_app/home_page.dart';
 import 'package:mental_wellness_app/services/firestore.dart';
 import 'package:mental_wellness_app/util/login_icon_tile.dart';
 import 'package:mental_wellness_app/util/my_button.dart';
@@ -44,6 +42,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
       // Update last active field
       await FirestoreService().updateLastActive();
+
+      // Update daily routine after successful login
+      await FirestoreService().updateDailyRoutine();
 
       // // pop loading circle when done signing in
       // if (mounted) {
@@ -209,17 +210,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   ]),
                 ),
 
-                const SizedBox(height: 30),
+                // const SizedBox(height: 30),
 
-                // google + apple sign in buttons
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SquareTile(imagePath: 'lib/images/google.png'),
-                    SizedBox(width: 25),
-                    SquareTile(imagePath: 'lib/images/apple.png'),
-                  ],
-                ),
+                // // google + apple sign in buttons
+                // const Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     SquareTile(imagePath: 'lib/images/google.png'),
+                //     SizedBox(width: 25),
+                //     SquareTile(imagePath: 'lib/images/apple.png'),
+                //   ],
+                // ),
 
                 const SizedBox(height: 30),
 
