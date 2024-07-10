@@ -26,6 +26,15 @@ class MeditationExerciseController extends GetxController {
       isLoading(false);
     }
   }
+
+  Future<MeditationExercise?> getMeditationExerciseById(String id) async {
+    try {
+      return await _firestoreService.getMeditationExerciseById(id);
+    } catch (e) {
+      print('Error fetching meditation exercise: $e');
+      return null;
+    }
+  }
 }
 
 // Simpler solution

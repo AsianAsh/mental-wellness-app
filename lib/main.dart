@@ -22,7 +22,7 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]).then((_) async {
-    runApp(MyApp());
+    runApp(const MyApp());
     if (FirebaseAuth.instance.currentUser != null) {
       await FirestoreService().updateDailyRoutine();
     }

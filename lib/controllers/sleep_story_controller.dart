@@ -24,4 +24,13 @@ class SleepStoryController extends GetxController {
       isLoading(false);
     }
   }
+
+  Future<SleepStory?> getSleepStoryById(String id) async {
+    try {
+      return await _firestoreService.getSleepStoryById(id);
+    } catch (e) {
+      print('Error fetching sleep story: $e');
+      return null;
+    }
+  }
 }

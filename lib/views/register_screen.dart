@@ -72,14 +72,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
         await createUserDocument(userCredential);
 
         // Update routine after successful registration
+        print("Updating routine after registration...");
         await FirestoreService().updateDailyRoutine();
+        print("Routine updated successfully!");
 
         // pop loading circle
-        if (context.mounted) Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
 
         // Further actions after successful registration (e.g., navigate to a new page)
       } on FirebaseAuthException catch (e) {
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
 
         if (e.code == 'weak-password') {
           displayErrorMessage("The password provided is too weak.", context);
@@ -90,7 +92,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           displayErrorMessage("An error occurred: ${e.message}", context);
         }
       } catch (e) {
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
         displayErrorMessage("An error occurred. Please try again.", context);
       }
     }

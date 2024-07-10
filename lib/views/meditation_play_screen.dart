@@ -456,13 +456,13 @@ class _MeditationPlayScreenState extends State<MeditationPlayScreen>
     });
 
     // Preload the audio file and set the total duration
-    _audioPlayer.setSourceUrl(widget.meditation.audioPath).then((_) {
-      _audioPlayer.getDuration().then((duration) {
-        setState(() {
-          _totalDuration = duration!;
-        });
-      });
-    });
+    // _audioPlayer.setSourceUrl(widget.meditation.audioPath).then((_) {
+    //   _audioPlayer.getDuration().then((duration) {
+    //     setState(() {
+    //       _totalDuration = duration!;
+    //     });
+    //   });
+    // });
 
     // _audioPlayer.onPositionChanged.listen((Duration position) {
     //   setState(() {
