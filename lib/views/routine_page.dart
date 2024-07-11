@@ -2378,7 +2378,7 @@ class RoutinePage extends StatefulWidget {
 }
 
 class _RoutinePageState extends State<RoutinePage> {
-  late Future<List<TaskCard>> taskCards;
+  List<TaskCard> taskCards = [];
   final MeditationExerciseController meditationController =
       Get.put(MeditationExerciseController());
   final BreathingExerciseController breathingExerciseController =
@@ -2390,7 +2390,7 @@ class _RoutinePageState extends State<RoutinePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _preloadImages();
-    taskCards = _fetchTasks();
+    _updateTaskCards();
   }
 
   void _preloadImages() {
@@ -2401,6 +2401,13 @@ class _RoutinePageState extends State<RoutinePage> {
     for (String imagePath in imageAssets) {
       precacheImage(AssetImage(imagePath), context);
     }
+  }
+
+  Future<void> _updateTaskCards() async {
+    List<TaskCard> tasks = await _fetchTasks();
+    setState(() {
+      taskCards = tasks;
+    });
   }
 
   Future<List<TaskCard>> _fetchTasks() async {
@@ -2530,13 +2537,14 @@ class _RoutinePageState extends State<RoutinePage> {
                 description: 'Track your mood',
                 image: 'assets/images/relaxing/relaxing_sounds_1.png',
                 isCompleted: isCompletedNotifier,
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const MoodTrackerScreen(),
                     ),
                   );
+                  _updateTaskCards(); // Update task cards when returning from mood tracker screen
                 },
               ));
               break;
@@ -2610,49 +2618,32 @@ class _RoutinePageState extends State<RoutinePage> {
             ),
 
             Expanded(
-              child: FutureBuilder<List<TaskCard>>(
-                future: taskCards,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error loading tasks'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('No tasks available'));
-                  } else {
-                    List<TaskCard> morningTasks = snapshot.data!
+              child: ListView(
+                children: [
+                  RoutineSection(
+                    title: 'Morning',
+                    icon: Icons.sunny_snowing,
+                    tasks: taskCards
                         .where((task) => task.category == 'Breathe')
-                        .toList();
-                    List<TaskCard> dayTasks = snapshot.data!
+                        .toList(),
+                  ),
+                  RoutineSection(
+                    title: 'Day',
+                    icon: Icons.sunny,
+                    tasks: taskCards
                         .where((task) => task.category == 'Meditation')
-                        .toList();
-                    List<TaskCard> eveningTasks = snapshot.data!
+                        .toList(),
+                  ),
+                  RoutineSection(
+                    title: 'Evening',
+                    icon: Icons.nights_stay,
+                    tasks: taskCards
                         .where((task) =>
                             task.category == 'Sleep Story' ||
                             task.category == 'Mood Tracker')
-                        .toList();
-
-                    return ListView(
-                      children: [
-                        RoutineSection(
-                          title: 'Morning',
-                          icon: Icons.sunny_snowing,
-                          tasks: morningTasks,
-                        ),
-                        RoutineSection(
-                          title: 'Day',
-                          icon: Icons.sunny,
-                          tasks: dayTasks,
-                        ),
-                        RoutineSection(
-                          title: 'Evening',
-                          icon: Icons.nights_stay,
-                          tasks: eveningTasks,
-                        ),
-                      ],
-                    );
-                  }
-                },
+                        .toList(),
+                  ),
+                ],
               ),
             ),
           ],
@@ -2667,8 +2658,11 @@ class RoutineSection extends StatelessWidget {
   final IconData icon;
   final List<TaskCard> tasks;
 
-  RoutineSection(
-      {required this.title, required this.icon, required this.tasks});
+  RoutineSection({
+    required this.title,
+    required this.icon,
+    required this.tasks,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -718,4 +718,28 @@ class FirestoreService {
       }
     }
   }
+
+  Future<void> updateMoodTrackerCompletion(bool completed) async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      DocumentReference memberRef =
+          _firestore.collection('Members').doc(currentUser.uid);
+      DocumentSnapshot memberSnapshot = await memberRef.get();
+
+      if (memberSnapshot.exists) {
+        Map<String, dynamic> memberData =
+            memberSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> tasks = memberData['routine']['tasks'];
+
+        for (var task in tasks) {
+          if (task['category'] == 'Mood Tracker') {
+            task['completed'] = completed;
+            break;
+          }
+        }
+
+        await memberRef.update({'routine.tasks': tasks});
+      }
+    }
+  }
 }
