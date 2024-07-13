@@ -337,7 +337,8 @@ class MeditationPage extends StatelessWidget {
                                 await FirestoreService().updateTaskCompletion(
                                     controller.breathingExercises[index].id,
                                     'Breathe',
-                                    true);
+                                    true,
+                                    context);
                               },
                             );
                           },
@@ -389,7 +390,8 @@ class MeditationPage extends StatelessWidget {
                               meditationController
                                   .meditationExercises[index].id,
                               'Meditation',
-                              true);
+                              true,
+                              context);
                         },
                       );
                     },

@@ -297,12 +297,14 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mental_wellness_app/models/breathing_exercise.dart';
 import 'package:mental_wellness_app/models/meditation_exercise.dart';
 import 'package:mental_wellness_app/models/relaxing_sound.dart';
 import 'package:mental_wellness_app/models/sleep_music.dart';
 import 'package:mental_wellness_app/models/sleep_story.dart';
+import 'package:mental_wellness_app/widgets/level_up_dialog.dart';
 
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -375,33 +377,9 @@ class FirestoreService {
     }
   }
 
-  // /// Method to fetch all available breathing exercises from Firestore
-  // Future<List<BreathingExercise>> fetchBreathingExercises() async {
-  //   QuerySnapshot querySnapshot =
-  //       await _firestore.collection('breathing_exercise').get();
-  //   return querySnapshot.docs.map((doc) {
-  //     return BreathingExercise(
-  //       title: doc['title'],
-  //       duration: doc['duration'],
-  //       imagePath: doc['imagePath'],
-  //       audioPath: doc['audioPath'],
-  //     );
-  //   }).toList();
-  // }
-
   // added id field for completion of task verification
   /// Method to fetch all available breathing exercises from Firestore
-  // Future<List<BreathingExercise>> fetchBreathingExercises() async {
-  //   QuerySnapshot querySnapshot =
-  //       await _firestore.collection('breathing_exercise').get();
-  //   return querySnapshot.docs.map((doc) {
-  //     print(doc.id);
-  //     return BreathingExercise.fromMap(
-  //         doc.data() as Map<String, dynamic>, doc.id);
-  //   }).toList();
-  // }
-
-  // Does same thing but better
+  //Does same thing but better
   Future<List<BreathingExercise>> fetchBreathingExercises() async {
     try {
       QuerySnapshot querySnapshot =
@@ -417,27 +395,6 @@ class FirestoreService {
   }
 
   // /// Method to fetch all available meditation exercises from Firestore
-  // Future<List<MeditationExercise>> fetchMeditationExercises() async {
-  //   QuerySnapshot querySnapshot =
-  //       await _firestore.collection('meditation_exercise').get();
-  //   List<MeditationExercise> exercises = [];
-  //   for (var doc in querySnapshot.docs) {
-  //     try {
-  //       print('Fetched doc: ${doc.id}');
-  //       exercises.add(MeditationExercise(
-  //         title: doc['title'] ?? 'Untitled',
-  //         description: doc['description'] ?? 'No description',
-  //         imagePath: doc['imagePath'] ?? 'assets/images/default.jpg',
-  //         audioPath: doc['audioPath'] ?? '',
-  //         duration: doc['duration'] ?? '0',
-  //       ));
-  //     } catch (e) {
-  //       print('Error parsing document ${doc.id}: $e');
-  //     }
-  //   }
-  //   return exercises;
-  // }
-
   // Does same thing but better + adds id field
   Future<List<MeditationExercise>> fetchMeditationExercises() async {
     try {
@@ -504,6 +461,7 @@ class FirestoreService {
   }
 
   /// Method to update daily routine
+  //Check if all tasks from previous day was completed, if not, reset daily streak to 0
   Future<void> updateDailyRoutine() async {
     User? currentUser = _currentUser;
     if (currentUser != null) {
@@ -525,8 +483,24 @@ class FirestoreService {
         print('Members routine field is NOT null');
       }
 
-      if (memberData['routine'] == null ||
+      bool allTasksCompleted = true;
+      if (memberData['routine'] != null &&
           memberData['routine']['date'] != todayDate) {
+        // Check if all tasks for the previous day are completed
+        List<dynamic> tasks = memberData['routine']['tasks'];
+        for (var task in tasks) {
+          if (!task['completed']) {
+            allTasksCompleted = false;
+            break;
+          }
+        }
+
+        if (!allTasksCompleted) {
+          // Reset daily streak to 0 if not all tasks are completed
+          await memberRef.update({'dailyStreak': 0});
+          print('Daily streak reset to 0');
+        }
+
         print('Creating a new routine');
         String newBreathingExerciseId =
             await _getRandomDocumentId('breathing_exercise');
@@ -539,6 +513,7 @@ class FirestoreService {
         print('Sleep Story id: $newSleepStoryId');
         Map<String, dynamic> newRoutine = {
           'date': todayDate,
+          'streakUpdated': false,
           'tasks': [
             {
               'category': 'Breathe',
@@ -579,28 +554,6 @@ class FirestoreService {
     return documents[randomIndex].id;
   }
 
-  //  fetch a breathing exercise by its ID.
-  // Future<BreathingExercise?> getBreathingExerciseById(String id) async {
-  //   try {
-  //     DocumentSnapshot doc =
-  //         await _firestore.collection('breathing_exercise').doc(id).get();
-  //     if (doc.exists) {
-  //       return BreathingExercise(
-  //         title: doc['title'],
-  //         duration: doc['duration'],
-  //         imagePath: doc['imagePath'],
-  //         audioPath: doc['audioPath'],
-  //       );
-  //     } else {
-  //       return null;
-  //     }
-  //   } catch (e) {
-  //     print('Error fetching breathing exercise: $e');
-  //     return null;
-  //   }
-  // }
-
-  //affected by: immediately check taskcard widget is completed instead o fneeding hot restart
   // Fetch a breathing exercise by its ID
   Future<BreathingExercise?> getBreathingExerciseById(String id) async {
     try {
@@ -618,34 +571,6 @@ class FirestoreService {
     }
   }
 
-  /// Method to update task completion status in Firestore
-  // Future<void> updateTaskCompletion(
-  //     String taskId, String category, bool isCompleted) async {
-  //   User? currentUser = _currentUser;
-  //   if (currentUser != null) {
-  //     DocumentReference memberRef =
-  //         _firestore.collection('Members').doc(currentUser.uid);
-  //     DocumentSnapshot memberSnapshot = await memberRef.get();
-  //     Map<String, dynamic> memberData =
-  //         memberSnapshot.data() as Map<String, dynamic>;
-
-  //     if (memberData['routine'] != null &&
-  //         memberData['routine']['tasks'] != null) {
-  //       List<dynamic> tasks = memberData['routine']['tasks'];
-
-  //       // Find the task to update
-  //       for (var task in tasks) {
-  //         if (task['category'] == category && task['id'] == taskId) {
-  //           task['completed'] = isCompleted;
-  //           break;
-  //         }
-  //       }
-
-  //       await memberRef.update({'routine': memberData['routine']});
-  //     }
-  //   }
-  // }
-
   Future<MeditationExercise?> getMeditationExerciseById(String id) async {
     try {
       DocumentSnapshot doc =
@@ -662,7 +587,7 @@ class FirestoreService {
     }
   }
 
-  //immediately check widget after completed is true
+  // /// both updateTask functions modified to check if all task completed and increment daily streak
   // Future<void> updateTaskCompletion(
   //     String taskId, String category, bool completed) async {
   //   User? currentUser = FirebaseAuth.instance.currentUser;
@@ -671,31 +596,95 @@ class FirestoreService {
   //         _firestore.collection('Members').doc(currentUser.uid);
   //     DocumentSnapshot memberSnapshot = await memberRef.get();
 
-  //     Map<String, dynamic> memberData =
-  //         memberSnapshot.data() as Map<String, dynamic>;
-  //     List<dynamic> tasks = memberData['routine']['tasks'];
+  //     if (memberSnapshot.exists) {
+  //       Map<String, dynamic> memberData =
+  //           memberSnapshot.data() as Map<String, dynamic>;
+  //       Map<String, dynamic> routine = memberData['routine'];
+  //       List<dynamic> tasks = routine['tasks'];
 
-  //     for (var task in tasks) {
-  //       if (task['category'] == category && task['id'] == taskId) {
-  //         task['completed'] = completed;
-  //         break;
+  //       for (var task in tasks) {
+  //         if (task['category'] == category && task['id'] == taskId) {
+  //           task['completed'] = completed;
+  //           break;
+  //         }
   //       }
-  //     }
 
-  //     await memberRef.update({'routine.tasks': tasks});
+  //       await memberRef.update({'routine.tasks': tasks});
 
-  //     // Optionally update the count of completed breathing tasks
-  //     if (category == 'Breathe') {
-  //       int newCount =
-  //           (memberData['breathingsCompleted'] ?? 0) + (completed ? 1 : 0);
-  //       await memberRef.update({'breathingsCompleted': newCount});
+  //       await _checkAndUpdateDailyStreak(memberRef, routine);
+
+  //       await awardPoints(100); // Award points for task completion
   //     }
   //   }
   // }
 
-  // affected by: standardize breathingexercise to follow MVC
-  Future<void> updateTaskCompletion(
-      String taskId, String category, bool completed) async {
+  // Future<void> updateMoodTrackerCompletion(bool completed) async {
+  //   User? currentUser = FirebaseAuth.instance.currentUser;
+  //   if (currentUser != null) {
+  //     DocumentReference memberRef =
+  //         _firestore.collection('Members').doc(currentUser.uid);
+  //     DocumentSnapshot memberSnapshot = await memberRef.get();
+
+  //     if (memberSnapshot.exists) {
+  //       Map<String, dynamic> memberData =
+  //           memberSnapshot.data() as Map<String, dynamic>;
+  //       Map<String, dynamic> routine = memberData['routine'];
+  //       List<dynamic> tasks = routine['tasks'];
+
+  //       for (var task in tasks) {
+  //         if (task['category'] == 'Mood Tracker') {
+  //           task['completed'] = completed;
+  //           break;
+  //         }
+  //       }
+
+  //       await memberRef.update({'routine.tasks': tasks});
+
+  //       await _checkAndUpdateDailyStreak(memberRef, routine);
+
+  //       await awardPoints(100); // Award points for task completion
+  //     }
+  //   }
+  // }
+
+  // Future<void> _checkAndUpdateDailyStreak(
+  //     DocumentReference memberRef, Map<String, dynamic> routine) async {
+  //   bool allTasksCompleted = true;
+  //   bool streakUpdated = routine['streakUpdated'] ?? false;
+
+  //   for (var task in routine['tasks']) {
+  //     print(
+  //         'Checking task: ${task['category']}, completed: ${task['completed']}');
+  //     if (!task['completed']) {
+  //       allTasksCompleted = false;
+  //     }
+  //   }
+
+  //   if (allTasksCompleted && !streakUpdated) {
+  //     await memberRef.update({
+  //       'dailyStreak': FieldValue.increment(1),
+  //       'routine.streakUpdated': true,
+  //     });
+  //     print('All tasks completed. Daily streak incremented.');
+
+  //     // Fetch updated daily streak
+  //     DocumentSnapshot updatedSnapshot = await memberRef.get();
+  //     int updatedDailyStreak = updatedSnapshot['dailyStreak'] ?? 0;
+
+  //     // Award 200 points for completing all tasks with the new daily streak multiplier
+  //     double multiplier = calculateMultiplier(updatedDailyStreak);
+  //     int bonusPoints = (200 * multiplier).round();
+  //     await awardPoints(bonusPoints);
+
+  //     print('Bonus points awarded: $bonusPoints');
+  //   } else {
+  //     print('Not all tasks completed or streak already updated.');
+  //   }
+  // }
+
+  // Add argument o of context due to Level up dialog
+  Future<void> updateTaskCompletion(String taskId, String category,
+      bool completed, BuildContext context) async {
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       DocumentReference memberRef =
@@ -705,7 +694,8 @@ class FirestoreService {
       if (memberSnapshot.exists) {
         Map<String, dynamic> memberData =
             memberSnapshot.data() as Map<String, dynamic>;
-        List<dynamic> tasks = memberData['routine']['tasks'];
+        Map<String, dynamic> routine = memberData['routine'];
+        List<dynamic> tasks = routine['tasks'];
 
         for (var task in tasks) {
           if (task['category'] == category && task['id'] == taskId) {
@@ -715,11 +705,18 @@ class FirestoreService {
         }
 
         await memberRef.update({'routine.tasks': tasks});
+
+        await _checkAndUpdateDailyStreak(memberRef, routine, context);
+
+        if (!context.mounted) return; // Check if the context is still mounted
+
+        await awardPoints(100, context); // Award points for task completion
       }
     }
   }
 
-  Future<void> updateMoodTrackerCompletion(bool completed) async {
+  Future<void> updateMoodTrackerCompletion(
+      bool completed, BuildContext context) async {
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       DocumentReference memberRef =
@@ -729,7 +726,8 @@ class FirestoreService {
       if (memberSnapshot.exists) {
         Map<String, dynamic> memberData =
             memberSnapshot.data() as Map<String, dynamic>;
-        List<dynamic> tasks = memberData['routine']['tasks'];
+        Map<String, dynamic> routine = memberData['routine'];
+        List<dynamic> tasks = routine['tasks'];
 
         for (var task in tasks) {
           if (task['category'] == 'Mood Tracker') {
@@ -739,7 +737,188 @@ class FirestoreService {
         }
 
         await memberRef.update({'routine.tasks': tasks});
+
+        await _checkAndUpdateDailyStreak(memberRef, routine, context);
+
+        if (!context.mounted) return; // Check if the context is still mounted
+
+        await awardPoints(100, context); // Award points for task completion
       }
     }
+  }
+
+  Future<void> _checkAndUpdateDailyStreak(DocumentReference memberRef,
+      Map<String, dynamic> routine, BuildContext context) async {
+    bool allTasksCompleted = true;
+    bool streakUpdated = routine['streakUpdated'] ?? false;
+
+    for (var task in routine['tasks']) {
+      print(
+          'Checking task: ${task['category']}, completed: ${task['completed']}');
+      if (!task['completed']) {
+        allTasksCompleted = false;
+      }
+    }
+
+    if (allTasksCompleted && !streakUpdated) {
+      await memberRef.update({
+        'dailyStreak': FieldValue.increment(1),
+        'routine.streakUpdated': true,
+      });
+      print('All tasks completed. Daily streak incremented.');
+
+      // Fetch updated daily streak
+      DocumentSnapshot updatedSnapshot = await memberRef.get();
+      int updatedDailyStreak = updatedSnapshot['dailyStreak'] ?? 0;
+
+      // Award 200 points for completing all tasks with the new daily streak multiplier
+      double multiplier = calculateMultiplier(updatedDailyStreak);
+      int bonusPoints = (200 * multiplier).round();
+
+      if (!context.mounted) return; // Check if the context is still mounted
+
+      await awardPoints(bonusPoints, context);
+
+      print('Bonus points awarded: $bonusPoints');
+    } else {
+      print('Not all tasks completed or streak already updated.');
+    }
+  }
+
+  // Calculate required points for a given level
+  int calculateRequiredPoints(int level) {
+    const basePoints = 100; // Base points required for level 1
+    int points = (basePoints * pow(level, 1.05)).round();
+    print('Legacy required points for level $level: $points');
+    print(
+        'Rounded required points for level $level: ${(points / 100).floor() * 100}');
+    return (points / 100).floor() * 100;
+  }
+
+  // Calculate multiplier based on daily streak
+  double calculateMultiplier(int dailyStreak) {
+    if (dailyStreak >= 10 && dailyStreak < 20) {
+      return 1.10;
+    } else if (dailyStreak >= 20 && dailyStreak < 30) {
+      return 1.20;
+    } else if (dailyStreak >= 30 && dailyStreak < 40) {
+      return 1.30;
+    } else if (dailyStreak >= 40 && dailyStreak < 50) {
+      return 1.40;
+    } else if (dailyStreak >= 50 && dailyStreak < 60) {
+      return 1.50;
+    } else if (dailyStreak >= 60 && dailyStreak < 70) {
+      return 1.60;
+    } else if (dailyStreak >= 70 && dailyStreak < 80) {
+      return 1.70;
+    } else if (dailyStreak >= 80 && dailyStreak < 90) {
+      return 1.80;
+    } else if (dailyStreak >= 90 && dailyStreak < 100) {
+      return 1.90;
+    } else if (dailyStreak >= 100) {
+      return 2.00;
+    }
+    return 1.0;
+  }
+
+  // Award points and handle level progression
+  // Future<void> awardPoints(int points) async {
+  //   User? currentUser = FirebaseAuth.instance.currentUser;
+  //   if (currentUser != null) {
+  //     DocumentReference memberRef =
+  //         _firestore.collection('Members').doc(currentUser.uid);
+  //     DocumentSnapshot memberSnapshot = await memberRef.get();
+  //     Map<String, dynamic> memberData =
+  //         memberSnapshot.data() as Map<String, dynamic>;
+
+  //     int currentLevel = memberData['level'] ?? 1;
+  //     int currentPoints = memberData['points'] ?? 0;
+  //     int dailyStreak = memberData['dailyStreak'] ?? 0;
+
+  //     // Calculate points with multiplier
+  //     double multiplier = calculateMultiplier(dailyStreak);
+  //     int totalPoints = (points * multiplier).round();
+
+  //     // Add points to current points
+  //     currentPoints += totalPoints;
+
+  //     // Check if points are enough to level up
+  //     int requiredPoints = calculateRequiredPoints(currentLevel);
+  //     while (currentPoints >= requiredPoints) {
+  //       currentPoints -= requiredPoints;
+  //       currentLevel++;
+  //       requiredPoints = calculateRequiredPoints(currentLevel);
+  //     }
+
+  //     // Update member's level and points
+  //     await memberRef.update({
+  //       'level': currentLevel,
+  //       'points': currentPoints,
+  //     });
+
+  //     print('Points awarded: $totalPoints');
+  //     print('New level: $currentLevel');
+  //     print('Remaining points: $currentPoints');
+  //   } else {
+  //     throw Exception("User not logged in");
+  //   }
+  // }
+
+  // Added level up pop up
+  Future<void> awardPoints(int points, BuildContext context) async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      DocumentReference memberRef =
+          FirebaseFirestore.instance.collection('Members').doc(currentUser.uid);
+      DocumentSnapshot memberSnapshot = await memberRef.get();
+      Map<String, dynamic> memberData =
+          memberSnapshot.data() as Map<String, dynamic>;
+
+      int currentLevel = memberData['level'] ?? 1;
+      int currentPoints = memberData['points'] ?? 0;
+      int dailyStreak = memberData['dailyStreak'] ?? 0;
+
+      // Calculate points with multiplier
+      double multiplier = calculateMultiplier(dailyStreak);
+      int totalPoints = (points * multiplier).round();
+
+      // Add points to current points
+      currentPoints += totalPoints;
+
+      // Check if points are enough to level up
+      int requiredPoints = calculateRequiredPoints(currentLevel);
+      bool leveledUp = false;
+
+      while (currentPoints >= requiredPoints) {
+        currentPoints -= requiredPoints;
+        currentLevel++;
+        requiredPoints = calculateRequiredPoints(currentLevel);
+        leveledUp = true;
+      }
+
+      // Update member's level and points
+      await memberRef.update({
+        'level': currentLevel,
+        'points': currentPoints,
+      });
+
+      print('Points awarded: $totalPoints');
+      print('New level: $currentLevel');
+      print('Remaining points: $currentPoints');
+
+      // Show level-up popup if leveled up
+      if (leveledUp) {
+        showLevelUpDialog(context, currentLevel);
+      }
+    } else {
+      throw Exception("User not logged in");
+    }
+  }
+
+  void showLevelUpDialog(BuildContext context, int level) {
+    showDialog(
+      context: context,
+      builder: (context) => LevelUpDialog(level: level),
+    );
   }
 }

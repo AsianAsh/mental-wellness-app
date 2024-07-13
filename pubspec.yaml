@@ -88,6 +88,7 @@ flutter:
     - assets/audio/sleep_music/
     - assets/audio/relaxing_sound/
     - assets/images/default.jpg
+    - assets/images/level_up_medal.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

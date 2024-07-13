@@ -1377,7 +1377,7 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
         'mood': selectedMood,
         'note': _noteController.text,
       });
-      await _firestoreService.updateMoodTrackerCompletion(true);
+      await _firestoreService.updateMoodTrackerCompletion(true, context);
       await _fetchMoodEntries(); // Re-fetch the mood entries after saving
     }
   }
@@ -1728,7 +1728,7 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
                                     _showMoodDetailsModal(context, moodEntry!)
                                 : null,
                             child: Container(
-                              width: 50,
+                              width: 40,
                               decoration: BoxDecoration(
                                 color: isOccupied
                                     ? _getMoodColor(moodEntry!['mood'])

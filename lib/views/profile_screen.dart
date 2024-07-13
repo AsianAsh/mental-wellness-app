@@ -3,17 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mental_wellness_app/auth/auth_screen.dart';
-import 'package:mental_wellness_app/services/firestore.dart';
+import 'package:mental_wellness_app/services/firestore.dart'; // Import the Firestore service
 import 'package:mental_wellness_app/views/achievements_screen.dart';
 import 'package:mental_wellness_app/views/friends_list_screen.dart';
-import 'package:mental_wellness_app/views/login_screen.dart';
 import 'package:mental_wellness_app/views/privacy_policy_screen.dart';
 import 'package:mental_wellness_app/views/rewards_screen.dart';
 import 'package:mental_wellness_app/views/terms_screen.dart';
 import 'package:mental_wellness_app/views/update_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  // Changed to StatefulWidget
   ProfileScreen({Key? key}) : super(key: key);
 
   @override
@@ -22,18 +20,17 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final FirestoreService _firestoreService = FirestoreService();
-  late Future<DocumentSnapshot<Map<String, dynamic>>>
-      _userDetailsFuture; // Added
+  late Future<DocumentSnapshot<Map<String, dynamic>>> _userDetailsFuture;
 
   @override
   void initState() {
     super.initState();
-    _loadUserData(); // Added
+    _loadUserData();
   }
 
   void _loadUserData() {
     setState(() {
-      _userDetailsFuture = _firestoreService.getMemberDetails(); // Added
+      _userDetailsFuture = _firestoreService.getMemberDetails();
     });
   }
 
@@ -47,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Removes default go back button
+        automaticallyImplyLeading: false,
         title: Text('Profile',
             style: Theme.of(context)
                 .textTheme
@@ -75,7 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: SingleChildScrollView(
         child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-          future: _userDetailsFuture, // Modified to use _userDetailsFuture
+          future: _userDetailsFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -92,6 +89,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             } else if (snapshot.hasData) {
               // Extract user data
               Map<String, dynamic>? user = snapshot.data!.data();
+              int currentLevel = user?['level'] ?? 1;
+              int currentPoints = user?['points'] ?? 0;
+              int pointsRequired =
+                  _firestoreService.calculateRequiredPoints(currentLevel);
+
+              double progressRatio = currentPoints / pointsRequired;
+
               return Container(
                 padding: const EdgeInsets.all(30),
                 child: Column(
@@ -130,7 +134,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     final result = await Get.to(
                                         () => const UpdateProfileScreen());
                                     if (result == true) {
-                                      _loadUserData(); // Reload data on return
+                                      _loadUserData();
                                     }
                                   },
                                 ),
@@ -138,8 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                            width: 20), // Add spacing between image and text
+                        const SizedBox(width: 20),
                         // Profile Info
                         Expanded(
                           child: Column(
@@ -184,7 +187,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                   ),
-                                  // const SizedBox(width: 8),
                                   Row(
                                     children: [
                                       const Icon(
@@ -209,7 +211,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Stack(
                                 children: [
                                   Container(
-                                    width: 160, // Adjust the width as needed
+                                    width: 160, // Total width of the XP bar
                                     height: 20,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -217,8 +219,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                   ),
                                   Container(
-                                    width:
-                                        90, // Adjust the width according to the current XP
+                                    width: 160 *
+                                        progressRatio, // Width based on progress
                                     height: 20,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -229,7 +231,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        '450 / 1000 XP',
+                                        '$currentPoints / $pointsRequired XP',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 12,

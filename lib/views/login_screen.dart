@@ -369,7 +369,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 25),
                 MyButton(text: "Sign In", onTap: () => login()),
-                const SizedBox(height: 30),
+                const SizedBox(height: 0),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(children: [
@@ -379,17 +379,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Colors.grey[400],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text('Or continue with',
-                          style: TextStyle(color: Colors.grey[700])),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    //   child: Text('Or continue with',
+                    //       style: TextStyle(color: Colors.grey[700])),
+                    // ),
                     Expanded(
                       child: Divider(thickness: 0.5, color: Colors.grey[400]),
                     ),
                   ]),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
