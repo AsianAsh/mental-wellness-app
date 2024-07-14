@@ -1258,10 +1258,12 @@ import 'package:mental_wellness_app/models/sleep_story.dart';
 import 'package:mental_wellness_app/services/firestore.dart';
 import 'package:mental_wellness_app/views/meditation_detail_screen.dart';
 import 'package:mental_wellness_app/views/mood_tracker_screen.dart';
+import 'package:mental_wellness_app/views/nudge_screen.dart';
 import 'package:mental_wellness_app/views/profile_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:mental_wellness_app/state/audio_player_state.dart';
 import 'breathing_play_screen.dart';
+import 'package:mental_wellness_app/views/request_counselling_screen.dart';
 
 class RoutinePage extends StatefulWidget {
   const RoutinePage({super.key});
@@ -1548,14 +1550,82 @@ class _RoutinePageState extends State<RoutinePage> {
                     ),
                   ],
                 ),
-                IconButton(
-                  onPressed: () {
-                    Get.to(ProfileScreen());
-                  },
-                  icon: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                  ),
+                Row(
+                  children: [
+                    StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('Members')
+                          .doc(currentUser?.uid)
+                          .collection('nudges')
+                          .where('read', isEqualTo: false)
+                          .snapshots(),
+                      builder:
+                          (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                        int unreadCount = 0;
+                        if (snapshot.hasData) {
+                          unreadCount = snapshot.data!.docs.length;
+                        }
+
+                        return Stack(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Get.to(ReceivedNudgesScreen());
+                              },
+                              icon: const Icon(
+                                Icons.notifications,
+                                color: Colors.white,
+                              ),
+                            ),
+                            if (unreadCount > 0)
+                              Positioned(
+                                right: 9,
+                                top: 9,
+                                child: Container(
+                                  padding: EdgeInsets.all(0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  constraints: BoxConstraints(
+                                    minWidth: 16,
+                                    minHeight: 16,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      '$unreadCount',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Get.to(() => RequestCounsellingScreen());
+                      },
+                      icon: const Icon(
+                        Icons.headset_mic,
+                        color: Colors.white,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Get.to(ProfileScreen());
+                      },
+                      icon: const Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

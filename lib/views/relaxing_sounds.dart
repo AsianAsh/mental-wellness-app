@@ -901,9 +901,11 @@
 // }
 
 // version 5
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:mental_wellness_app/auth/auth_screen.dart';
 import 'package:mental_wellness_app/controllers/relaxing_sound_controller.dart';
 import 'package:mental_wellness_app/models/relaxing_sound.dart';
 import 'package:provider/provider.dart';
@@ -919,6 +921,11 @@ class RelaxingSoundsScreen extends StatefulWidget {
 class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
   final RelaxingSoundController _controller =
       Get.put(RelaxingSoundController());
+
+  // void logout(BuildContext context) {
+  //   FirebaseAuth.instance.signOut();
+  //   Get.offAll(() => const AuthScreen());
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -1021,6 +1028,13 @@ class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
                         : 'Play All',
                   ),
                 ),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     logout(context);
+                //   },
+                //   child: Text("Logout"),
+                // ),
+
                 // Sliders for different sounds
                 Expanded(
                   child: Obx(() {

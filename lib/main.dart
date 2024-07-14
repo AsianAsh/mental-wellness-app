@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // To set device orientation
@@ -9,14 +8,12 @@ import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-// import './persistent_bottom_bar_scaffold.dart';
-//import 'package:mental-wellness-app/persistent_bottom_bar_scaffold.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // Update logged in member's lastActive field when app starts
-  // await FirestoreService().updateLastActive();
+  await FirestoreService().updateLastActive();
   // Set device orientation to be portrait only
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
