@@ -980,6 +980,13 @@ class ProfileScreen extends StatelessWidget {
     return docSnapshot.data() as Map<String, dynamic>?;
   }
 
+  String _addHttpIfNeeded(String url) {
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      return 'https://$url';
+    }
+    return url;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>?>(
@@ -1031,148 +1038,207 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Stack(
                         children: [
-                          Center(
-                            child: CircleAvatar(
-                              radius: 50,
-                              backgroundImage: profilePic.startsWith('http')
-                                  ? NetworkImage(profilePic)
-                                  : AssetImage(profilePic) as ImageProvider,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Center(
-                            child: Text(
-                              '$title. $firstName $lastName',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Center(
-                            child: Text(
-                              jobTitle,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ),
-                          Center(
-                            child: Text(
-                              '$city, $country',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            'Biography',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Text(bio),
-                          SizedBox(height: 20),
-                          Row(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(Icons.email, color: Colors.grey[700]),
-                              SizedBox(width: 10),
-                              Flexible(
+                              Center(
+                                child: CircleAvatar(
+                                  radius: 50,
+                                  backgroundImage: profilePic.startsWith('http')
+                                      ? NetworkImage(profilePic)
+                                      : AssetImage(profilePic) as ImageProvider,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Center(
                                 child: Text(
-                                  'Email: $email',
+                                  '$title. $firstName $lastName',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Icon(Icons.school, color: Colors.grey[700]),
-                              SizedBox(width: 10),
-                              Flexible(
+                              Center(
                                 child: Text(
-                                  'Education: $education',
+                                  jobTitle,
                                   style: TextStyle(
                                     fontSize: 16,
+                                    color: Colors.grey[600],
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Icon(Icons.language, color: Colors.grey[700]),
-                              SizedBox(width: 10),
-                              Flexible(
+                              Center(
                                 child: Text(
-                                  'Languages: ${languages.join(', ')}',
+                                  '$city, $country',
                                   style: TextStyle(
                                     fontSize: 16,
+                                    color: Colors.grey[600],
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Icon(Icons.work, color: Colors.grey[700]),
-                              SizedBox(width: 10),
-                              Flexible(
-                                child: Text(
-                                  'Years of Experience: $experienceYears',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
+                              SizedBox(height: 20),
+                              Text(
+                                'Biography',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Icon(Icons.link, color: Colors.grey[700]),
-                              SizedBox(width: 10),
-                              Flexible(
-                                child: InkWell(
-                                  onTap: () async {
-                                    if (await canLaunch(linkedin)) {
-                                      await launch(linkedin);
-                                    } else {
-                                      throw 'Could not launch $linkedin';
-                                    }
-                                  },
-                                  child: Text(
-                                    'LinkedIn: $linkedin',
+                              SizedBox(height: 10),
+                              Text(bio),
+                              SizedBox(height: 20),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(Icons.email, color: Colors.grey[700]),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Email:',
                                     style: TextStyle(
                                       fontSize: 16,
-                                      color: Colors.blue,
-                                      decoration: TextDecoration.underline,
                                     ),
                                   ),
-                                ),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      email,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ),
+                                ],
                               ),
+                              SizedBox(height: 10),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(Icons.school, color: Colors.grey[700]),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Education:',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      education,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(Icons.language, color: Colors.grey[700]),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Languages:',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      languages.join(', '),
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(Icons.work, color: Colors.grey[700]),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Years of Experience:',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      '$experienceYears',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(Icons.link, color: Colors.grey[700]),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'LinkedIn:',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () async {
+                                        final Uri linkedinUrl = Uri.parse(
+                                            _addHttpIfNeeded(linkedin));
+                                        try {
+                                          await launchUrl(linkedinUrl);
+                                        } catch (e) {
+                                          throw 'Could not launch $linkedin';
+                                        }
+                                      },
+                                      child: Text(
+                                        'View LinkedIn Profile',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.blue,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                        textAlign: TextAlign.right,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 20),
                             ],
                           ),
-                          SizedBox(height: 20),
-                          Center(
-                            child: IconButton(
-                              icon: Icon(Icons.edit, color: Colors.indigo),
-                              onPressed: () {
-                                Get.to(() => UpdateCounsellorProfileScreen());
-                              },
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.indigo[50],
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                icon: Icon(Icons.edit, color: Colors.indigo),
+                                onPressed: () {
+                                  Get.to(() => UpdateCounsellorProfileScreen());
+                                },
+                              ),
                             ),
                           ),
                         ],
