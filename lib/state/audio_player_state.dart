@@ -188,23 +188,15 @@ class AudioPlayerState with ChangeNotifier {
   String? currentAudio;
   bool isVisible = false;
   bool isPlaying = false;
+  bool isLooping = false;
   Duration _currentPosition = Duration.zero;
 
-  // Add this new state to handle relaxing sounds
-  bool isPlayingAllRelaxingSounds = false;
-  List<AudioPlayer> _relaxingSoundPlayers = [];
-
-  void setCurrentAudioTitle(String title) async {
+  void setCurrentAudioTitle(String title) {
     currentAudioTitle = title;
     notifyListeners();
   }
 
-  void playAudio(String audioPath) async {
-    // If relaxing sounds are playing, stop them first
-    if (isPlayingAllRelaxingSounds) {
-      pauseAllRelaxingSounds();
-    }
-
+  void playAudio(String audioPath, {bool loop = false}) async {
     if (currentAudio == audioPath && isPlaying) {
       // If the same audio is already playing, do nothing
       return;
@@ -218,8 +210,17 @@ class AudioPlayerState with ChangeNotifier {
     currentAudio = audioPath;
     isVisible = true;
     isPlaying = true;
+    isLooping = loop;
 
     await _audioPlayer.play(AssetSource(currentAudio!));
+    _audioPlayer.onPlayerComplete.listen((event) {
+      if (isLooping) {
+        _audioPlayer.play(AssetSource(currentAudio!));
+      } else {
+        isPlaying = false;
+        notifyListeners();
+      }
+    });
     notifyListeners();
   }
 
@@ -242,41 +243,8 @@ class AudioPlayerState with ChangeNotifier {
     pauseAudio();
     notifyListeners();
   }
-
-  // Add these methods to handle playing all relaxing sounds
-  void playAllRelaxingSounds(List<String> audioPaths) async {
-    if (currentAudio != null) {
-      // Stop any currently playing audio
-      await _audioPlayer.stop();
-      currentAudio = null;
-    }
-
-    _relaxingSoundPlayers = audioPaths.map((path) => AudioPlayer()).toList();
-    for (int i = 0; i < audioPaths.length; i++) {
-      await _relaxingSoundPlayers[i].play(AssetSource(audioPaths[i]));
-    }
-    isPlayingAllRelaxingSounds = true;
-    currentAudioTitle = 'Relax Sounds';
-    isVisible = true;
-    notifyListeners();
-  }
-
-  void pauseAllRelaxingSounds() async {
-    for (var player in _relaxingSoundPlayers) {
-      await player.pause();
-    }
-    isPlayingAllRelaxingSounds = false;
-    notifyListeners();
-  }
-
-  void toggleAllRelaxingSounds(List<String> audioPaths) {
-    if (isPlayingAllRelaxingSounds) {
-      pauseAllRelaxingSounds();
-    } else {
-      playAllRelaxingSounds(audioPaths);
-    }
-  }
 }
+
 
 //version 5b
 // import 'package:audioplayers/audioplayers.dart';

@@ -901,6 +901,435 @@
 // }
 
 // version 5
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:get/get.dart';
+// import 'package:mental_wellness_app/auth/auth_screen.dart';
+// import 'package:mental_wellness_app/controllers/relaxing_sound_controller.dart';
+// import 'package:mental_wellness_app/models/relaxing_sound.dart';
+// import 'package:provider/provider.dart';
+// import 'package:mental_wellness_app/state/audio_player_state.dart';
+
+// class RelaxingSoundsScreen extends StatefulWidget {
+//   const RelaxingSoundsScreen({super.key});
+
+//   @override
+//   _RelaxingSoundsScreenState createState() => _RelaxingSoundsScreenState();
+// }
+
+// class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
+//   final RelaxingSoundController _controller =
+//       Get.put(RelaxingSoundController());
+
+//   void logout(BuildContext context) {
+//     FirebaseAuth.instance.signOut();
+//     Get.offAll(() => const AuthScreen());
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // Make the status bar transparent
+//     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+//       statusBarColor: Colors.transparent,
+//       statusBarIconBrightness: Brightness.light,
+//     ));
+
+//     return Scaffold(
+//       body: Stack(
+//         children: [
+//           // Background image with fixed height
+//           Container(
+//             height: MediaQuery.of(context).size.height * 0.28,
+//             decoration: const BoxDecoration(
+//               image: DecorationImage(
+//                 image: AssetImage('assets/images/test1.jpg'),
+//                 fit: BoxFit.cover,
+//               ),
+//             ),
+//           ),
+//           SafeArea(
+//             child: Column(
+//               children: [
+//                 // Top section with title, description, and image
+//                 Padding(
+//                   padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
+//                   child: Row(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       const Expanded(
+//                         flex: 3,
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Padding(
+//                               padding: EdgeInsets.only(top: 16.0),
+//                               child: Text(
+//                                 'Sounds',
+//                                 style: TextStyle(
+//                                   color: Colors.white,
+//                                   fontSize: 26,
+//                                   fontWeight: FontWeight.bold,
+//                                 ),
+//                               ),
+//                             ),
+//                             SizedBox(height: 16),
+//                             Padding(
+//                               padding: EdgeInsets.only(left: 4.0),
+//                               child: Text(
+//                                 'Relax Sounds',
+//                                 style: TextStyle(
+//                                   color: Colors.white,
+//                                   fontSize: 20,
+//                                   fontWeight: FontWeight.bold,
+//                                 ),
+//                               ),
+//                             ),
+//                             SizedBox(height: 8),
+//                             Padding(
+//                               padding: EdgeInsets.only(left: 4.0),
+//                               child: Text(
+//                                 'Help for focus, relax or sleep. \nMix sounds together.',
+//                                 style: TextStyle(
+//                                   color: Colors.white70,
+//                                   fontSize: 12,
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                       const SizedBox(
+//                           width: 10), // Increased space between text and image
+//                       Padding(
+//                         padding: const EdgeInsets.only(top: 25.0),
+//                         child: Align(
+//                           alignment: Alignment.bottomRight,
+//                           child: Image.asset(
+//                             'assets/images/relaxing/relaxing_sounds_4.png',
+//                             height: 152, // Use original height if needed
+//                             fit: BoxFit.contain,
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 // Main button to play/pause all relaxing sounds
+//                 ElevatedButton(
+//                   onPressed: () {
+//                     Provider.of<AudioPlayerState>(context, listen: false)
+//                         .toggleAllRelaxingSounds(_controller.audioPaths);
+//                   },
+//                   child: Text(
+//                     Provider.of<AudioPlayerState>(context)
+//                             .isPlayingAllRelaxingSounds
+//                         ? 'Pause All'
+//                         : 'Play All',
+//                   ),
+//                 ),
+//                 ElevatedButton(
+//                   onPressed: () {
+//                     logout(context);
+//                   },
+//                   child: Text("Logout"),
+//                 ),
+
+//                 // Sliders for different sounds
+//                 Expanded(
+//                   child: Obx(() {
+//                     if (_controller.isLoading.value) {
+//                       return const Center(child: CircularProgressIndicator());
+//                     }
+
+//                     return ListView.builder(
+//                       padding:
+//                           const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 70.0),
+//                       itemCount: _controller.relaxingSounds.length,
+//                       itemBuilder: (context, index) {
+//                         return buildSoundSlider(
+//                           context,
+//                           _controller.relaxingSounds[index],
+//                         );
+//                       },
+//                     );
+//                   }),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget buildSoundSlider(BuildContext context, RelaxingSound sound) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 5.0),
+//       child: Container(
+//         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+//         decoration: BoxDecoration(
+//           color: const Color.fromARGB(255, 0, 23, 34),
+//           borderRadius: BorderRadius.circular(10),
+//         ),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 Text(
+//                   sound.title,
+//                   style: const TextStyle(
+//                     color: Colors.white,
+//                     fontSize: 14,
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//             Slider(
+//               value: 0.5,
+//               onChanged: (value) {},
+//               activeColor: Colors.indigo,
+//               inactiveColor: Colors.grey,
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// only play 1 at a time
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:get/get.dart';
+// import 'package:mental_wellness_app/auth/auth_screen.dart';
+// import 'package:mental_wellness_app/controllers/relaxing_sound_controller.dart';
+// import 'package:mental_wellness_app/models/relaxing_sound.dart';
+// import 'package:provider/provider.dart';
+// import 'package:mental_wellness_app/state/audio_player_state.dart';
+
+// class RelaxingSoundsScreen extends StatefulWidget {
+//   const RelaxingSoundsScreen({super.key});
+
+//   @override
+//   _RelaxingSoundsScreenState createState() => _RelaxingSoundsScreenState();
+// }
+
+// class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
+//   final RelaxingSoundController _controller =
+//       Get.put(RelaxingSoundController());
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // Make the status bar transparent
+//     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+//       statusBarColor: Colors.transparent,
+//       statusBarIconBrightness: Brightness.light,
+//     ));
+
+//     return Scaffold(
+//       body: Stack(
+//         children: [
+//           // Background image with fixed height
+//           Container(
+//             height: MediaQuery.of(context).size.height * 0.28,
+//             decoration: const BoxDecoration(
+//               image: DecorationImage(
+//                 image: AssetImage('assets/images/test1.jpg'),
+//                 fit: BoxFit.cover,
+//               ),
+//             ),
+//           ),
+//           SafeArea(
+//             child: Column(
+//               children: [
+//                 // Top section with title, description, and image
+//                 Padding(
+//                   padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
+//                   child: Row(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       const Expanded(
+//                         flex: 3,
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Padding(
+//                               padding: EdgeInsets.only(top: 16.0),
+//                               child: Text(
+//                                 'Sounds',
+//                                 style: TextStyle(
+//                                   color: Colors.white,
+//                                   fontSize: 26,
+//                                   fontWeight: FontWeight.bold,
+//                                 ),
+//                               ),
+//                             ),
+//                             SizedBox(height: 16),
+//                             Padding(
+//                               padding: EdgeInsets.only(left: 4.0),
+//                               child: Text(
+//                                 'Relax Sounds',
+//                                 style: TextStyle(
+//                                   color: Colors.white,
+//                                   fontSize: 20,
+//                                   fontWeight: FontWeight.bold,
+//                                 ),
+//                               ),
+//                             ),
+//                             SizedBox(height: 8),
+//                             Padding(
+//                               padding: EdgeInsets.only(left: 4.0),
+//                               child: Text(
+//                                 'Help for focus, relax or sleep. \nMix sounds together.',
+//                                 style: TextStyle(
+//                                   color: Colors.white70,
+//                                   fontSize: 12,
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                       const SizedBox(
+//                           width: 10), // Increased space between text and image
+//                       Padding(
+//                         padding: const EdgeInsets.only(top: 25.0),
+//                         child: Align(
+//                           alignment: Alignment.bottomRight,
+//                           child: Image.asset(
+//                             'assets/images/relaxing/relaxing_sounds_4.png',
+//                             height: 152, // Use original height if needed
+//                             fit: BoxFit.contain,
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 // Sliders for different sounds
+//                 Expanded(
+//                   child: Obx(() {
+//                     if (_controller.isLoading.value) {
+//                       return const Center(child: CircularProgressIndicator());
+//                     }
+
+//                     return ListView.builder(
+//                       padding:
+//                           const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 70.0),
+//                       itemCount: _controller.relaxingSounds.length,
+//                       itemBuilder: (context, index) {
+//                         return buildSoundSlider(
+//                           context,
+//                           _controller.relaxingSounds[index],
+//                         );
+//                       },
+//                     );
+//                   }),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   // Widget buildSoundSlider(BuildContext context, RelaxingSound sound) {
+//   //   return Padding(
+//   //     padding: const EdgeInsets.symmetric(vertical: 5.0),
+//   //     child: Container(
+//   //       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+//   //       decoration: BoxDecoration(
+//   //         color: const Color.fromARGB(255, 0, 23, 34),
+//   //         borderRadius: BorderRadius.circular(10),
+//   //       ),
+//   //       child: Column(
+//   //         crossAxisAlignment: CrossAxisAlignment.start,
+//   //         children: [
+//   //           Row(
+//   //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//   //             children: [
+//   //               Text(
+//   //                 sound.title,
+//   //                 style: const TextStyle(
+//   //                   color: Colors.white,
+//   //                   fontSize: 14,
+//   //                   fontWeight: FontWeight.bold,
+//   //                 ),
+//   //               ),
+//   //               IconButton(
+//   //                 icon: Icon(Icons.play_circle_fill, color: Colors.white),
+//   //                 onPressed: () {
+//   //                   Provider.of<AudioPlayerState>(context, listen: false)
+//   //                       .playAudio(sound.audioPath);
+//   //                 },
+//   //               ),
+//   //             ],
+//   //           ),
+//   //           Slider(
+//   //             value: 0.5,
+//   //             onChanged: (value) {},
+//   //             activeColor: Colors.indigo,
+//   //             inactiveColor: Colors.grey,
+//   //           ),
+//   //         ],
+//   //       ),
+//   //     ),
+//   //   );
+//   // }
+
+//   Widget buildSoundSlider(BuildContext context, RelaxingSound sound) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 5.0),
+//       child: Container(
+//         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+//         decoration: BoxDecoration(
+//           color: const Color.fromARGB(255, 0, 23, 34),
+//           borderRadius: BorderRadius.circular(10),
+//         ),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 Text(
+//                   sound.title,
+//                   style: const TextStyle(
+//                     color: Colors.white,
+//                     fontSize: 14,
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                 ),
+//                 IconButton(
+//                   icon: Icon(Icons.play_circle_fill, color: Colors.white),
+//                   onPressed: () {
+//                     Provider.of<AudioPlayerState>(context, listen: false)
+//                         .playAudio(sound.audioPath);
+//                     Provider.of<AudioPlayerState>(context, listen: false)
+//                         .setCurrentAudioTitle(sound.title);
+//                   },
+//                 ),
+//               ],
+//             ),
+//             Slider(
+//               value: 0.5,
+//               onChanged: (value) {},
+//               activeColor: Colors.indigo,
+//               inactiveColor: Colors.grey,
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -922,10 +1351,10 @@ class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
   final RelaxingSoundController _controller =
       Get.put(RelaxingSoundController());
 
-  // void logout(BuildContext context) {
-  //   FirebaseAuth.instance.signOut();
-  //   Get.offAll(() => const AuthScreen());
-  // }
+  void logout(BuildContext context) {
+    FirebaseAuth.instance.signOut();
+    Get.offAll(() => const AuthScreen());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1001,6 +1430,12 @@ class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
                       ),
                       const SizedBox(
                           width: 10), // Increased space between text and image
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     logout(context);
+                      //   },
+                      //   child: Text("Logout"),
+                      // ),
                       Padding(
                         padding: const EdgeInsets.only(top: 25.0),
                         child: Align(
@@ -1015,43 +1450,32 @@ class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
                     ],
                   ),
                 ),
-                // Main button to play/pause all relaxing sounds
-                ElevatedButton(
-                  onPressed: () {
-                    Provider.of<AudioPlayerState>(context, listen: false)
-                        .toggleAllRelaxingSounds(_controller.audioPaths);
-                  },
-                  child: Text(
-                    Provider.of<AudioPlayerState>(context)
-                            .isPlayingAllRelaxingSounds
-                        ? 'Pause All'
-                        : 'Play All',
-                  ),
-                ),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     logout(context);
-                //   },
-                //   child: Text("Logout"),
-                // ),
-
-                // Sliders for different sounds
+                // Sound cards
                 Expanded(
                   child: Obx(() {
                     if (_controller.isLoading.value) {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    return ListView.builder(
-                      padding:
-                          const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 70.0),
-                      itemCount: _controller.relaxingSounds.length,
-                      itemBuilder: (context, index) {
-                        return buildSoundSlider(
-                          context,
-                          _controller.relaxingSounds[index],
-                        );
-                      },
+                    return Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16.0,
+                          mainAxisSpacing: 16.0,
+                          childAspectRatio:
+                              3 / 1.5, // Adjusted the aspect ratio
+                        ),
+                        itemCount: _controller.relaxingSounds.length,
+                        itemBuilder: (context, index) {
+                          return buildSoundCard(
+                            context,
+                            _controller.relaxingSounds[index],
+                          );
+                        },
+                      ),
                     );
                   }),
                 ),
@@ -1063,644 +1487,42 @@ class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
     );
   }
 
-  Widget buildSoundSlider(BuildContext context, RelaxingSound sound) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
+  Widget buildSoundCard(BuildContext context, RelaxingSound sound) {
+    final audioPlayerState = Provider.of<AudioPlayerState>(context);
+    final isPlaying = audioPlayerState.currentAudio == sound.audioPath;
+
+    return GestureDetector(
+      onTap: () {
+        audioPlayerState.playAudio(sound.audioPath,
+            loop: true); // Enable looping for relaxing sounds
+        audioPlayerState.setCurrentAudioTitle(sound.title);
+      },
       child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 0, 23, 34),
+          color: isPlaying
+              ? const Color.fromARGB(255, 0, 23, 34)
+              : const Color.fromARGB(255, 0, 23, 34).withOpacity(0.5),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
                   sound.title,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: isPlaying ? Colors.white : Colors.white54,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
-            ),
-            Slider(
-              value: 0.5,
-              onChanged: (value) {},
-              activeColor: Colors.indigo,
-              inactiveColor: Colors.grey,
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
-//version 6: bottom audioplayer UI can control relaixng sounds also
-// result: works but stops working after a while with this error:
-//I/flutter (12279): AudioPlayers Exception: AudioPlayerException(
-//I/flutter (12279):      AssetSource(path: audio/relaxing_sound/rain.mp3, mimeType: null),
-//I/flutter (12279):      PlatformException(AndroidAudioError, MEDIA_ERROR_UNKNOWN {what:1}, MEDIA_ERROR_UNKNOWN {extra:-19}, null)
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:get/get.dart';
-// import 'package:mental_wellness_app/controllers/relaxing_sound_controller.dart';
-// import 'package:mental_wellness_app/models/relaxing_sound.dart';
-// import 'package:provider/provider.dart';
-// import 'package:mental_wellness_app/state/audio_player_state.dart';
-
-// class RelaxingSoundsScreen extends StatefulWidget {
-//   const RelaxingSoundsScreen({super.key});
-
-//   @override
-//   _RelaxingSoundsScreenState createState() => _RelaxingSoundsScreenState();
-// }
-
-// class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
-//   final RelaxingSoundController _controller =
-//       Get.put(RelaxingSoundController());
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // Make the status bar transparent
-//     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-//       statusBarColor: Colors.transparent,
-//       statusBarIconBrightness: Brightness.light,
-//     ));
-
-//     return Scaffold(
-//       body: Stack(
-//         children: [
-//           // Background image with fixed height
-//           Container(
-//             height: MediaQuery.of(context).size.height * 0.28,
-//             decoration: const BoxDecoration(
-//               image: DecorationImage(
-//                 image: AssetImage('assets/images/test1.jpg'),
-//                 fit: BoxFit.cover,
-//               ),
-//             ),
-//           ),
-//           SafeArea(
-//             child: Column(
-//               children: [
-//                 // Top section with title, description, and image
-//                 Padding(
-//                   padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
-//                   child: Row(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       const Expanded(
-//                         flex: 3,
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             Padding(
-//                               padding: EdgeInsets.only(top: 16.0),
-//                               child: Text(
-//                                 'Sounds',
-//                                 style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 26,
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                             ),
-//                             SizedBox(height: 16),
-//                             Padding(
-//                               padding: EdgeInsets.only(left: 4.0),
-//                               child: Text(
-//                                 'Relax Sounds',
-//                                 style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 20,
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                             ),
-//                             SizedBox(height: 8),
-//                             Padding(
-//                               padding: EdgeInsets.only(left: 4.0),
-//                               child: Text(
-//                                 'Help for focus, relax or sleep. \nMix sounds together.',
-//                                 style: TextStyle(
-//                                   color: Colors.white70,
-//                                   fontSize: 12,
-//                                 ),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       const SizedBox(
-//                           width: 10), // Increased space between text and image
-//                       Padding(
-//                         padding: const EdgeInsets.only(top: 25.0),
-//                         child: Align(
-//                           alignment: Alignment.bottomRight,
-//                           child: Image.asset(
-//                             'assets/images/relaxing/relaxing_sounds_4.png',
-//                             height: 152, // Use original height if needed
-//                             fit: BoxFit.contain,
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 // Main button to play/pause all relaxing sounds
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     Provider.of<AudioPlayerState>(context, listen: false)
-//                         .toggleAllRelaxingSounds(_controller.audioPaths);
-//                   },
-//                   child: Text(
-//                     Provider.of<AudioPlayerState>(context)
-//                             .isPlayingAllRelaxingSounds
-//                         ? 'Pause All'
-//                         : 'Play All',
-//                   ),
-//                 ),
-//                 // Sliders for different sounds
-//                 Expanded(
-//                   child: Obx(() {
-//                     if (_controller.isLoading.value) {
-//                       return const Center(child: CircularProgressIndicator());
-//                     }
-
-//                     return ListView.builder(
-//                       padding:
-//                           const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 70.0),
-//                       itemCount: _controller.relaxingSounds.length,
-//                       itemBuilder: (context, index) {
-//                         return buildSoundSlider(
-//                           context,
-//                           _controller.relaxingSounds[index],
-//                         );
-//                       },
-//                     );
-//                   }),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget buildSoundSlider(BuildContext context, RelaxingSound sound) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(vertical: 5.0),
-//       child: Container(
-//         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-//         decoration: BoxDecoration(
-//           color: const Color.fromARGB(255, 0, 23, 34),
-//           borderRadius: BorderRadius.circular(10),
-//         ),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Text(
-//                   sound.title,
-//                   style: const TextStyle(
-//                     color: Colors.white,
-//                     fontSize: 14,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//             Slider(
-//               value: 0.5,
-//               onChanged: (value) {},
-//               activeColor: Colors.indigo,
-//               inactiveColor: Colors.grey,
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-//version 7: realxing sounds view file and audio_player_state.dart - add individual enable and disable relaixng sounds in the widget
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:get/get.dart';
-// import 'package:mental_wellness_app/controllers/relaxing_sound_controller.dart';
-// import 'package:mental_wellness_app/models/relaxing_sound.dart';
-// import 'package:provider/provider.dart';
-// import 'package:mental_wellness_app/state/audio_player_state.dart';
-
-// class RelaxingSoundsScreen extends StatefulWidget {
-//   const RelaxingSoundsScreen({super.key});
-
-//   @override
-//   _RelaxingSoundsScreenState createState() => _RelaxingSoundsScreenState();
-// }
-
-// class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
-//   final RelaxingSoundController _controller =
-//       Get.put(RelaxingSoundController());
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // Make the status bar transparent
-//     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-//       statusBarColor: Colors.transparent,
-//       statusBarIconBrightness: Brightness.light,
-//     ));
-
-//     return Scaffold(
-//       body: Stack(
-//         children: [
-//           // Background image with fixed height
-//           Container(
-//             height: MediaQuery.of(context).size.height * 0.28,
-//             decoration: const BoxDecoration(
-//               image: DecorationImage(
-//                 image: AssetImage('assets/images/test1.jpg'),
-//                 fit: BoxFit.cover,
-//               ),
-//             ),
-//           ),
-//           SafeArea(
-//             child: Column(
-//               children: [
-//                 // Top section with title, description, and image
-//                 Padding(
-//                   padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
-//                   child: Row(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       const Expanded(
-//                         flex: 3,
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             Padding(
-//                               padding: EdgeInsets.only(top: 16.0),
-//                               child: Text(
-//                                 'Sounds',
-//                                 style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 26,
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                             ),
-//                             SizedBox(height: 16),
-//                             Padding(
-//                               padding: EdgeInsets.only(left: 4.0),
-//                               child: Text(
-//                                 'Relax Sounds',
-//                                 style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 20,
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                             ),
-//                             SizedBox(height: 8),
-//                             Padding(
-//                               padding: EdgeInsets.only(left: 4.0),
-//                               child: Text(
-//                                 'Help for focus, relax or sleep. \nMix sounds together.',
-//                                 style: TextStyle(
-//                                   color: Colors.white70,
-//                                   fontSize: 12,
-//                                 ),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       const SizedBox(
-//                           width: 10), // Increased space between text and image
-//                       Padding(
-//                         padding: const EdgeInsets.only(top: 25.0),
-//                         child: Align(
-//                           alignment: Alignment.bottomRight,
-//                           child: Image.asset(
-//                             'assets/images/relaxing/relaxing_sounds_4.png',
-//                             height: 152, // Use original height if needed
-//                             fit: BoxFit.contain,
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 // Main button to play/pause all relaxing sounds
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     Provider.of<AudioPlayerState>(context, listen: false)
-//                         .toggleAllRelaxingSounds(_controller.audioPaths);
-//                   },
-//                   child: Text(
-//                     Provider.of<AudioPlayerState>(context)
-//                             .isPlayingAllRelaxingSounds
-//                         ? 'Pause All'
-//                         : 'Play All',
-//                   ),
-//                 ),
-//                 // Sliders for different sounds
-//                 Expanded(
-//                   child: Obx(() {
-//                     if (_controller.isLoading.value) {
-//                       return const Center(child: CircularProgressIndicator());
-//                     }
-
-//                     return ListView.builder(
-//                       padding:
-//                           const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 70.0),
-//                       itemCount: _controller.relaxingSounds.length,
-//                       itemBuilder: (context, index) {
-//                         return buildSoundSlider(
-//                           context,
-//                           _controller.relaxingSounds[index],
-//                         );
-//                       },
-//                     );
-//                   }),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget buildSoundSlider(BuildContext context, RelaxingSound sound) {
-//     return Consumer<AudioPlayerState>(
-//       builder: (context, audioPlayerState, child) {
-//         final isEnabled =
-//             audioPlayerState.soundEnabledMap[sound.audioPath] ?? true;
-
-//         return Padding(
-//           padding: const EdgeInsets.symmetric(vertical: 5.0),
-//           child: Container(
-//             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-//             decoration: BoxDecoration(
-//               color: const Color.fromARGB(255, 0, 23, 34),
-//               borderRadius: BorderRadius.circular(10),
-//             ),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     Text(
-//                       sound.title,
-//                       style: const TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 14,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                     IconButton(
-//                       icon: Icon(
-//                         isEnabled
-//                             ? Icons.volume_up_outlined
-//                             : Icons.volume_off_outlined,
-//                         color: Colors.white,
-//                       ),
-//                       onPressed: () {
-//                         audioPlayerState.toggleSoundEnabled(sound.audioPath);
-//                       },
-//                     ),
-//                   ],
-//                 ),
-//                 Slider(
-//                   value: 0.5,
-//                   onChanged: (value) {},
-//                   activeColor: Colors.indigo,
-//                   inactiveColor: Colors.grey,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
-
-// version 8 (this and audioplayerstate): revamp relaixng sound player (each sound has their own audio player + correct play/ enable/disable logic)
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:get/get.dart';
-// import 'package:mental_wellness_app/controllers/relaxing_sound_controller.dart';
-// import 'package:mental_wellness_app/models/relaxing_sound.dart';
-// import 'package:provider/provider.dart';
-// import 'package:mental_wellness_app/state/audio_player_state.dart';
-// import 'package:audioplayers/audioplayers.dart';
-
-// class RelaxingSoundsScreen extends StatefulWidget {
-//   const RelaxingSoundsScreen({super.key});
-
-//   @override
-//   _RelaxingSoundsScreenState createState() => _RelaxingSoundsScreenState();
-// }
-
-// class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
-//   final RelaxingSoundController _controller =
-//       Get.put(RelaxingSoundController());
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // Make the status bar transparent
-//     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-//       statusBarColor: Colors.transparent,
-//       statusBarIconBrightness: Brightness.light,
-//     ));
-
-//     return Scaffold(
-//       body: Stack(
-//         children: [
-//           // Background image with fixed height
-//           Container(
-//             height: MediaQuery.of(context).size.height * 0.28,
-//             decoration: const BoxDecoration(
-//               image: DecorationImage(
-//                 image: AssetImage('assets/images/test1.jpg'),
-//                 fit: BoxFit.cover,
-//               ),
-//             ),
-//           ),
-//           SafeArea(
-//             child: Column(
-//               children: [
-//                 // Top section with title, description, and image
-//                 Padding(
-//                   padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
-//                   child: Row(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       const Expanded(
-//                         flex: 3,
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             Padding(
-//                               padding: EdgeInsets.only(top: 16.0),
-//                               child: Text(
-//                                 'Sounds',
-//                                 style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 26,
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                             ),
-//                             SizedBox(height: 16),
-//                             Padding(
-//                               padding: EdgeInsets.only(left: 4.0),
-//                               child: Text(
-//                                 'Relax Sounds',
-//                                 style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 20,
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                             ),
-//                             SizedBox(height: 8),
-//                             Padding(
-//                               padding: EdgeInsets.only(left: 4.0),
-//                               child: Text(
-//                                 'Help for focus, relax or sleep. \nMix sounds together.',
-//                                 style: TextStyle(
-//                                   color: Colors.white70,
-//                                   fontSize: 12,
-//                                 ),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       const SizedBox(
-//                           width: 10), // Increased space between text and image
-//                       Padding(
-//                         padding: const EdgeInsets.only(top: 25.0),
-//                         child: Align(
-//                           alignment: Alignment.bottomRight,
-//                           child: Image.asset(
-//                             'assets/images/relaxing/relaxing_sounds_4.png',
-//                             height: 152, // Use original height if needed
-//                             fit: BoxFit.contain,
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 // Main button to play/pause all relaxing sounds
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     Provider.of<AudioPlayerState>(context, listen: false)
-//                         .toggleAllRelaxingSounds();
-//                   },
-//                   child: Text(
-//                     Provider.of<AudioPlayerState>(context)
-//                             .isPlayingAllRelaxingSounds
-//                         ? 'Pause All'
-//                         : 'Play All',
-//                   ),
-//                 ),
-//                 // Sliders for different sounds
-//                 Expanded(
-//                   child: Obx(() {
-//                     if (_controller.isLoading.value) {
-//                       return const Center(child: CircularProgressIndicator());
-//                     }
-
-//                     return ListView.builder(
-//                       padding:
-//                           const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 70.0),
-//                       itemCount: _controller.relaxingSounds.length,
-//                       itemBuilder: (context, index) {
-//                         return buildSoundSlider(
-//                           context,
-//                           _controller.relaxingSounds[index],
-//                         );
-//                       },
-//                     );
-//                   }),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget buildSoundSlider(BuildContext context, RelaxingSound sound) {
-//     return Consumer<AudioPlayerState>(
-//       builder: (context, audioPlayerState, child) {
-//         final isEnabled =
-//             audioPlayerState.soundEnabledMap[sound.audioPath] ?? true;
-//         final player = AudioPlayer();
-//         audioPlayerState.registerSound(sound.audioPath, player);
-
-//         return Padding(
-//           padding: const EdgeInsets.symmetric(vertical: 5.0),
-//           child: Container(
-//             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-//             decoration: BoxDecoration(
-//               color: const Color.fromARGB(255, 0, 23, 34),
-//               borderRadius: BorderRadius.circular(10),
-//             ),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     Text(
-//                       sound.title,
-//                       style: const TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 14,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                     IconButton(
-//                       icon: Icon(
-//                         isEnabled
-//                             ? Icons.volume_up_outlined
-//                             : Icons.volume_off_outlined,
-//                         color: Colors.white,
-//                       ),
-//                       onPressed: () {
-//                         audioPlayerState.toggleSoundEnabled(sound.audioPath);
-//                       },
-//                     ),
-//                   ],
-//                 ),
-//                 Slider(
-//                   value: 0.5,
-//                   onChanged: (value) {},
-//                   activeColor: Colors.indigo,
-//                   inactiveColor: Colors.grey,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }

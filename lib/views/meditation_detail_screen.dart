@@ -248,6 +248,7 @@
 // update: when play button pressed, check if the MeditationExercise is the same as
 // todays Meditaiton task routine, mark as complete if it is
 import 'package:flutter/material.dart';
+import 'package:mental_wellness_app/services/firestore.dart';
 import 'package:mental_wellness_app/views/meditation_play_screen.dart';
 import 'package:mental_wellness_app/models/meditation_exercise.dart';
 
@@ -263,6 +264,8 @@ class MeditationDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FirestoreService firestoreService = FirestoreService();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -333,8 +336,11 @@ class MeditationDetailScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             onComplete();
+                            await firestoreService
+                                .incrementFieldAndCheckAchievement(
+                                    'meditationsCompleted', context);
                             Navigator.push(
                               context,
                               MaterialPageRoute(

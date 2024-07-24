@@ -615,23 +615,21 @@ class PersistentAudioPlayer extends StatelessWidget {
                     ),
                     Row(
                       children: [
+                        // IconButton(
+                        //   icon: const Icon(Icons.timer_outlined,
+                        //       color: Colors.white),
+                        //   onPressed: () {
+                        //     // Timer action
+                        //   },
+                        // ),
                         IconButton(
-                          icon: const Icon(Icons.timer_outlined,
-                              color: Colors.white),
-                          onPressed: () {
-                            // Timer action
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(audioPlayerState.isPlaying ||
-                                  audioPlayerState.isPlayingAllRelaxingSounds
+                          icon: Icon(audioPlayerState.isPlaying
                               ? Icons.pause
                               : Icons.play_arrow),
                           iconSize: 30,
                           color: Colors.white,
                           onPressed: () {
-                            if (audioPlayerState.isPlaying ||
-                                audioPlayerState.isPlayingAllRelaxingSounds) {
+                            if (audioPlayerState.isPlaying) {
                               audioPlayerState.pauseAudio();
                             } else {
                               audioPlayerState.resumeAudio();

@@ -1,256 +1,5 @@
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:mental_wellness_app/helper/helper_functions.dart';
-// import 'package:mental_wellness_app/services/firestore.dart';
-// import 'package:mental_wellness_app/util/login_icon_tile.dart';
-// import 'package:mental_wellness_app/util/my_button.dart';
-// import 'package:mental_wellness_app/util/my_textfield.dart';
-
-// class LoginScreen extends StatefulWidget {
-//   final Function()? onTap;
-//   const LoginScreen({super.key, required this.onTap});
-//   @override
-//   State<LoginScreen> createState() => _LoginScreenState();
-// }
-
-// class _LoginScreenState extends State<LoginScreen> {
-//   // removed const due to we have text editing controllers
-//   final emailController = TextEditingController(text: 'ashchar111@gmail.com');
-
-//   final passwordController = TextEditingController(text: 'test123');
-
-//   // void signUserIn(BuildContext context) {
-//   void login() async {
-//     // loading circle
-//     showDialog(
-//       context: context,
-//       builder: (context) {
-//         return const Center(
-//           child: CircularProgressIndicator(),
-//         );
-//       },
-//     );
-
-//     // attempt sign in
-//     try {
-//       await FirebaseAuth.instance.signInWithEmailAndPassword(
-//         email: emailController.text,
-//         password: passwordController.text,
-//       );
-
-//       // Update last active field
-//       await FirestoreService().updateLastActive();
-
-//       // Update daily routine after successful login
-//       await FirestoreService().updateDailyRoutine();
-
-//       if (mounted) Navigator.pop(context);
-
-//       // // pop loading circle when done signing in
-//       // if (mounted) {
-//       //   Navigator.pop(context);
-//       // }
-//     } on FirebaseAuthException catch (e) {
-//       // pop loading circle when done signing in
-//       if (mounted) Navigator.pop(context);
-
-//       // display errors
-//       displayErrorMessage(e.code, context);
-//       // if (e.code == 'user-not-found') {
-//       //   wrongEmailMsg();
-//       // } else if (e.code == 'wrong-password') {
-//       //   wrongPasswordMsg();
-//       // } else if (e.code == 'invalid-credential') {
-//       //   invalidCredsMsg();
-//       // } else {
-//       //   print('An error occurred: ${e.message}');
-//       // }
-//     }
-//   }
-
-//   void wrongEmailMsg() {
-//     showDialog(
-//       context: context,
-//       builder: (context) {
-//         return const AlertDialog(
-//           backgroundColor: Colors.deepPurple,
-//           title: Text(
-//             'Incorrect Email',
-//             style: TextStyle(color: Colors.white),
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   void wrongPasswordMsg() {
-//     showDialog(
-//       context: context,
-//       builder: (context) {
-//         return const AlertDialog(
-//           backgroundColor: Colors.deepPurple,
-//           title: Text(
-//             'Incorrect Password',
-//             style: TextStyle(color: Colors.white),
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   void invalidCredsMsg() {
-//     showDialog(
-//       context: context,
-//       builder: (context) {
-//         return const AlertDialog(
-//           backgroundColor: Colors.deepPurple,
-//           title: Text(
-//             'Invalid Credentials',
-//             style: TextStyle(color: Colors.white),
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.grey[300],
-//       body: SafeArea(
-//         child: Center(
-//           child: SingleChildScrollView(
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 const SizedBox(height: 35),
-
-//                 // logo
-//                 const Icon(
-//                   Icons.lock,
-//                   size: 90,
-//                 ),
-
-//                 const SizedBox(height: 40),
-
-//                 //welcome back
-//                 Center(
-//                   child: Text(
-//                     'Welcome back you\'ve been missed!',
-//                     style: TextStyle(
-//                       color: Colors.grey[700],
-//                       fontSize: 16,
-//                     ),
-//                   ),
-//                 ),
-
-//                 const SizedBox(height: 20),
-
-//                 //email textfield
-//                 MyTextField(
-//                   controller: emailController,
-//                   hintText: 'Email',
-//                   obscureText: false,
-//                 ),
-
-//                 const SizedBox(height: 10),
-
-//                 // password textfield
-//                 MyTextField(
-//                   controller: passwordController,
-//                   hintText: 'Password',
-//                   obscureText: true,
-//                 ),
-
-//                 const SizedBox(height: 10),
-
-//                 // forgot password
-//                 Padding(
-//                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.end,
-//                     children: [
-//                       Text(
-//                         'Forgot Password?',
-//                         style: TextStyle(color: Colors.grey[600]),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-
-//                 const SizedBox(height: 25),
-
-//                 //sign in btn
-//                 // MyButton(onTap: () => signUserIn(context)),
-//                 MyButton(text: "Sign In", onTap: () => login()),
-
-//                 const SizedBox(height: 30),
-
-//                 //or continue with
-//                 Padding(
-//                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-//                   child: Row(children: [
-//                     Expanded(
-//                       child: Divider(
-//                         thickness: 0.5,
-//                         color: Colors.grey[400],
-//                       ),
-//                     ),
-//                     Padding(
-//                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-//                       child: Text('Or continue with',
-//                           style: TextStyle(color: Colors.grey[700])),
-//                     ),
-//                     Expanded(
-//                       child: Divider(
-//                         thickness: 0.5,
-//                         color: Colors.grey[400],
-//                       ),
-//                     ),
-//                   ]),
-//                 ),
-
-//                 // const SizedBox(height: 30),
-
-//                 // // google + apple sign in buttons
-//                 // const Row(
-//                 //   mainAxisAlignment: MainAxisAlignment.center,
-//                 //   children: [
-//                 //     SquareTile(imagePath: 'lib/images/google.png'),
-//                 //     SizedBox(width: 25),
-//                 //     SquareTile(imagePath: 'lib/images/apple.png'),
-//                 //   ],
-//                 // ),
-
-//                 const SizedBox(height: 30),
-
-//                 //not a member? register now
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     Text(
-//                       'Not a member?',
-//                       style: TextStyle(color: Colors.grey[700]),
-//                     ),
-//                     const SizedBox(width: 4),
-//                     GestureDetector(
-//                       onTap: widget.onTap,
-//                       child: const Text('Register now',
-//                           style: TextStyle(
-//                               color: Colors.blue, fontWeight: FontWeight.bold)),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// fi laoding not ending issue + print previous user data instead of current
+// fix issue where login doesnt show latest routine and loading circle doesnt dismiss
+// login_screen.dart
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/material.dart';
 // import 'package:mental_wellness_app/helper/helper_functions.dart';
@@ -261,7 +10,11 @@
 
 // class LoginScreen extends StatefulWidget {
 //   final Function()? onTap;
-//   const LoginScreen({super.key, required this.onTap});
+//   final Function()? onSwitchRole;
+
+//   const LoginScreen(
+//       {super.key, required this.onTap, required this.onSwitchRole});
+
 //   @override
 //   State<LoginScreen> createState() => _LoginScreenState();
 // }
@@ -304,7 +57,6 @@
 //       Navigator.pop(context); // Dismiss the loading circle
 
 //       if (loginSuccess) {
-//         Navigator.pop(context); // Dismiss the loading circle
 //         Navigator.pushReplacement(
 //           context,
 //           MaterialPageRoute(builder: (context) => HomePage.instance),
@@ -318,101 +70,141 @@
 //     return Scaffold(
 //       backgroundColor: Colors.grey[300],
 //       body: SafeArea(
-//         child: Center(
-//           child: SingleChildScrollView(
-//             child: Padding(
-//               padding: const EdgeInsets.all(16.0),
-//               child: Column(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   const SizedBox(height: 35),
-//                   const Icon(
-//                     Icons.lock,
-//                     size: 90,
-//                   ),
-//                   const SizedBox(height: 40),
-//                   Center(
-//                     child: Text(
-//                       'Welcome back you\'ve been missed!',
-//                       style: TextStyle(
-//                         color: Colors.grey[700],
-//                         fontSize: 16,
-//                       ),
-//                     ),
-//                   ),
-//                   const SizedBox(height: 20),
-//                   MyTextField(
-//                     controller: emailController,
-//                     hintText: 'Email',
-//                     obscureText: false,
-//                   ),
-//                   const SizedBox(height: 10),
-//                   MyTextField(
-//                     controller: passwordController,
-//                     hintText: 'Password',
-//                     obscureText: true,
-//                   ),
-//                   const SizedBox(height: 10),
-//                   Padding(
-//                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
-//                     child: Row(
-//                       mainAxisAlignment: MainAxisAlignment.end,
+//         child: LayoutBuilder(
+//           builder: (context, constraints) {
+//             return SingleChildScrollView(
+//               child: ConstrainedBox(
+//                 constraints: BoxConstraints(
+//                   minHeight: constraints.maxHeight,
+//                 ),
+//                 child: IntrinsicHeight(
+//                   child: Padding(
+//                     padding: const EdgeInsets.all(16.0),
+//                     child: Column(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //                       children: [
-//                         Text(
-//                           'Forgot Password?',
-//                           style: TextStyle(color: Colors.grey[600]),
+//                         Column(
+//                           children: [
+//                             const SizedBox(height: 35),
+//                             const Icon(
+//                               Icons.lock,
+//                               size: 90,
+//                             ),
+//                             const SizedBox(height: 40),
+//                             Center(
+//                               child: Text(
+//                                 'Welcome back you\'ve been missed!',
+//                                 style: TextStyle(
+//                                   color: Colors.grey[700],
+//                                   fontSize: 16,
+//                                 ),
+//                               ),
+//                             ),
+//                             const SizedBox(height: 20),
+//                             MyTextField(
+//                               controller: emailController,
+//                               hintText: 'Email',
+//                               obscureText: false,
+//                             ),
+//                             const SizedBox(height: 10),
+//                             MyTextField(
+//                               controller: passwordController,
+//                               hintText: 'Password',
+//                               obscureText: true,
+//                             ),
+//                             const SizedBox(height: 10),
+//                             Padding(
+//                               padding:
+//                                   const EdgeInsets.symmetric(horizontal: 25.0),
+//                               child: Row(
+//                                 mainAxisAlignment: MainAxisAlignment.end,
+//                                 children: [
+//                                   Text(
+//                                     'Forgot Password?',
+//                                     style: TextStyle(color: Colors.grey[600]),
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                             const SizedBox(height: 25),
+//                             MyButton(text: "Sign In", onTap: () => login()),
+//                             const SizedBox(height: 10),
+//                             Padding(
+//                               padding:
+//                                   const EdgeInsets.symmetric(horizontal: 25.0),
+//                               child: Row(
+//                                 children: [
+//                                   Expanded(
+//                                     child: Divider(
+//                                       thickness: 0.5,
+//                                       color: Colors.grey[400],
+//                                     ),
+//                                   ),
+//                                   Padding(
+//                                     padding:
+//                                         EdgeInsets.symmetric(horizontal: 10.0),
+//                                     child: Text('Or continue with',
+//                                         style:
+//                                             TextStyle(color: Colors.grey[700])),
+//                                   ),
+//                                   Expanded(
+//                                     child: Divider(
+//                                       thickness: 0.5,
+//                                       color: Colors.grey[400],
+//                                     ),
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                             const SizedBox(height: 20),
+//                             Row(
+//                               mainAxisAlignment: MainAxisAlignment.center,
+//                               children: [
+//                                 Text(
+//                                   'Not a member?',
+//                                   style: TextStyle(color: Colors.grey[700]),
+//                                 ),
+//                                 const SizedBox(width: 4),
+//                                 GestureDetector(
+//                                   onTap: widget.onTap,
+//                                   child: const Text(
+//                                     'Register now',
+//                                     style: TextStyle(
+//                                       color: Colors.blue,
+//                                       fontWeight: FontWeight.bold,
+//                                     ),
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           ],
+//                         ),
+//                         GestureDetector(
+//                           onTap: widget.onSwitchRole,
+//                           child: const Text(
+//                             'Switch to Counsellor Login',
+//                             style: TextStyle(
+//                               color: Colors.blue,
+//                               fontWeight: FontWeight.bold,
+//                             ),
+//                           ),
 //                         ),
 //                       ],
 //                     ),
 //                   ),
-//                   const SizedBox(height: 25),
-//                   MyButton(text: "Sign In", onTap: () => login()),
-//                   const SizedBox(height: 0),
-//                   Padding(
-//                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
-//                     child: Row(children: [
-//                       Expanded(
-//                         child: Divider(
-//                           thickness: 0.5,
-//                           color: Colors.grey[400],
-//                         ),
-//                       ),
-//                       Expanded(
-//                         child: Divider(thickness: 0.5, color: Colors.grey[400]),
-//                       ),
-//                     ]),
-//                   ),
-//                   const SizedBox(height: 10),
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       Text(
-//                         'Not a member?',
-//                         style: TextStyle(color: Colors.grey[700]),
-//                       ),
-//                       const SizedBox(width: 4),
-//                       GestureDetector(
-//                         onTap: widget.onTap,
-//                         child: const Text('Register now',
-//                             style: TextStyle(
-//                                 color: Colors.blue,
-//                                 fontWeight: FontWeight.bold)),
-//                       ),
-//                     ],
-//                   ),
-//                 ],
+//                 ),
 //               ),
-//             ),
-//           ),
+//             );
+//           },
 //         ),
 //       ),
 //     );
 //   }
 // }
 
-// with counsellor option
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mental_wellness_app/auth/forgot_password_screen.dart';
 import 'package:mental_wellness_app/helper/helper_functions.dart';
 import 'package:mental_wellness_app/services/firestore.dart';
 import 'package:mental_wellness_app/util/my_button.dart';
@@ -433,25 +225,105 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  // void login() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+
+  //   try {
+  //     await FirebaseAuth.instance.signInWithEmailAndPassword(
+  //       email: emailController.text,
+  //       password: passwordController.text,
+  //     );
+
+  //     // Update last active field
+  //     await FirestoreService().updateLastActive();
+
+  //     // Update daily routine after successful login
+  //     await FirestoreService().updateDailyRoutine();
+
+  //     // Navigate to home page
+  //     if (mounted) {
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => HomePage.instance),
+  //       );
+  //     }
+  //   } on FirebaseAuthException catch (e) {
+  //     if (mounted) {
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //     }
+
+  //     String errorMessage;
+  //     print('Error is: ${e.code}');
+  //     switch (e.code) {
+  //       case 'user-not-found':
+  //         errorMessage = 'No user found for that email.';
+  //         break;
+  //       case 'wrong-password':
+  //         errorMessage = 'Wrong password provided.';
+  //         break;
+  //       case 'invalid-email':
+  //         errorMessage = 'The email address is not valid.';
+  //         break;
+  //       case 'invalid-credential':
+  //         errorMessage = 'Login credentials are not valid.';
+  //         break;
+  //       case 'user-disabled':
+  //         errorMessage = 'This user has been disabled.';
+  //         break;
+  //       case 'too-many-requests':
+  //         errorMessage = 'Too many requests. Try again later.';
+  //         break;
+  //       case 'operation-not-allowed':
+  //         errorMessage = 'Email and password sign-in is not enabled.';
+  //         break;
+  //       default:
+  //         errorMessage = 'An unexpected error occurred. Please try again.';
+  //     }
+
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(errorMessage),
+  //         backgroundColor: Colors.red,
+  //       ),
+  //     );
+  //   }
+  // }
 
   void login() async {
-    // show loading circle
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-
-    bool loginSuccess = false;
+    setState(() {
+      _isLoading = true;
+    });
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
+
+      User? user = userCredential.user;
+      if (user != null && !user.emailVerified) {
+        setState(() {
+          _isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Please verify your email to continue.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        await FirebaseAuth.instance.signOut(); // Sign out the user
+        return;
+      }
 
       // Update last active field
       await FirestoreService().updateLastActive();
@@ -459,21 +331,54 @@ class _LoginScreenState extends State<LoginScreen> {
       // Update daily routine after successful login
       await FirestoreService().updateDailyRoutine();
 
-      loginSuccess = true;
-    } on FirebaseAuthException catch (e) {
-      displayErrorMessage(e.code, context);
-    }
-
-    if (mounted) {
-      Navigator.pop(context); // Dismiss the loading circle
-
-      if (loginSuccess) {
-        Navigator.pop(context); // Dismiss the loading circle
+      // Navigate to home page
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomePage.instance),
         );
       }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+
+      String errorMessage;
+      print('Error is: ${e.code}');
+      switch (e.code) {
+        case 'user-not-found':
+          errorMessage = 'No user found for that email.';
+          break;
+        case 'wrong-password':
+          errorMessage = 'Wrong password provided.';
+          break;
+        case 'invalid-email':
+          errorMessage = 'The email address is not valid.';
+          break;
+        case 'user-disabled':
+          errorMessage = 'This user has been disabled.';
+          break;
+        case 'too-many-requests':
+          errorMessage = 'Too many requests. Try again later.';
+          break;
+        case 'operation-not-allowed':
+          errorMessage = 'Email and password sign-in is not enabled.';
+          break;
+        default:
+          errorMessage = 'An unexpected error occurred. Please try again.';
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -492,115 +397,110 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: IntrinsicHeight(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Stack(
                       children: [
                         Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const SizedBox(height: 35),
-                            const Icon(
-                              Icons.lock,
-                              size: 90,
-                            ),
-                            const SizedBox(height: 40),
-                            Center(
-                              child: Text(
-                                'Welcome back you\'ve been missed!',
-                                style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            MyTextField(
-                              controller: emailController,
-                              hintText: 'Email',
-                              obscureText: false,
-                            ),
-                            const SizedBox(height: 10),
-                            MyTextField(
-                              controller: passwordController,
-                              hintText: 'Password',
-                              obscureText: true,
-                            ),
-                            const SizedBox(height: 10),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 25.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    'Forgot Password?',
-                                    style: TextStyle(color: Colors.grey[600]),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 25),
-                            MyButton(text: "Sign In", onTap: () => login()),
-                            const SizedBox(height: 10),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 25.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Divider(
-                                      thickness: 0.5,
-                                      color: Colors.grey[400],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10.0),
-                                    child: Text('Or continue with',
-                                        style:
-                                            TextStyle(color: Colors.grey[700])),
-                                  ),
-                                  Expanded(
-                                    child: Divider(
-                                      thickness: 0.5,
-                                      color: Colors.grey[400],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            Column(
                               children: [
-                                Text(
-                                  'Not a member?',
-                                  style: TextStyle(color: Colors.grey[700]),
+                                const SizedBox(height: 35),
+                                const Icon(
+                                  Icons.lock,
+                                  size: 90,
                                 ),
-                                const SizedBox(width: 4),
-                                GestureDetector(
-                                  onTap: widget.onTap,
-                                  child: const Text(
-                                    'Register now',
+                                const SizedBox(height: 40),
+                                Center(
+                                  child: Text(
+                                    'Hi Member, you\'ve been missed!',
                                     style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[700],
+                                      fontSize: 16,
                                     ),
                                   ),
+                                ),
+                                const SizedBox(height: 20),
+                                MyTextField(
+                                  controller: emailController,
+                                  hintText: 'Email',
+                                  obscureText: false,
+                                ),
+                                const SizedBox(height: 10),
+                                MyTextField(
+                                  controller: passwordController,
+                                  hintText: 'Password',
+                                  obscureText: true,
+                                ),
+                                const SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ForgotPasswordScreen(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          'Forgot Password?',
+                                          style: TextStyle(
+                                              color: Colors.grey[600]),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 25),
+                                MyButton(text: "Sign In", onTap: () => login()),
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Not a member yet?',
+                                      style: TextStyle(color: Colors.grey[700]),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    GestureDetector(
+                                      onTap: widget.onTap,
+                                      child: const Text(
+                                        'Register now',
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
+                            GestureDetector(
+                              onTap: widget.onSwitchRole,
+                              child: const Text(
+                                'Switch to Counsellor Login',
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
-                        GestureDetector(
-                          onTap: widget.onSwitchRole,
-                          child: const Text(
-                            'Switch to Counsellor Login',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
+                        if (_isLoading)
+                          Container(
+                            color: Colors.black54,
+                            child: const Center(
+                              child: CircularProgressIndicator(),
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ),

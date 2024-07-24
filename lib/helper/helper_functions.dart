@@ -37,3 +37,44 @@ bool validateNameFields(
   }
   return true;
 }
+
+/// Function to validate the counsellor-specific fields
+bool validateCounsellorFields({
+  required String bio,
+  required String education,
+  required String city,
+  required String country,
+  required String languages,
+  required String experienceYears,
+  required BuildContext context,
+}) {
+  if (bio.trim().isEmpty) {
+    displayErrorMessage("Bio cannot be empty", context);
+    return false;
+  }
+  if (education.trim().isEmpty) {
+    displayErrorMessage("Education cannot be empty", context);
+    return false;
+  }
+  if (city.trim().isEmpty) {
+    displayErrorMessage("City cannot be empty", context);
+    return false;
+  }
+  if (country.trim().isEmpty) {
+    displayErrorMessage("Country cannot be empty", context);
+    return false;
+  }
+  if (languages.trim().isEmpty) {
+    displayErrorMessage("Languages cannot be empty", context);
+    return false;
+  }
+  if (experienceYears.trim().isEmpty) {
+    displayErrorMessage("Years of experience cannot be empty", context);
+    return false;
+  }
+  if (int.tryParse(experienceYears) == null) {
+    displayErrorMessage("Years of experience must be a number", context);
+    return false;
+  }
+  return true;
+}
