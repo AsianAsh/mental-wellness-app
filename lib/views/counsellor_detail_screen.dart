@@ -787,6 +787,7 @@ class _CounsellorDetailScreenState extends State<CounsellorDetailScreen> {
         .fetchCounsellorAppointments(widget.counsellor.counsellorId);
     Map<String, List<String>> tempAvailableSlots = {};
     Set<String> tempDates = {};
+    Map<String, DateTime> dateMap = {};
 
     DateTime currentDate = DateTime.now();
     for (var doc in appointments) {
@@ -801,12 +802,17 @@ class _CounsellorDetailScreenState extends State<CounsellorDetailScreen> {
         tempAvailableSlots[formattedDate]!.add(DateFormat('hh:mm a')
             .format((data['startTime'] as Timestamp).toDate()));
         tempDates.add(formattedDate);
+        dateMap[formattedDate] = appointmentDate; // Store the mapping
       }
     }
 
+    // Sort the dates using the mapping
+    List<String> sortedDates = tempDates.toList()
+      ..sort((a, b) => dateMap[a]!.compareTo(dateMap[b]!));
+
     setState(() {
       _availableSlots = tempAvailableSlots;
-      _dates = tempDates.toList()..sort();
+      _dates = sortedDates;
     });
   }
 
