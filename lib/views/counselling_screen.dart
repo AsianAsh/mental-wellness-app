@@ -1081,7 +1081,7 @@ import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:mental_wellness_app/controllers/counsellor_controller.dart';
 import 'package:mental_wellness_app/models/counsellor.dart';
-import 'counsellor_detail_screen.dart';
+import 'book_appointment_screen.dart';
 import 'member_appointment_detail_screen.dart';
 
 class CounsellingScreen extends StatefulWidget {

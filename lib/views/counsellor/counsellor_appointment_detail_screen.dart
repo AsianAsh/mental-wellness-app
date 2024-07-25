@@ -515,7 +515,8 @@ class _CounsellorAppointmentDetailScreenState
     );
   }
 
-  Widget _buildLongDetail(String title, TextEditingController controller) {
+  Widget _buildLongDetail(String title, TextEditingController controller,
+      {bool isEditable = true}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
@@ -535,7 +536,7 @@ class _CounsellorAppointmentDetailScreenState
             child: TextFormField(
               controller: controller,
               maxLines: null,
-              enabled: widget.isEditable,
+              enabled: isEditable,
               decoration: InputDecoration(
                 border: InputBorder.none,
               ),
@@ -650,10 +651,9 @@ class _CounsellorAppointmentDetailScreenState
                   _buildDetailRow('Status:', formattedStatus,
                       valueColor: statusColor),
                   SizedBox(height: 10),
-                  _buildLongDetail(
-                      'Reason:',
-                      TextEditingController(
-                          text: widget.appointment['reason'])),
+                  _buildLongDetail('Reason:',
+                      TextEditingController(text: widget.appointment['reason']),
+                      isEditable: false),
                   _buildLongDetail('Summary:', _summaryController),
                   SizedBox(height: 10),
                   Center(

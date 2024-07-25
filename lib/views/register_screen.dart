@@ -1119,7 +1119,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             TextButton(
               onPressed: () async {
                 Navigator.pop(context); // Dismiss the dialog
-
                 // Send email verification
                 User? user = userCredential.user;
                 await user?.sendEmailVerification();

@@ -354,7 +354,7 @@ import 'package:mental_wellness_app/state/audio_player_state.dart';
 import 'package:mental_wellness_app/views/breathing_play_screen.dart';
 import 'package:mental_wellness_app/views/meditation_detail_screen.dart';
 import 'package:mental_wellness_app/views/mood_tracker_screen.dart';
-import 'package:mental_wellness_app/views/relaxing_sounds.dart';
+import 'package:mental_wellness_app/views/relaxing_sounds_screen.dart';
 import 'package:mental_wellness_app/views/sleep_screen.dart';
 import 'package:mental_wellness_app/widgets/persistent_audio_player.dart';
 import 'package:provider/provider.dart';
