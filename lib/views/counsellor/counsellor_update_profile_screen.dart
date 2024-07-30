@@ -6,13 +6,14 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
-import 'package:mental_wellness_app/util/edit_profile_textfield.dart';
 import 'package:mental_wellness_app/services/firestore.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:mental_wellness_app/helper/helper_functions.dart';
+import 'package:mental_wellness_app/widgets/edit_profile_textfield.dart';
+import 'package:validators/validators.dart';
 
 class UpdateCounsellorProfileScreen extends StatefulWidget {
-  const UpdateCounsellorProfileScreen({Key? key}) : super(key: key);
+  const UpdateCounsellorProfileScreen({super.key});
 
   @override
   _UpdateCounsellorProfileScreenState createState() =>
@@ -151,11 +152,53 @@ class _UpdateCounsellorProfileScreenState
     );
   }
 
-  Future<void> _updateCounsellorDetails() async {
+  bool _validateFields() {
     if (!validateNameFields(
         firstNameController.text, lastNameController.text, context)) {
+      return false;
+    }
+    if (bioController.text.trim().isEmpty) {
+      displaySnackBarMessage('Bio cannot be empty', context);
+      return false;
+    }
+    if (educationController.text.trim().isEmpty) {
+      displaySnackBarMessage('Education cannot be empty', context);
+      return false;
+    }
+    if (jobTitleController.text.trim().isEmpty) {
+      displaySnackBarMessage('Job title cannot be empty', context);
+      return false;
+    }
+    if (cityController.text.trim().isEmpty) {
+      displaySnackBarMessage('City cannot be empty', context);
+      return false;
+    }
+    if (selectedCountry == null || selectedCountry!.isEmpty) {
+      displaySnackBarMessage('Country cannot be empty', context);
+      return false;
+    }
+    if (linkedinController.text.trim().isEmpty ||
+        !isURL(linkedinController.text)) {
+      displaySnackBarMessage('Please enter a valid LinkedIn URL', context);
+      return false;
+    }
+    if (languagesController.text.trim().isEmpty) {
+      displaySnackBarMessage('Languages cannot be empty', context);
+      return false;
+    }
+    if (experienceYearsController.text.trim().isEmpty ||
+        int.tryParse(experienceYearsController.text) == null) {
+      displaySnackBarMessage('Years of experience must be a number', context);
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _updateCounsellorDetails() async {
+    if (!_validateFields()) {
       return;
     }
+
     try {
       User? currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser == null) return;
@@ -466,6 +509,7 @@ class _UpdateCounsellorProfileScreenState
     );
   }
 }
+
 
 // add specialization field to edit and enable save changes button to track profile pic and country
 // UpdateCounsellorProfileScreen

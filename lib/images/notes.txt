@@ -1,2 +1,0 @@
-not sure if images should be in this folder
-there is a dependancy for this under pubspec.yaml calleds - lib/images/

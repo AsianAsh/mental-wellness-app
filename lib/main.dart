@@ -83,7 +83,7 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]).then((_) async {
-    runApp(const MyApp());
+    runApp(MyApp());
     if (FirebaseAuth.instance.currentUser != null) {
       await FirestoreService().updateDailyRoutine();
     }
@@ -91,7 +91,10 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+  // Create a GlobalKey for the ScaffoldMessenger
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   @override
   Widget build(BuildContext context) {

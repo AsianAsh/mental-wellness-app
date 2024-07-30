@@ -1045,15 +1045,283 @@
 // }
 
 // with fix to loading circle by replacing it and implement verify email
-import 'package:firebase_auth/firebase_auth.dart';
+// register_screen.dart
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:mental_wellness_app/helper/helper_functions.dart';
+// import 'package:mental_wellness_app/services/firestore.dart';
+// import 'package:mental_wellness_app/widgets/my_button.dart';
+// import 'package:mental_wellness_app/widgets/my_textfield.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:mental_wellness_app/views/login_screen.dart';
+
+// class RegisterScreen extends StatefulWidget {
+//   final Function()? onTap;
+//   final Function()? onSwitchRole;
+
+//   RegisterScreen({super.key, required this.onTap, required this.onSwitchRole});
+
+//   @override
+//   State<RegisterScreen> createState() => _RegisterScreenState();
+// }
+
+// class _RegisterScreenState extends State<RegisterScreen> {
+//   final firstNameController = TextEditingController();
+//   final lastNameController = TextEditingController();
+//   final emailController = TextEditingController();
+//   final passwordController = TextEditingController();
+//   final confirmPasswordController = TextEditingController();
+//   final FirestoreService firestoreService = FirestoreService();
+//   bool _isLoading = false;
+
+//   // String capitalize(String name) {
+//   //   return name.split(' ').map((word) {
+//   //     if (word.isNotEmpty) {
+//   //       return word[0].toUpperCase() + word.substring(1).toLowerCase();
+//   //     } else {
+//   //       return '';
+//   //     }
+//   //   }).join(' ');
+//   // }
+
+//   void registerUser() async {
+//     if (!validateNameFields(
+//         firstNameController.text, lastNameController.text, context)) {
+//       return;
+//     }
+
+//     if (passwordController.text != confirmPasswordController.text) {
+//       displayErrorMessage("Passwords don't match", context);
+//       return;
+//     }
+
+//     setState(() {
+//       _isLoading = true;
+//     });
+
+//     try {
+//       UserCredential userCredential =
+//           await FirebaseAuth.instance.createUserWithEmailAndPassword(
+//         email: emailController.text,
+//         password: passwordController.text,
+//       );
+
+//       // Show a dialog informing the user to verify their email
+//       showDialog(
+//         context: context,
+//         barrierDismissible:
+//             false, // Prevents the dialog from being dismissed without user interaction
+//         builder: (context) => AlertDialog(
+//           title: Text('Verify your email'),
+//           content: Text(
+//               'A verification link will be sent to your email. Please verify your email before logging in.'),
+//           actions: [
+//             TextButton(
+//               onPressed: () async {
+//                 Navigator.pop(context); // Dismiss the dialog
+//                 // Send email verification
+//                 User? user = userCredential.user;
+//                 await user?.sendEmailVerification();
+
+//                 await createMemberDocument(userCredential);
+
+//                 await firestoreService.updateDailyRoutine();
+
+//                 if (mounted) {
+//                   setState(() {
+//                     _isLoading = false;
+//                   });
+//                   Navigator.pushReplacement(
+//                     context,
+//                     MaterialPageRoute(
+//                       builder: (context) => LoginScreen(
+//                         onTap: widget.onTap,
+//                         onSwitchRole: widget.onSwitchRole,
+//                       ),
+//                     ),
+//                   );
+//                 }
+//               },
+//               child: Text('OK'),
+//             ),
+//           ],
+//         ),
+//       );
+//     } on FirebaseAuthException catch (e) {
+//       if (mounted) {
+//         setState(() {
+//           _isLoading = false;
+//         });
+//       }
+
+//       if (e.code == 'weak-password') {
+//         displayErrorMessage("The password provided is too weak.", context);
+//       } else if (e.code == 'email-already-in-use') {
+//         displayErrorMessage(
+//             "The account already exists for that email.", context);
+//       } else {
+//         displayErrorMessage("An error occurred: ${e.message}", context);
+//       }
+//     } catch (e) {
+//       if (mounted) {
+//         setState(() {
+//           _isLoading = false;
+//         });
+//       }
+//       displayErrorMessage("An error occurred. Please try again.", context);
+//     }
+//   }
+
+//   // Future<void> createMemberDocument(UserCredential? userCredential) async {
+//   //   if (userCredential != null && userCredential.user != null) {
+//   //     await FirebaseFirestore.instance
+//   //         .collection("Members")
+//   //         .doc(userCredential.user!.uid)
+//   //         .set({
+//   //       'memberId': userCredential.user!.uid,
+//   //       'email': userCredential.user!.email,
+//   //       'firstName': capitalize(firstNameController.text.trim()),
+//   //       'lastName': capitalize(lastNameController.text.trim()),
+//   //       'profilePic': '',
+//   //       'bio': '',
+//   //       'country': '',
+//   //       'level': 1,
+//   //       'points': 0,
+//   //       'dailyStreak': 0,
+//   //       'meditationsCompleted': 0,
+//   //       'breathingsCompleted': 0,
+//   //       'soundsCompleted': 0,
+//   //       'friendsAdded': 0,
+//   //       'encouragingMessagesSent': 0,
+//   //       'totalDailyNotes': 0,
+//   //       'totalMoodEntries': 0,
+//   //       'createdAt': Timestamp.now(),
+//   //       'lastActive': Timestamp.now(),
+//   //     });
+//   //   }
+//   // }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.grey[300],
+//       body: SafeArea(
+//         child: LayoutBuilder(
+//           builder: (context, constraints) {
+//             return SingleChildScrollView(
+//               child: ConstrainedBox(
+//                 constraints: BoxConstraints(
+//                   minHeight: constraints.maxHeight,
+//                 ),
+//                 child: IntrinsicHeight(
+//                   child: Padding(
+//                     padding: const EdgeInsets.all(16.0),
+//                     child: Stack(
+//                       children: [
+//                         Column(
+//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                           children: [
+//                             Column(
+//                               children: [
+//                                 const SizedBox(height: 35),
+//                                 const Icon(
+//                                   Icons.lock,
+//                                   size: 60,
+//                                 ),
+//                                 const SizedBox(height: 5),
+//                                 Center(
+//                                   child: Text(
+//                                     'Create your account',
+//                                     style: TextStyle(
+//                                       color: Colors.grey[700],
+//                                       fontSize: 16,
+//                                     ),
+//                                   ),
+//                                 ),
+//                                 const SizedBox(height: 20),
+//                                 MyTextField(
+//                                   controller: firstNameController,
+//                                   hintText: 'First Name',
+//                                   obscureText: false,
+//                                 ),
+//                                 const SizedBox(height: 10),
+//                                 MyTextField(
+//                                   controller: lastNameController,
+//                                   hintText: 'Last Name',
+//                                   obscureText: false,
+//                                 ),
+//                                 const SizedBox(height: 10),
+//                                 MyTextField(
+//                                   controller: emailController,
+//                                   hintText: 'Email',
+//                                   obscureText: false,
+//                                 ),
+//                                 const SizedBox(height: 10),
+//                                 MyTextField(
+//                                   controller: passwordController,
+//                                   hintText: 'Password',
+//                                   obscureText: true,
+//                                 ),
+//                                 const SizedBox(height: 10),
+//                                 MyTextField(
+//                                   controller: confirmPasswordController,
+//                                   hintText: 'Confirm Password',
+//                                   obscureText: true,
+//                                 ),
+//                                 const SizedBox(height: 25),
+//                                 MyButton(
+//                                     text: "Sign Up",
+//                                     onTap: () => registerUser()),
+//                                 const SizedBox(height: 20),
+//                                 Row(
+//                                   mainAxisAlignment: MainAxisAlignment.center,
+//                                   children: [
+//                                     Text(
+//                                       'Already a member?',
+//                                       style: TextStyle(color: Colors.grey[700]),
+//                                     ),
+//                                     const SizedBox(width: 4),
+//                                     GestureDetector(
+//                                       onTap: widget.onTap,
+//                                       child: const Text(
+//                                         'Login now',
+//                                         style: TextStyle(
+//                                           color: Colors.blue,
+//                                           fontWeight: FontWeight.bold,
+//                                         ),
+//                                       ),
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ],
+//                             ),
+//                           ],
+//                         ),
+//                         if (_isLoading)
+//                           Container(
+//                             color: Colors.black54,
+//                             child: const Center(
+//                               child: CircularProgressIndicator(),
+//                             ),
+//                           ),
+//                       ],
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// views/register_screen.dart
 import 'package:flutter/material.dart';
-import 'package:mental_wellness_app/helper/helper_functions.dart';
-import 'package:mental_wellness_app/services/firestore.dart';
-import 'package:mental_wellness_app/util/my_button.dart';
-import 'package:mental_wellness_app/util/my_textfield.dart';
-import 'package:mental_wellness_app/home_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mental_wellness_app/views/login_screen.dart';
+import 'package:mental_wellness_app/controllers/register_controller.dart';
+import 'package:mental_wellness_app/widgets/my_button.dart';
+import 'package:mental_wellness_app/widgets/my_textfield.dart';
 
 class RegisterScreen extends StatefulWidget {
   final Function()? onTap;
@@ -1071,136 +1339,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  final FirestoreService firestoreService = FirestoreService();
+  final RegisterController registerController = RegisterController();
   bool _isLoading = false;
-
-  String capitalize(String name) {
-    return name.split(' ').map((word) {
-      if (word.isNotEmpty) {
-        return word[0].toUpperCase() + word.substring(1).toLowerCase();
-      } else {
-        return '';
-      }
-    }).join(' ');
-  }
-
-  void registerUser() async {
-    if (!validateNameFields(
-        firstNameController.text, lastNameController.text, context)) {
-      return;
-    }
-
-    if (passwordController.text != confirmPasswordController.text) {
-      displayErrorMessage("Passwords don't match", context);
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-
-      // Show a dialog informing the user to verify their email
-      showDialog(
-        context: context,
-        barrierDismissible:
-            false, // Prevents the dialog from being dismissed without user interaction
-        builder: (context) => AlertDialog(
-          title: Text('Verify your email'),
-          content: Text(
-              'A verification link will be sent to your email. Please verify your email before logging in.'),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(context); // Dismiss the dialog
-                // Send email verification
-                User? user = userCredential.user;
-                await user?.sendEmailVerification();
-
-                await createUserDocument(userCredential);
-
-                await firestoreService.updateDailyRoutine();
-
-                if (mounted) {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginScreen(
-                        onTap: widget.onTap,
-                        onSwitchRole: widget.onSwitchRole,
-                      ),
-                    ),
-                  );
-                }
-              },
-              child: Text('OK'),
-            ),
-          ],
-        ),
-      );
-    } on FirebaseAuthException catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-
-      if (e.code == 'weak-password') {
-        displayErrorMessage("The password provided is too weak.", context);
-      } else if (e.code == 'email-already-in-use') {
-        displayErrorMessage(
-            "The account already exists for that email.", context);
-      } else {
-        displayErrorMessage("An error occurred: ${e.message}", context);
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-      displayErrorMessage("An error occurred. Please try again.", context);
-    }
-  }
-
-  Future<void> createUserDocument(UserCredential? userCredential) async {
-    if (userCredential != null && userCredential.user != null) {
-      await FirebaseFirestore.instance
-          .collection("Members")
-          .doc(userCredential.user!.uid)
-          .set({
-        'memberId': userCredential.user!.uid,
-        'email': userCredential.user!.email,
-        'firstName': capitalize(firstNameController.text.trim()),
-        'lastName': capitalize(lastNameController.text.trim()),
-        'profilePic': '',
-        'bio': '',
-        'country': '',
-        'level': 1,
-        'points': 0,
-        'dailyStreak': 0,
-        'meditationsCompleted': 0,
-        'breathingsCompleted': 0,
-        'soundsCompleted': 0,
-        'friendsAdded': 0,
-        'encouragingMessagesSent': 0,
-        'totalDailyNotes': 0,
-        'totalMoodEntries': 0,
-        'createdAt': Timestamp.now(),
-        'lastActive': Timestamp.now(),
-        // No need to add routine here as it will be added by updateDailyRoutine
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -1272,7 +1412,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 const SizedBox(height: 25),
                                 MyButton(
                                     text: "Sign Up",
-                                    onTap: () => registerUser()),
+                                    onTap: () {
+                                      setState(() {
+                                        _isLoading = true;
+                                      });
+                                      registerController.registerUser(
+                                        context,
+                                        firstNameController,
+                                        lastNameController,
+                                        emailController,
+                                        passwordController,
+                                        confirmPasswordController,
+                                        widget.onSwitchRole!,
+                                      );
+                                      setState(() {
+                                        _isLoading = false;
+                                      });
+                                    }),
                                 const SizedBox(height: 20),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,

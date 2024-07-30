@@ -64,7 +64,7 @@ class BreathingExercise {
       id: id,
       title: data['title'] ?? 'Untitled',
       duration: data['duration'] ?? 0,
-      imagePath: data['imagePath'] ?? 'assets/images/default.jpg',
+      imagePath: data['imagePath'] ?? 'assets/images/default_image.jpg',
       audioPath: data['audioPath'] ?? '',
     );
   }

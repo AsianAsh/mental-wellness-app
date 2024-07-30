@@ -24,7 +24,7 @@ class MeditationExercise {
       id: id,
       title: data['title'] ?? 'Untitled',
       description: data['description'] ?? 'No description',
-      imagePath: data['imagePath'] ?? 'assets/images/default.jpg',
+      imagePath: data['imagePath'] ?? 'assets/images/default_image.jpg',
       audioPath: data['audioPath'] ?? '',
       duration: data['duration'] ?? 0,
     );

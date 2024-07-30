@@ -51,6 +51,8 @@ dependencies:
   image_picker: ^1.1.2
   firebase_storage: ^12.1.1
   permission_handler: ^11.3.1
+  validators: ^3.0.0
+  confetti: ^0.7.0
 
 dev_dependencies:
   flutter_test:
@@ -74,30 +76,41 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/gong_yoo.jpg
-    - assets/images/meditation_1.jpg
-    - assets/images/relaxing/relaxing_sounds_1.png
-    - assets/images/relaxing/relaxing_sounds_2.png
-    - assets/images/relaxing/relaxing_sounds_3.png
-    - assets/images/relaxing/relaxing_sounds_4.png
-    - assets/images/test1.jpg
-    - assets/images/test2.jpg
-    - assets/images/breathing/anger.png
-    - assets/images/breathing/anxiety.png
-    - assets/audio/breathing/anger.mp3
-    - assets/audio/breathing/anxiety.mp3
+    # - assets/images/relaxing/relaxing_sounds_1.png
+    # - assets/images/relaxing/relaxing_sounds_4.png
+    # - assets/images/relaxing_sounds_bg.jpg
+    # - assets/images/breathing/anger.png
+    # - assets/images/breathing/anxiety.png
+    # - assets/audio/breathing/anger.mp3
+    # - assets/audio/breathing/anxiety.mp3
+    # - assets/images/meditation/
+    # - assets/audio/meditation/
+    # - assets/images/sleep_story/
+    # - assets/audio/sleep_story/
+    # - assets/audio/sleep_music/
+    # - assets/audio/relaxing_sound/
+    # - assets/images/default_image.jpg
+    # - assets/images/default_profile.png
+    # - assets/images/level_up_medal.png
+    # - assets/images/breathing/
+    # - assets/audio/breathing/
+    # - assets/images/achievements/
+    # - assets/helplines.json
+
+    - assets/images/
+    - assets/images/breathing/
     - assets/images/meditation/
-    - assets/audio/meditation/
+    - assets/images/achievements/
+    - assets/images/relaxing/
     - assets/images/sleep_story/
     - assets/audio/sleep_story/
     - assets/audio/sleep_music/
     - assets/audio/relaxing_sound/
-    - assets/images/default.jpg
+    - assets/audio/breathing/
+    - assets/audio/meditation/
+    - assets/images/default_image.jpg
     - assets/images/default_profile.png
     - assets/images/level_up_medal.png
-    - assets/images/breathing/
-    - assets/audio/breathing/
-    - assets/images/achievements/
     - assets/helplines.json
 
   # To add assets to your application, add an assets section, like this:

@@ -15,4 +15,12 @@ class SleepMusic {
     String secondsStr = seconds.toString().padLeft(2, '0');
     return '$minutes:$secondsStr';
   }
+
+  factory SleepMusic.fromMap(Map<String, dynamic> data) {
+    return SleepMusic(
+      title: data['title'] ?? 'Untitled',
+      duration: data['duration'] ?? 0,
+      audioPath: data['audioPath'] ?? '',
+    );
+  }
 }

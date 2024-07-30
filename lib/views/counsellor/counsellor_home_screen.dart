@@ -774,7 +774,12 @@ class _CounsellorHomeScreenState extends State<CounsellorHomeScreen> {
   }
 }
 
-class AppointmentsScreen extends StatelessWidget {
+class AppointmentsScreen extends StatefulWidget {
+  @override
+  _AppointmentsScreenState createState() => _AppointmentsScreenState();
+}
+
+class _AppointmentsScreenState extends State<AppointmentsScreen> {
   Future<List<Map<String, dynamic>>> _fetchCounsellorAppointments() async {
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) return [];
@@ -838,6 +843,10 @@ class AppointmentsScreen extends StatelessWidget {
     return appointments;
   }
 
+  Future<void> _refreshAppointments() async {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Map<String, dynamic>>>(
@@ -857,6 +866,7 @@ class AppointmentsScreen extends StatelessWidget {
               return AppointmentCard(
                 appointment: appointment,
                 isEditable: true,
+                onUpdate: _refreshAppointments, // Pass the refresh function
               );
             },
           );
@@ -967,7 +977,12 @@ class HistoryScreen extends StatelessWidget {
   }
 }
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   Future<Map<String, dynamic>?> fetchCounsellorData() async {
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) return null;
@@ -985,6 +1000,15 @@ class ProfileScreen extends StatelessWidget {
       return 'https://$url';
     }
     return url;
+  }
+
+  Future<void> _navigateAndRefresh(BuildContext context) async {
+    bool? result = await Get.to(() => UpdateCounsellorProfileScreen());
+    if (result == true) {
+      setState(() {
+        // Trigger rebuild to refresh data
+      });
+    }
   }
 
   @override
@@ -1236,7 +1260,8 @@ class ProfileScreen extends StatelessWidget {
                               child: IconButton(
                                 icon: Icon(Icons.edit, color: Colors.indigo),
                                 onPressed: () {
-                                  Get.to(() => UpdateCounsellorProfileScreen());
+                                  _navigateAndRefresh(
+                                      context); // Navigate and refresh on return
                                 },
                               ),
                             ),
@@ -1266,11 +1291,13 @@ class ProfileScreen extends StatelessWidget {
 class AppointmentCard extends StatelessWidget {
   final Map<String, dynamic> appointment;
   final bool isEditable;
+  final Future<void> Function()? onUpdate;
 
   const AppointmentCard({
     Key? key,
     required this.appointment,
     required this.isEditable,
+    this.onUpdate,
   }) : super(key: key);
 
   @override
@@ -1330,8 +1357,8 @@ class AppointmentCard extends StatelessWidget {
             IconButton(
               icon:
                   Icon(Icons.more_vert_rounded, color: Colors.indigo, size: 30),
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                bool? result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => CounsellorAppointmentDetailScreen(
@@ -1340,6 +1367,10 @@ class AppointmentCard extends StatelessWidget {
                     ),
                   ),
                 );
+                if (result == true) {
+                  // Refresh the appointments if the appointment was updated
+                  if (onUpdate != null) await onUpdate!();
+                }
               },
             ),
           ],

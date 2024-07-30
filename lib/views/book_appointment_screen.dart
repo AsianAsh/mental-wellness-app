@@ -755,7 +755,6 @@ import 'package:intl/intl.dart';
 import 'package:mental_wellness_app/controllers/appointment_controller.dart';
 import 'package:mental_wellness_app/models/counsellor.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:mental_wellness_app/views/counselling_screen.dart';
 
 class CounsellorDetailScreen extends StatefulWidget {
   final Counsellor counsellor;

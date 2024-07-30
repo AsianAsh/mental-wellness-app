@@ -1,1814 +1,8 @@
-// import 'package:flutter/material.dart';
-// import 'package:mental_wellness_app/util/emote_face.dart';
-// import 'package:intl/intl.dart';
-
-// class MoodTrackerScreen extends StatefulWidget {
-//   const MoodTrackerScreen({Key? key}) : super(key: key);
-
-//   @override
-//   _MoodTrackerScreenState createState() => _MoodTrackerScreenState();
-// }
-
-// class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
-//   bool isAddingNote = false;
-//   TextEditingController _noteController = TextEditingController();
-//   bool isNoteFilled = false;
-
-//   // TextField to write note (pops up when Add Note button is tapped)
-//   void _showAddNoteBottomSheet(BuildContext context) {
-//     showModalBottomSheet(
-//       context: context,
-//       isScrollControlled: true,
-//       backgroundColor: Colors.indigo[600],
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.vertical(
-//           top: Radius.circular(20),
-//         ),
-//       ),
-//       builder: (BuildContext context) {
-//         return Padding(
-//           padding: MediaQuery.of(context).viewInsets,
-//           child: Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   DateFormat.yMMMMd().format(DateTime.now()),
-//                   style: TextStyle(
-//                     color: Colors.white,
-//                     fontSize: 16,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//                 SizedBox(height: 10),
-//                 TextField(
-//                   controller: _noteController,
-//                   onChanged: (text) {
-//                     setState(() {
-//                       isNoteFilled = text.isNotEmpty;
-//                     });
-//                   },
-//                   decoration: InputDecoration(
-//                     hintText: 'Write here your thoughts and emotions',
-//                     hintStyle: TextStyle(color: Colors.white70),
-//                     filled: true,
-//                     fillColor: Colors.indigo[400],
-//                     border: OutlineInputBorder(
-//                       borderRadius: BorderRadius.circular(10),
-//                       borderSide: BorderSide.none,
-//                     ),
-//                     suffixIcon: IconButton(
-//                       icon: Icon(Icons.add, color: Colors.white),
-//                       onPressed: () {
-//                         // Handle note submission
-//                         Navigator.pop(context);
-//                       },
-//                     ),
-//                   ),
-//                   style: TextStyle(color: Colors.white),
-//                   maxLines: 3,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Mood Tracker'),
-//         backgroundColor: Colors.transparent,
-//         elevation: 0,
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // Today's Check-in Card
-//             Container(
-//               padding: const EdgeInsets.all(16.0),
-//               decoration: BoxDecoration(
-//                 color: Colors.indigo[600],
-//                 borderRadius: BorderRadius.circular(16),
-//               ),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Row(
-//                     children: [
-//                       Icon(Icons.cloud, color: Colors.purple[300]),
-//                       SizedBox(width: 8),
-//                       Text(
-//                         "Today's check-in",
-//                         style: TextStyle(
-//                           color: Colors.purple[300],
-//                           fontSize: 16,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   SizedBox(height: 10),
-//                   Text(
-//                     'How you feeling today?',
-//                     style: TextStyle(
-//                       color: Colors.white,
-//                       fontSize: 18,
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-//                   Text(
-//                     'Time to reflect on your day',
-//                     style: TextStyle(
-//                       color: Colors.white70,
-//                       fontSize: 12,
-//                     ),
-//                   ),
-//                   SizedBox(height: 20),
-//                   SafeArea(
-//                     child: Column(
-//                       children: [
-//                         // Mood of the day Options
-//                         const Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                           children: [
-//                             // bad
-//                             Column(
-//                               children: [
-//                                 EmoticonFace(emoticonFace: '😒'),
-//                                 SizedBox(height: 5),
-//                                 Text('Bad',
-//                                     style: TextStyle(
-//                                       color: Colors.white,
-//                                     )),
-//                               ],
-//                             ),
-
-//                             // fine
-//                             Column(
-//                               children: [
-//                                 EmoticonFace(emoticonFace: '😐'),
-//                                 SizedBox(height: 5),
-//                                 Text('Fine',
-//                                     style: TextStyle(
-//                                       color: Colors.white,
-//                                     )),
-//                               ],
-//                             ),
-
-//                             // good
-//                             Column(
-//                               children: [
-//                                 EmoticonFace(emoticonFace: '😀'),
-//                                 SizedBox(height: 5),
-//                                 Text('Good',
-//                                     style: TextStyle(
-//                                       color: Colors.white,
-//                                     )),
-//                               ],
-//                             ),
-
-//                             // excellent
-//                             Column(
-//                               children: [
-//                                 EmoticonFace(emoticonFace: '😎'),
-//                                 SizedBox(height: 5),
-//                                 Text('Fantastic',
-//                                     style: TextStyle(
-//                                       color: Colors.white,
-//                                     )),
-//                               ],
-//                             ),
-//                           ],
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                   SizedBox(height: 20),
-//                   Align(
-//                     alignment: Alignment.center,
-//                     child: SizedBox(
-//                       width: double.infinity,
-//                       child: ElevatedButton(
-//                         onPressed: () {
-//                           _showAddNoteBottomSheet(context);
-//                         },
-//                         style: ElevatedButton.styleFrom(
-//                           shape: RoundedRectangleBorder(
-//                             borderRadius: BorderRadius.circular(
-//                                 16), // Adjust the radius as needed
-//                           ),
-//                         ),
-//                         child: Text(isNoteFilled ? 'Edit Note' : 'Add Note'),
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             // Tracker History Card
-//             SizedBox(height: 20),
-
-//             // Tracker History Card
-//             Container(
-//               padding: const EdgeInsets.all(16.0),
-//               decoration: BoxDecoration(
-//                 color: Colors.indigo[600],
-//                 borderRadius: BorderRadius.circular(16),
-//               ),
-//               child: Column(
-//                 children: [
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                     children: [
-//                       ChoiceChip(
-//                         label:
-//                             Text('Week', style: TextStyle(color: Colors.white)),
-//                         selected: true,
-//                         backgroundColor: Colors.indigo,
-//                         selectedColor: Colors.purple,
-//                         onSelected: (bool selected) {},
-//                       ),
-//                       ChoiceChip(
-//                         label: Text('Month',
-//                             style: TextStyle(color: Colors.white)),
-//                         selected: false,
-//                         backgroundColor: Colors.indigo,
-//                         onSelected: (bool selected) {},
-//                       ),
-//                     ],
-//                   ),
-//                   SizedBox(height: 10),
-//                   Text(
-//                     'Last 7 check-ins',
-//                     style: TextStyle(
-//                       color: Colors.white,
-//                       fontSize: 16,
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-//                   SizedBox(height: 10),
-//                   Container(
-//                     height: 90,
-//                     child: ListView(
-//                       scrollDirection: Axis.horizontal,
-//                       children: List.generate(7, (index) {
-//                         return Padding(
-//                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//                           child: Container(
-//                             width: 50,
-//                             decoration: BoxDecoration(
-//                               color: index == 0 ? Colors.blue : Colors.white24,
-//                               borderRadius: BorderRadius.circular(8),
-//                             ),
-//                           ),
-//                         );
-//                       }),
-//                     ),
-//                   ),
-//                   SizedBox(height: 20),
-//                   // Check-ins Left Card
-//                   Container(
-//                     padding: const EdgeInsets.all(16.0),
-//                     decoration: BoxDecoration(
-//                       color: Colors.indigo[800],
-//                       borderRadius: BorderRadius.circular(16),
-//                     ),
-//                     child: Row(
-//                       children: [
-//                         Icon(Icons.lock, color: Colors.white, size: 40),
-//                         SizedBox(width: 10),
-//                         Expanded(
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               Text(
-//                                 '6 check-ins left',
-//                                 style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 18,
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                               Text(
-//                                 'Track your moods a bit longer to unlock the mood score',
-//                                 style: TextStyle(
-//                                   color: Colors.white70,
-//                                   fontSize: 14,
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// Display selected mood, add option to replace selected mood, hide Add Note button
-// until mood is selected
-// mood_tracker_screen.dart (view)
-// mood_tracker_screen.dart (view)
-// mood_tracker_screen.dart (view)
-// mood_tracker_screen.dart (view)
-//
-
-// Add storing and displaying mood entry documents from Firestore
-// import 'package:flutter/material.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:mental_wellness_app/util/emote_face.dart';
-// import 'package:intl/intl.dart';
-
-// class MoodTrackerScreen extends StatefulWidget {
-//   const MoodTrackerScreen({Key? key}) : super(key: key);
-
-//   @override
-//   _MoodTrackerScreenState createState() => _MoodTrackerScreenState();
-// }
-
-// class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
-//   bool isAddingNote = false;
-//   TextEditingController _noteController = TextEditingController();
-//   bool isNoteFilled = false;
-//   String? selectedMood;
-//   String? selectedMoodText;
-
-//   final List<Map<String, String>> moods = [
-//     {'emoticon': '😒', 'text': 'Bad'},
-//     {'emoticon': '😐', 'text': 'Fine'},
-//     {'emoticon': '😀', 'text': 'Good'},
-//     {'emoticon': '😎', 'text': 'Fantastic'}
-//   ];
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _loadMoodEntryForToday();
-//   }
-
-//   Future<void> _loadMoodEntryForToday() async {
-//     User? currentUser = FirebaseAuth.instance.currentUser;
-//     if (currentUser != null) {
-//       QuerySnapshot moodEntrySnapshot = await FirebaseFirestore.instance
-//           .collection('Members')
-//           .doc(currentUser.uid)
-//           .collection('mood_entries')
-//           .where('date',
-//               isEqualTo: DateTime.now().toIso8601String().substring(0, 10))
-//           .get();
-
-//       if (moodEntrySnapshot.docs.isNotEmpty) {
-//         var moodEntry =
-//             moodEntrySnapshot.docs.first.data() as Map<String, dynamic>;
-//         setState(() {
-//           selectedMood = moodEntry['mood'];
-//           selectedMoodText = _getMoodText(moodEntry['mood']);
-//           _noteController.text = moodEntry['note'];
-//           isNoteFilled = moodEntry['note'].isNotEmpty;
-//         });
-//       }
-//     }
-//   }
-
-//   String _getMoodText(String emoticon) {
-//     return moods.firstWhere((mood) => mood['emoticon'] == emoticon)['text']!;
-//   }
-
-//   Future<void> _saveMoodEntry() async {
-//     User? currentUser = FirebaseAuth.instance.currentUser;
-//     if (currentUser != null && selectedMood != null) {
-//       await FirebaseFirestore.instance
-//           .collection('Members')
-//           .doc(currentUser.uid)
-//           .collection('mood_entries')
-//           .doc(DateTime.now()
-//               .toIso8601String()
-//               .substring(0, 10)) // Use date as document ID
-//           .set({
-//         'date': DateTime.now().toIso8601String().substring(0, 10),
-//         'mood': selectedMood,
-//         'note': _noteController.text,
-//       });
-//     }
-//   }
-
-//   void _selectMood(String emoticon, String text) {
-//     setState(() {
-//       selectedMood = emoticon;
-//       selectedMoodText = text;
-//       _saveMoodEntry(); // Save mood entry when a mood is selected
-//     });
-//   }
-
-//   void _showAddNoteBottomSheet(BuildContext context) {
-//     showModalBottomSheet(
-//       context: context,
-//       isScrollControlled: true,
-//       backgroundColor: Colors.indigo[600],
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.vertical(
-//           top: Radius.circular(20),
-//         ),
-//       ),
-//       builder: (BuildContext context) {
-//         return Padding(
-//           padding: MediaQuery.of(context).viewInsets,
-//           child: Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   DateFormat.yMMMMd().format(DateTime.now()),
-//                   style: TextStyle(
-//                     color: Colors.white,
-//                     fontSize: 16,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//                 SizedBox(height: 10),
-//                 TextField(
-//                   controller: _noteController,
-//                   onChanged: (text) {
-//                     setState(() {
-//                       isNoteFilled = text.isNotEmpty;
-//                     });
-//                   },
-//                   decoration: InputDecoration(
-//                     hintText: 'Write here your thoughts and emotions',
-//                     hintStyle: TextStyle(color: Colors.white70),
-//                     filled: true,
-//                     fillColor: Colors.indigo[400],
-//                     border: OutlineInputBorder(
-//                       borderRadius: BorderRadius.circular(10),
-//                       borderSide: BorderSide.none,
-//                     ),
-//                     suffixIcon: IconButton(
-//                       icon: Icon(Icons.add, color: Colors.white),
-//                       onPressed: () {
-//                         _saveMoodEntry(); // Save mood entry when note is added
-//                         Navigator.pop(context);
-//                       },
-//                     ),
-//                   ),
-//                   style: TextStyle(color: Colors.white),
-//                   maxLines: 3,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   void _showMoodSelectionModal(BuildContext context) {
-//     showModalBottomSheet(
-//       context: context,
-//       backgroundColor: Colors.indigo[600],
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.vertical(
-//           top: Radius.circular(20),
-//         ),
-//       ),
-//       builder: (BuildContext context) {
-//         return Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               Text(
-//                 'Changing your mood?',
-//                 style: TextStyle(
-//                   color: Colors.white,
-//                   fontSize: 18,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//               SizedBox(height: 20),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: moods.map((mood) {
-//                   return GestureDetector(
-//                     onTap: () {
-//                       _selectMood(mood['emoticon']!, mood['text']!);
-//                       Navigator.pop(context);
-//                     },
-//                     child: Column(
-//                       children: [
-//                         EmoticonFace(emoticonFace: mood['emoticon']!),
-//                         SizedBox(height: 5),
-//                         Text(mood['text']!,
-//                             style: TextStyle(
-//                               color: Colors.white,
-//                             )),
-//                       ],
-//                     ),
-//                   );
-//                 }).toList(),
-//               ),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Mood Tracker'),
-//         backgroundColor: Colors.transparent,
-//         elevation: 0,
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // Today's Check-in Card
-//             Container(
-//               padding: const EdgeInsets.all(16.0),
-//               decoration: BoxDecoration(
-//                 color: Colors.indigo[600],
-//                 borderRadius: BorderRadius.circular(16),
-//               ),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Row(
-//                     children: [
-//                       Icon(Icons.cloud, color: Colors.purple[300]),
-//                       SizedBox(width: 8),
-//                       Text(
-//                         "Today's check-in",
-//                         style: TextStyle(
-//                           color: Colors.purple[300],
-//                           fontSize: 16,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   SizedBox(height: 10),
-//                   Row(
-//                     children: [
-//                       Text(
-//                         selectedMood == null
-//                             ? 'How you feeling today?'
-//                             : "You're feeling $selectedMood",
-//                         style: TextStyle(
-//                           color: Colors.white,
-//                           fontSize: 18,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                       if (selectedMood != null)
-//                         IconButton(
-//                           icon: Icon(Icons.edit, color: Colors.white),
-//                           onPressed: () {
-//                             _showMoodSelectionModal(context);
-//                           },
-//                         ),
-//                     ],
-//                   ),
-//                   if (selectedMood == null)
-//                     Column(
-//                       children: [
-//                         SizedBox(height: 20),
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                           children: moods.map((mood) {
-//                             return GestureDetector(
-//                               onTap: () {
-//                                 _selectMood(mood['emoticon']!, mood['text']!);
-//                               },
-//                               child: Column(
-//                                 children: [
-//                                   EmoticonFace(emoticonFace: mood['emoticon']!),
-//                                   SizedBox(height: 5),
-//                                   Text(mood['text']!,
-//                                       style: TextStyle(
-//                                         color: Colors.white,
-//                                       )),
-//                                 ],
-//                               ),
-//                             );
-//                           }).toList(),
-//                         ),
-//                       ],
-//                     ),
-//                   if (selectedMoodText != null)
-//                     Text(
-//                       selectedMoodText!,
-//                       style: TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 16,
-//                       ),
-//                     ),
-//                   SizedBox(height: 20),
-//                   if (selectedMood != null)
-//                     Align(
-//                       alignment: Alignment.center,
-//                       child: SizedBox(
-//                         width: double.infinity,
-//                         child: ElevatedButton(
-//                           onPressed: () {
-//                             _showAddNoteBottomSheet(context);
-//                           },
-//                           style: ElevatedButton.styleFrom(
-//                             shape: RoundedRectangleBorder(
-//                               borderRadius: BorderRadius.circular(16),
-//                             ),
-//                           ),
-//                           child: Text(isNoteFilled ? 'Edit Note' : 'Add Note'),
-//                         ),
-//                       ),
-//                     ),
-//                 ],
-//               ),
-//             ),
-//             // Tracker History Card
-//             SizedBox(height: 20),
-
-//             // Tracker History Card
-//             Container(
-//               padding: const EdgeInsets.all(16.0),
-//               decoration: BoxDecoration(
-//                 color: Colors.indigo[600],
-//                 borderRadius: BorderRadius.circular(16),
-//               ),
-//               child: Column(
-//                 children: [
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                     children: [
-//                       ChoiceChip(
-//                         label:
-//                             Text('Week', style: TextStyle(color: Colors.white)),
-//                         selected: true,
-//                         backgroundColor: Colors.indigo,
-//                         selectedColor: Colors.purple,
-//                         onSelected: (bool selected) {},
-//                       ),
-//                       ChoiceChip(
-//                         label: Text('Month',
-//                             style: TextStyle(color: Colors.white)),
-//                         selected: false,
-//                         backgroundColor: Colors.indigo,
-//                         onSelected: (bool selected) {},
-//                       ),
-//                     ],
-//                   ),
-//                   SizedBox(height: 10),
-//                   Text(
-//                     'Last 7 check-ins',
-//                     style: TextStyle(
-//                       color: Colors.white,
-//                       fontSize: 16,
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-//                   SizedBox(height: 10),
-//                   Container(
-//                     height: 90,
-//                     child: ListView(
-//                       scrollDirection: Axis.horizontal,
-//                       children: List.generate(7, (index) {
-//                         return Padding(
-//                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//                           child: Container(
-//                             width: 50,
-//                             decoration: BoxDecoration(
-//                               color: index == 0 ? Colors.blue : Colors.white24,
-//                               borderRadius: BorderRadius.circular(8),
-//                             ),
-//                           ),
-//                         );
-//                       }),
-//                     ),
-//                   ),
-//                   SizedBox(height: 20),
-//                   // Check-ins Left Card
-//                   Container(
-//                     padding: const EdgeInsets.all(16.0),
-//                     decoration: BoxDecoration(
-//                       color: Colors.indigo[800],
-//                       borderRadius: BorderRadius.circular(16),
-//                     ),
-//                     child: Row(
-//                       children: [
-//                         Icon(Icons.lock, color: Colors.white, size: 40),
-//                         SizedBox(width: 10),
-//                         Expanded(
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               Text(
-//                                 '6 check-ins left',
-//                                 style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 18,
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                               Text(
-//                                 'Track your moods a bit longer to unlock the mood score',
-//                                 style: TextStyle(
-//                                   color: Colors.white70,
-//                                   fontSize: 14,
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// get 7 latest mood entries form firestore and display under the containers section
-// when a container is presses, a modal pops up showing the entry details of that day
-// mood_tracker_screen.dart (view)
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:intl/intl.dart';
-// import 'package:mental_wellness_app/util/emote_face.dart';
-
-// class MoodTrackerScreen extends StatefulWidget {
-//   const MoodTrackerScreen({Key? key}) : super(key: key);
-
-//   @override
-//   _MoodTrackerScreenState createState() => _MoodTrackerScreenState();
-// }
-
-// class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
-//   bool isAddingNote = false;
-//   TextEditingController _noteController = TextEditingController();
-//   bool isNoteFilled = false;
-//   String? selectedMood;
-//   String? selectedMoodText;
-//   List<Map<String, dynamic>> moodEntries = [];
-
-//   final List<Map<String, String>> moods = [
-//     {'emoticon': '😒', 'text': 'Bad'},
-//     {'emoticon': '😐', 'text': 'Fine'},
-//     {'emoticon': '😀', 'text': 'Good'},
-//     {'emoticon': '😎', 'text': 'Fantastic'}
-//   ];
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _loadMoodEntryForToday();
-//     _fetchMoodEntries();
-//   }
-
-//   Future<void> _loadMoodEntryForToday() async {
-//     User? currentUser = FirebaseAuth.instance.currentUser;
-//     if (currentUser != null) {
-//       QuerySnapshot moodEntrySnapshot = await FirebaseFirestore.instance
-//           .collection('Members')
-//           .doc(currentUser.uid)
-//           .collection('mood_entries')
-//           .where('date',
-//               isEqualTo: DateTime.now().toIso8601String().substring(0, 10))
-//           .get();
-
-//       if (moodEntrySnapshot.docs.isNotEmpty) {
-//         var moodEntry =
-//             moodEntrySnapshot.docs.first.data() as Map<String, dynamic>;
-//         setState(() {
-//           selectedMood = moodEntry['mood'];
-//           selectedMoodText = _getMoodText(moodEntry['mood']);
-//           _noteController.text = moodEntry['note'];
-//           isNoteFilled = moodEntry['note'].isNotEmpty;
-//         });
-//       }
-//     }
-//   }
-
-//   String _getMoodText(String emoticon) {
-//     return moods.firstWhere((mood) => mood['emoticon'] == emoticon)['text']!;
-//   }
-
-//   Future<void> _fetchMoodEntries() async {
-//     User? currentUser = FirebaseAuth.instance.currentUser;
-//     if (currentUser != null) {
-//       QuerySnapshot snapshot = await FirebaseFirestore.instance
-//           .collection('Members')
-//           .doc(currentUser.uid)
-//           .collection('mood_entries')
-//           .orderBy('date', descending: true)
-//           .limit(7)
-//           .get();
-
-//       setState(() {
-//         moodEntries = snapshot.docs
-//             .map((doc) => doc.data() as Map<String, dynamic>)
-//             .toList();
-//       });
-//     }
-//   }
-
-//   Future<void> _saveMoodEntry() async {
-//     User? currentUser = FirebaseAuth.instance.currentUser;
-//     if (currentUser != null && selectedMood != null) {
-//       await FirebaseFirestore.instance
-//           .collection('Members')
-//           .doc(currentUser.uid)
-//           .collection('mood_entries')
-//           .doc(DateTime.now()
-//               .toIso8601String()
-//               .substring(0, 10)) // Use date as document ID
-//           .set({
-//         'date': DateTime.now().toIso8601String().substring(0, 10),
-//         'mood': selectedMood,
-//         'note': _noteController.text,
-//       });
-//     }
-//   }
-
-//   void _selectMood(String emoticon, String text) {
-//     setState(() {
-//       selectedMood = emoticon;
-//       selectedMoodText = text;
-//       _saveMoodEntry(); // Save mood entry when a mood is selected
-//     });
-//   }
-
-//   void _showAddNoteBottomSheet(BuildContext context) {
-//     showModalBottomSheet(
-//       context: context,
-//       isScrollControlled: true,
-//       backgroundColor: Colors.indigo[600],
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.vertical(
-//           top: Radius.circular(20),
-//         ),
-//       ),
-//       builder: (BuildContext context) {
-//         return Padding(
-//           padding: MediaQuery.of(context).viewInsets,
-//           child: Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   DateFormat.yMMMMd().format(DateTime.now()),
-//                   style: TextStyle(
-//                     color: Colors.white,
-//                     fontSize: 16,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//                 SizedBox(height: 10),
-//                 TextField(
-//                   controller: _noteController,
-//                   onChanged: (text) {
-//                     setState(() {
-//                       isNoteFilled = text.isNotEmpty;
-//                     });
-//                   },
-//                   decoration: InputDecoration(
-//                     hintText: 'Write here your thoughts and emotions',
-//                     hintStyle: TextStyle(color: Colors.white70),
-//                     filled: true,
-//                     fillColor: Colors.indigo[400],
-//                     border: OutlineInputBorder(
-//                       borderRadius: BorderRadius.circular(10),
-//                       borderSide: BorderSide.none,
-//                     ),
-//                     suffixIcon: IconButton(
-//                       icon: Icon(Icons.add, color: Colors.white),
-//                       onPressed: () {
-//                         _saveMoodEntry(); // Save mood entry when note is added
-//                         Navigator.pop(context);
-//                       },
-//                     ),
-//                   ),
-//                   style: TextStyle(color: Colors.white),
-//                   maxLines: 3,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   void _showMoodSelectionModal(BuildContext context) {
-//     showModalBottomSheet(
-//       context: context,
-//       backgroundColor: Colors.indigo[600],
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.vertical(
-//           top: Radius.circular(20),
-//         ),
-//       ),
-//       builder: (BuildContext context) {
-//         return Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               Text(
-//                 'Changing your mood?',
-//                 style: TextStyle(
-//                   color: Colors.white,
-//                   fontSize: 18,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//               SizedBox(height: 20),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: moods.map((mood) {
-//                   return GestureDetector(
-//                     onTap: () {
-//                       _selectMood(mood['emoticon']!, mood['text']!);
-//                       Navigator.pop(context);
-//                     },
-//                     child: Column(
-//                       children: [
-//                         EmoticonFace(emoticonFace: mood['emoticon']!),
-//                         SizedBox(height: 5),
-//                         Text(mood['text']!,
-//                             style: TextStyle(
-//                               color: Colors.white,
-//                             )),
-//                       ],
-//                     ),
-//                   );
-//                 }).toList(),
-//               ),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   void _showMoodDetailsModal(
-//       BuildContext context, Map<String, dynamic> moodEntry) {
-//     showModalBottomSheet(
-//       context: context,
-//       backgroundColor: Colors.indigo[600],
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.vertical(
-//           top: Radius.circular(20),
-//         ),
-//       ),
-//       builder: (BuildContext context) {
-//         return Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Text(
-//                 'Your mood on ${DateFormat.yMMMMd().format(DateTime.parse(moodEntry['date']))}',
-//                 style: TextStyle(
-//                   color: Colors.white,
-//                   fontSize: 18,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//               SizedBox(height: 10),
-//               Text(
-//                 moodEntry['mood'],
-//                 style: TextStyle(
-//                   color: Colors.white,
-//                   fontSize: 24,
-//                 ),
-//               ),
-//               SizedBox(height: 10),
-//               if (moodEntry['note'] != null && moodEntry['note'].isNotEmpty)
-//                 Text(
-//                   moodEntry['note'],
-//                   style: TextStyle(
-//                     color: Colors.white70,
-//                     fontSize: 16,
-//                   ),
-//                 ),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Mood Tracker'),
-//         backgroundColor: Colors.transparent,
-//         elevation: 0,
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // Today's Check-in Card
-//             Container(
-//               padding: const EdgeInsets.all(16.0),
-//               decoration: BoxDecoration(
-//                 color: Colors.indigo[600],
-//                 borderRadius: BorderRadius.circular(16),
-//               ),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Row(
-//                     children: [
-//                       Icon(Icons.cloud, color: Colors.purple[300]),
-//                       SizedBox(width: 8),
-//                       Text(
-//                         "Today's check-in",
-//                         style: TextStyle(
-//                           color: Colors.purple[300],
-//                           fontSize: 16,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   SizedBox(height: 10),
-//                   Row(
-//                     children: [
-//                       Text(
-//                         selectedMood == null
-//                             ? 'How you feeling today?'
-//                             : "You're feeling $selectedMood",
-//                         style: TextStyle(
-//                           color: Colors.white,
-//                           fontSize: 18,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                       if (selectedMood != null)
-//                         IconButton(
-//                           icon: Icon(Icons.edit, color: Colors.white),
-//                           onPressed: () {
-//                             _showMoodSelectionModal(context);
-//                           },
-//                         ),
-//                     ],
-//                   ),
-//                   if (selectedMood == null)
-//                     Column(
-//                       children: [
-//                         SizedBox(height: 20),
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                           children: moods.map((mood) {
-//                             return GestureDetector(
-//                               onTap: () {
-//                                 _selectMood(mood['emoticon']!, mood['text']!);
-//                               },
-//                               child: Column(
-//                                 children: [
-//                                   EmoticonFace(emoticonFace: mood['emoticon']!),
-//                                   SizedBox(height: 5),
-//                                   Text(mood['text']!,
-//                                       style: TextStyle(
-//                                         color: Colors.white,
-//                                       )),
-//                                 ],
-//                               ),
-//                             );
-//                           }).toList(),
-//                         ),
-//                       ],
-//                     ),
-//                   if (selectedMoodText != null)
-//                     Text(
-//                       selectedMoodText!,
-//                       style: TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 16,
-//                       ),
-//                     ),
-//                   SizedBox(height: 20),
-//                   if (selectedMood != null)
-//                     Align(
-//                       alignment: Alignment.center,
-//                       child: SizedBox(
-//                         width: double.infinity,
-//                         child: ElevatedButton(
-//                           onPressed: () {
-//                             _showAddNoteBottomSheet(context);
-//                           },
-//                           style: ElevatedButton.styleFrom(
-//                             shape: RoundedRectangleBorder(
-//                               borderRadius: BorderRadius.circular(16),
-//                             ),
-//                           ),
-//                           child: Text(isNoteFilled ? 'Edit Note' : 'Add Note'),
-//                         ),
-//                       ),
-//                     ),
-//                 ],
-//               ),
-//             ),
-//             // Tracker History Card
-//             SizedBox(height: 20),
-
-//             // Tracker History Card
-//             Container(
-//               padding: const EdgeInsets.all(16.0),
-//               decoration: BoxDecoration(
-//                 color: Colors.indigo[600],
-//                 borderRadius: BorderRadius.circular(16),
-//               ),
-//               child: Column(
-//                 children: [
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                     children: [
-//                       ChoiceChip(
-//                         label:
-//                             Text('Week', style: TextStyle(color: Colors.white)),
-//                         selected: true,
-//                         backgroundColor: Colors.indigo,
-//                         selectedColor: Colors.purple,
-//                         onSelected: (bool selected) {},
-//                       ),
-//                       ChoiceChip(
-//                         label: Text('Month',
-//                             style: TextStyle(color: Colors.white)),
-//                         selected: false,
-//                         backgroundColor: Colors.indigo,
-//                         onSelected: (bool selected) {},
-//                       ),
-//                     ],
-//                   ),
-//                   SizedBox(height: 10),
-//                   Text(
-//                     'Last 7 check-ins',
-//                     style: TextStyle(
-//                       color: Colors.white,
-//                       fontSize: 16,
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-//                   SizedBox(height: 10),
-//                   Container(
-//                     height: 90,
-//                     child: ListView.builder(
-//                       scrollDirection: Axis.horizontal,
-//                       itemCount: 7,
-//                       itemBuilder: (context, index) {
-//                         bool isOccupied = index < moodEntries.length;
-//                         Map<String, dynamic>? moodEntry =
-//                             isOccupied ? moodEntries[index] : null;
-//                         return Padding(
-//                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//                           child: GestureDetector(
-//                             onTap: isOccupied
-//                                 ? () =>
-//                                     _showMoodDetailsModal(context, moodEntry!)
-//                                 : null,
-//                             child: Container(
-//                               width: 50,
-//                               decoration: BoxDecoration(
-//                                 color: isOccupied
-//                                     ? _getMoodColor(moodEntry!['mood'])
-//                                     : Colors.white24,
-//                                 borderRadius: BorderRadius.circular(8),
-//                               ),
-//                             ),
-//                           ),
-//                         );
-//                       },
-//                     ),
-//                   ),
-//                   SizedBox(height: 20),
-//                   // Check-ins Left Card
-//                   Container(
-//                     padding: const EdgeInsets.all(16.0),
-//                     decoration: BoxDecoration(
-//                       color: Colors.indigo[800],
-//                       borderRadius: BorderRadius.circular(16),
-//                     ),
-//                     child: Row(
-//                       children: [
-//                         Icon(Icons.lock, color: Colors.white, size: 40),
-//                         SizedBox(width: 10),
-//                         Expanded(
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               Text(
-//                                 '6 check-ins left',
-//                                 style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 18,
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                               Text(
-//                                 'Track your moods a bit longer to unlock the mood score',
-//                                 style: TextStyle(
-//                                   color: Colors.white70,
-//                                   fontSize: 14,
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   Color _getMoodColor(String mood) {
-//     switch (mood) {
-//       case '😒':
-//         return Colors.red;
-//       case '😐':
-//         return Colors.orange;
-//       case '😀':
-//         return Colors.green;
-//       case '😎':
-//         return Colors.blue;
-//       default:
-//         return Colors.grey;
-//     }
-//   }
-// }
-
-// immeditely update container when current mood and note is changed
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:intl/intl.dart';
-// import 'package:mental_wellness_app/util/emote_face.dart';
-// import 'package:mental_wellness_app/services/firestore.dart';
-
-// class MoodTrackerScreen extends StatefulWidget {
-//   const MoodTrackerScreen({Key? key}) : super(key: key);
-
-//   @override
-//   _MoodTrackerScreenState createState() => _MoodTrackerScreenState();
-// }
-
-// class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
-//   bool isAddingNote = false;
-//   TextEditingController _noteController = TextEditingController();
-//   bool isNoteFilled = false;
-//   String? selectedMood;
-//   String? selectedMoodText;
-//   List<Map<String, dynamic>> moodEntries = [];
-//   final FirestoreService _firestoreService = FirestoreService();
-
-//   final List<Map<String, String>> moods = [
-//     {'emoticon': '😒', 'text': 'Bad'},
-//     {'emoticon': '😐', 'text': 'Fine'},
-//     {'emoticon': '😀', 'text': 'Good'},
-//     {'emoticon': '😎', 'text': 'Fantastic'}
-//   ];
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _loadMoodEntryForToday();
-//     _fetchMoodEntries();
-//   }
-
-//   Future<void> _loadMoodEntryForToday() async {
-//     User? currentUser = FirebaseAuth.instance.currentUser;
-//     if (currentUser != null) {
-//       QuerySnapshot moodEntrySnapshot = await FirebaseFirestore.instance
-//           .collection('Members')
-//           .doc(currentUser.uid)
-//           .collection('mood_entries')
-//           .where('date',
-//               isEqualTo: DateTime.now().toIso8601String().substring(0, 10))
-//           .get();
-
-//       if (moodEntrySnapshot.docs.isNotEmpty) {
-//         var moodEntry =
-//             moodEntrySnapshot.docs.first.data() as Map<String, dynamic>;
-//         setState(() {
-//           selectedMood = moodEntry['mood'];
-//           selectedMoodText = _getMoodText(moodEntry['mood']);
-//           _noteController.text = moodEntry['note'];
-//           isNoteFilled = moodEntry['note'].isNotEmpty;
-//         });
-//       }
-//     }
-//   }
-
-//   String _getMoodText(String emoticon) {
-//     return moods.firstWhere((mood) => mood['emoticon'] == emoticon)['text']!;
-//   }
-
-//   Future<void> _fetchMoodEntries() async {
-//     User? currentUser = FirebaseAuth.instance.currentUser;
-//     if (currentUser != null) {
-//       QuerySnapshot snapshot = await FirebaseFirestore.instance
-//           .collection('Members')
-//           .doc(currentUser.uid)
-//           .collection('mood_entries')
-//           .orderBy('date', descending: true)
-//           .limit(7)
-//           .get();
-
-//       setState(() {
-//         moodEntries = snapshot.docs
-//             .map((doc) => doc.data() as Map<String, dynamic>)
-//             .toList();
-//       });
-//     }
-//   }
-
-//   Future<void> _saveMoodEntry() async {
-//     User? currentUser = FirebaseAuth.instance.currentUser;
-//     if (currentUser != null && selectedMood != null) {
-//       await FirebaseFirestore.instance
-//           .collection('Members')
-//           .doc(currentUser.uid)
-//           .collection('mood_entries')
-//           .doc(DateTime.now()
-//               .toIso8601String()
-//               .substring(0, 10)) // Use date as document ID
-//           .set({
-//         'date': DateTime.now().toIso8601String().substring(0, 10),
-//         'mood': selectedMood,
-//         'note': _noteController.text,
-//       });
-//       await _firestoreService.updateMoodTrackerCompletion(true, context);
-//       await _fetchMoodEntries(); // Re-fetch the mood entries after saving
-//     }
-//   }
-
-//   void _selectMood(String emoticon, String text) {
-//     setState(() {
-//       selectedMood = emoticon;
-//       selectedMoodText = text;
-//     });
-//     _saveMoodEntry(); // Save mood entry when a mood is selected
-//   }
-
-//   void _showAddNoteBottomSheet(BuildContext context) {
-//     showModalBottomSheet(
-//       context: context,
-//       isScrollControlled: true,
-//       backgroundColor: Colors.indigo[600],
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.vertical(
-//           top: Radius.circular(20),
-//         ),
-//       ),
-//       builder: (BuildContext context) {
-//         return Padding(
-//           padding: MediaQuery.of(context).viewInsets,
-//           child: Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   DateFormat.yMMMMd().format(DateTime.now()),
-//                   style: TextStyle(
-//                     color: Colors.white,
-//                     fontSize: 16,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//                 SizedBox(height: 10),
-//                 TextField(
-//                   controller: _noteController,
-//                   onChanged: (text) {
-//                     setState(() {
-//                       isNoteFilled = text.isNotEmpty;
-//                     });
-//                   },
-//                   decoration: InputDecoration(
-//                     hintText: 'Write here your thoughts and emotions',
-//                     hintStyle: TextStyle(color: Colors.white70),
-//                     filled: true,
-//                     fillColor: Colors.indigo[400],
-//                     border: OutlineInputBorder(
-//                       borderRadius: BorderRadius.circular(10),
-//                       borderSide: BorderSide.none,
-//                     ),
-//                     suffixIcon: IconButton(
-//                       icon: Icon(Icons.add, color: Colors.white),
-//                       onPressed: () {
-//                         _saveMoodEntry(); // Save mood entry when note is added
-//                         Navigator.pop(context);
-//                       },
-//                     ),
-//                   ),
-//                   style: TextStyle(color: Colors.white),
-//                   maxLines: 3,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   void _showMoodSelectionModal(BuildContext context) {
-//     showModalBottomSheet(
-//       context: context,
-//       backgroundColor: Colors.indigo[600],
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.vertical(
-//           top: Radius.circular(20),
-//         ),
-//       ),
-//       builder: (BuildContext context) {
-//         return Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               Text(
-//                 'Changing your mood?',
-//                 style: TextStyle(
-//                   color: Colors.white,
-//                   fontSize: 18,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//               SizedBox(height: 20),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: moods.map((mood) {
-//                   return GestureDetector(
-//                     onTap: () {
-//                       _selectMood(mood['emoticon']!, mood['text']!);
-//                       Navigator.pop(context);
-//                     },
-//                     child: Column(
-//                       children: [
-//                         EmoticonFace(emoticonFace: mood['emoticon']!),
-//                         SizedBox(height: 5),
-//                         Text(mood['text']!,
-//                             style: TextStyle(
-//                               color: Colors.white,
-//                             )),
-//                       ],
-//                     ),
-//                   );
-//                 }).toList(),
-//               ),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   void _showMoodDetailsModal(
-//       BuildContext context, Map<String, dynamic> moodEntry) {
-//     showModalBottomSheet(
-//       context: context,
-//       backgroundColor: Colors.indigo[600],
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.vertical(
-//           top: Radius.circular(20),
-//         ),
-//       ),
-//       builder: (BuildContext context) {
-//         return Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Text(
-//                 'Your mood on ${DateFormat.yMMMMd().format(DateTime.parse(moodEntry['date']))}',
-//                 style: TextStyle(
-//                   color: Colors.white,
-//                   fontSize: 18,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//               SizedBox(height: 10),
-//               Text(
-//                 moodEntry['mood'],
-//                 style: TextStyle(
-//                   color: Colors.white,
-//                   fontSize: 24,
-//                 ),
-//               ),
-//               SizedBox(height: 10),
-//               if (moodEntry['note'] != null && moodEntry['note'].isNotEmpty)
-//                 Text(
-//                   moodEntry['note'],
-//                   style: TextStyle(
-//                     color: Colors.white70,
-//                     fontSize: 16,
-//                   ),
-//                 ),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Mood Tracker'),
-//         backgroundColor: Colors.transparent,
-//         elevation: 0,
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // Today's Check-in Card
-//             Container(
-//               padding: const EdgeInsets.all(16.0),
-//               decoration: BoxDecoration(
-//                 color: Colors.indigo[600],
-//                 borderRadius: BorderRadius.circular(16),
-//               ),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Row(
-//                     children: [
-//                       Icon(Icons.cloud, color: Colors.purple[300]),
-//                       SizedBox(width: 8),
-//                       Text(
-//                         "Today's check-in",
-//                         style: TextStyle(
-//                           color: Colors.purple[300],
-//                           fontSize: 16,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   SizedBox(height: 10),
-//                   Row(
-//                     children: [
-//                       Text(
-//                         selectedMood == null
-//                             ? 'How you feeling today?'
-//                             : "You're feeling $selectedMood",
-//                         style: TextStyle(
-//                           color: Colors.white,
-//                           fontSize: 18,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                       if (selectedMood != null)
-//                         IconButton(
-//                           icon: Icon(Icons.edit, color: Colors.white),
-//                           onPressed: () {
-//                             _showMoodSelectionModal(context);
-//                           },
-//                         ),
-//                     ],
-//                   ),
-//                   if (selectedMood == null)
-//                     Column(
-//                       children: [
-//                         SizedBox(height: 20),
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                           children: moods.map((mood) {
-//                             return GestureDetector(
-//                               onTap: () {
-//                                 _selectMood(mood['emoticon']!, mood['text']!);
-//                               },
-//                               child: Column(
-//                                 children: [
-//                                   EmoticonFace(emoticonFace: mood['emoticon']!),
-//                                   SizedBox(height: 5),
-//                                   Text(mood['text']!,
-//                                       style: TextStyle(
-//                                         color: Colors.white,
-//                                       )),
-//                                 ],
-//                               ),
-//                             );
-//                           }).toList(),
-//                         ),
-//                       ],
-//                     ),
-//                   if (selectedMoodText != null)
-//                     Text(
-//                       selectedMoodText!,
-//                       style: TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 16,
-//                       ),
-//                     ),
-//                   SizedBox(height: 20),
-//                   if (selectedMood != null)
-//                     Align(
-//                       alignment: Alignment.center,
-//                       child: SizedBox(
-//                         width: double.infinity,
-//                         child: ElevatedButton(
-//                           onPressed: () {
-//                             _showAddNoteBottomSheet(context);
-//                           },
-//                           style: ElevatedButton.styleFrom(
-//                             shape: RoundedRectangleBorder(
-//                               borderRadius: BorderRadius.circular(16),
-//                             ),
-//                           ),
-//                           child: Text(isNoteFilled ? 'Edit Note' : 'Add Note'),
-//                         ),
-//                       ),
-//                     ),
-//                 ],
-//               ),
-//             ),
-//             // Tracker History Card
-//             SizedBox(height: 20),
-
-//             // Tracker History Card
-//             Container(
-//               padding: const EdgeInsets.all(16.0),
-//               decoration: BoxDecoration(
-//                 color: Colors.indigo[600],
-//                 borderRadius: BorderRadius.circular(16),
-//               ),
-//               child: Column(
-//                 children: [
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                     children: [
-//                       ChoiceChip(
-//                         label:
-//                             Text('Week', style: TextStyle(color: Colors.white)),
-//                         selected: true,
-//                         backgroundColor: Colors.indigo,
-//                         selectedColor: Colors.purple,
-//                         onSelected: (bool selected) {},
-//                       ),
-//                       ChoiceChip(
-//                         label: Text('Month',
-//                             style: TextStyle(color: Colors.white)),
-//                         selected: false,
-//                         backgroundColor: Colors.indigo,
-//                         onSelected: (bool selected) {},
-//                       ),
-//                     ],
-//                   ),
-//                   SizedBox(height: 10),
-//                   Text(
-//                     'Last 7 check-ins',
-//                     style: TextStyle(
-//                       color: Colors.white,
-//                       fontSize: 16,
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-//                   SizedBox(height: 10),
-//                   Container(
-//                     height: 90,
-//                     child: ListView.builder(
-//                       scrollDirection: Axis.horizontal,
-//                       itemCount: 7,
-//                       itemBuilder: (context, index) {
-//                         bool isOccupied = index < moodEntries.length;
-//                         Map<String, dynamic>? moodEntry =
-//                             isOccupied ? moodEntries[index] : null;
-//                         return Padding(
-//                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//                           child: GestureDetector(
-//                             onTap: isOccupied
-//                                 ? () =>
-//                                     _showMoodDetailsModal(context, moodEntry!)
-//                                 : null,
-//                             child: Container(
-//                               width: 40,
-//                               decoration: BoxDecoration(
-//                                 color: isOccupied
-//                                     ? _getMoodColor(moodEntry!['mood'])
-//                                     : Colors.white24,
-//                                 borderRadius: BorderRadius.circular(8),
-//                               ),
-//                             ),
-//                           ),
-//                         );
-//                       },
-//                     ),
-//                   ),
-//                   SizedBox(height: 20),
-//                   // Check-ins Left Card
-//                   Container(
-//                     padding: const EdgeInsets.all(16.0),
-//                     decoration: BoxDecoration(
-//                       color: Colors.indigo[800],
-//                       borderRadius: BorderRadius.circular(16),
-//                     ),
-//                     child: Row(
-//                       children: [
-//                         Icon(Icons.lock, color: Colors.white, size: 40),
-//                         SizedBox(width: 10),
-//                         Expanded(
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               Text(
-//                                 '6 check-ins left',
-//                                 style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 18,
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                               Text(
-//                                 'Track your moods a bit longer to unlock the mood score',
-//                                 style: TextStyle(
-//                                   color: Colors.white70,
-//                                   fontSize: 14,
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   Color _getMoodColor(String mood) {
-//     switch (mood) {
-//       case '😒':
-//         return Colors.red;
-//       case '😐':
-//         return Colors.orange;
-//       case '😀':
-//         return Colors.green;
-//       case '😎':
-//         return Colors.blue;
-//       default:
-//         return Colors.grey;
-//     }
-//   }
-// }
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:mental_wellness_app/util/emote_face.dart';
-import 'package:mental_wellness_app/services/firestore.dart';
+import 'package:mental_wellness_app/widgets/emote_face.dart';
+import 'package:mental_wellness_app/controllers/mood_tracker_controller.dart';
 
 class MoodTrackerScreen extends StatefulWidget {
   const MoodTrackerScreen({Key? key}) : super(key: key);
@@ -1818,526 +12,366 @@ class MoodTrackerScreen extends StatefulWidget {
 }
 
 class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
-  bool isAddingNote = false;
-  TextEditingController _noteController = TextEditingController();
-  bool isNoteFilled = false;
-  String? selectedMood;
-  String? selectedMoodText;
-  List<Map<String, dynamic>> moodEntries = [];
-  final FirestoreService _firestoreService = FirestoreService();
-
-  final List<Map<String, String>> moods = [
-    {'emoticon': '😒', 'text': 'Bad'},
-    {'emoticon': '😐', 'text': 'Fine'},
-    {'emoticon': '😀', 'text': 'Good'},
-    {'emoticon': '😎', 'text': 'Fantastic'}
-  ];
+  late MoodTrackerController _controller;
 
   @override
   void initState() {
     super.initState();
-    _loadMoodEntryForToday();
-    _fetchMoodEntries();
-  }
-
-  Future<void> _loadMoodEntryForToday() async {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      QuerySnapshot moodEntrySnapshot = await FirebaseFirestore.instance
-          .collection('Members')
-          .doc(currentUser.uid)
-          .collection('mood_entries')
-          .where('date',
-              isEqualTo: DateTime.now().toIso8601String().substring(0, 10))
-          .get();
-
-      if (moodEntrySnapshot.docs.isNotEmpty) {
-        var moodEntry =
-            moodEntrySnapshot.docs.first.data() as Map<String, dynamic>;
-        setState(() {
-          selectedMood = moodEntry['mood'];
-          selectedMoodText = _getMoodText(moodEntry['mood']);
-          _noteController.text = moodEntry['note'];
-          isNoteFilled = moodEntry['note'].isNotEmpty;
-        });
-      }
-    }
-  }
-
-  String _getMoodText(String emoticon) {
-    return moods.firstWhere((mood) => mood['emoticon'] == emoticon)['text']!;
-  }
-
-  Future<void> _fetchMoodEntries() async {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('Members')
-          .doc(currentUser.uid)
-          .collection('mood_entries')
-          .orderBy('date', descending: true)
-          .limit(7)
-          .get();
-
-      setState(() {
-        moodEntries = snapshot.docs
-            .map((doc) => doc.data() as Map<String, dynamic>)
-            .toList();
-      });
-    }
-  }
-
-  Future<void> _saveMoodEntry() async {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null && selectedMood != null) {
-      String date = DateTime.now().toIso8601String().substring(0, 10);
-      DocumentReference moodEntryRef = FirebaseFirestore.instance
-          .collection('Members')
-          .doc(currentUser.uid)
-          .collection('mood_entries')
-          .doc(date);
-
-      DocumentSnapshot moodEntrySnapshot = await moodEntryRef.get();
-
-      if (!moodEntrySnapshot.exists) {
-        await moodEntryRef.set({
-          'date': date,
-          'mood': selectedMood,
-          'note': _noteController.text,
-        });
-        await _firestoreService.incrementFieldAndCheckAchievement(
-            'totalMoodEntries', context);
-      } else {
-        await moodEntryRef.update({
-          'mood': selectedMood,
-          'note': _noteController.text,
-        });
-      }
-      await _firestoreService.checkAndIncrementDailyNote(
-          _noteController.text, context);
-
-      await _firestoreService.updateMoodTrackerCompletion(true, context);
-      await _fetchMoodEntries(); // Re-fetch the mood entries after saving
-    }
-  }
-
-  void _selectMood(String emoticon, String text) {
-    setState(() {
-      selectedMood = emoticon;
-      selectedMoodText = text;
-    });
-    _saveMoodEntry(); // Save mood entry when a mood is selected
-  }
-
-  void _showAddNoteBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.indigo[600],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
-      builder: (BuildContext context) {
-        return Padding(
-          padding: MediaQuery.of(context).viewInsets,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  DateFormat.yMMMMd().format(DateTime.now()),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 10),
-                TextField(
-                  controller: _noteController,
-                  onChanged: (text) {
-                    setState(() {
-                      isNoteFilled = text.isNotEmpty;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Write here your thoughts and emotions',
-                    hintStyle: TextStyle(color: Colors.white70),
-                    filled: true,
-                    fillColor: Colors.indigo[400],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.add, color: Colors.white),
-                      onPressed: () {
-                        _saveMoodEntry(); // Save mood entry when note is added
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  style: TextStyle(color: Colors.white),
-                  maxLines: 3,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _showMoodSelectionModal(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.indigo[600],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Changing your mood?',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: moods.map((mood) {
-                  return GestureDetector(
-                    onTap: () {
-                      _selectMood(mood['emoticon']!, mood['text']!);
-                      Navigator.pop(context);
-                    },
-                    child: Column(
-                      children: [
-                        EmoticonFace(emoticonFace: mood['emoticon']!),
-                        SizedBox(height: 5),
-                        Text(mood['text']!,
-                            style: TextStyle(
-                              color: Colors.white,
-                            )),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showMoodDetailsModal(
-      BuildContext context, Map<String, dynamic> moodEntry) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.indigo[600],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Your mood on ${DateFormat.yMMMMd().format(DateTime.parse(moodEntry['date']))}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 10),
-              Text(
-                moodEntry['mood'],
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-              SizedBox(height: 10),
-              if (moodEntry['note'] != null && moodEntry['note'].isNotEmpty)
-                Text(
-                  moodEntry['note'],
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
-                  ),
-                ),
-            ],
-          ),
-        );
-      },
-    );
+    _controller = MoodTrackerController();
+    _controller.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mood Tracker'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Today's Check-in Card
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.indigo[600],
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.cloud, color: Colors.purple[300]),
-                      SizedBox(width: 8),
-                      Text(
-                        "Today's check-in",
-                        style: TextStyle(
-                          color: Colors.purple[300],
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Text(
-                        selectedMood == null
-                            ? 'How you feeling today?'
-                            : "You're feeling $selectedMood",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (selectedMood != null)
-                        IconButton(
-                          icon: Icon(Icons.edit, color: Colors.white),
-                          onPressed: () {
-                            _showMoodSelectionModal(context);
-                          },
-                        ),
-                    ],
-                  ),
-                  if (selectedMood == null)
-                    Column(
-                      children: [
-                        SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: moods.map((mood) {
-                            return GestureDetector(
-                              onTap: () {
-                                _selectMood(mood['emoticon']!, mood['text']!);
-                              },
-                              child: Column(
-                                children: [
-                                  EmoticonFace(emoticonFace: mood['emoticon']!),
-                                  SizedBox(height: 5),
-                                  Text(mood['text']!,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      )),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                  if (selectedMoodText != null)
-                    Text(
-                      selectedMoodText!,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                  SizedBox(height: 20),
-                  if (selectedMood != null)
-                    Align(
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _showAddNoteBottomSheet(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                          child: Text(isNoteFilled ? 'Edit Note' : 'Add Note'),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+    return ChangeNotifierProvider<MoodTrackerController>(
+      create: (_) => _controller,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Mood Tracker'),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildTodayCheckInCard(context),
+                const SizedBox(height: 20),
+                _buildTrackerHistoryCard(),
+              ],
             ),
-            // Tracker History Card
-            SizedBox(height: 20),
+          ),
+        ),
+      ),
+    );
+  }
 
-            // Tracker History Card
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.indigo[600],
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
+  Widget _buildTodayCheckInCard(BuildContext context) {
+    return Consumer<MoodTrackerController>(
+      builder: (context, controller, child) {
+        return Container(
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Colors.indigo[600],
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ChoiceChip(
-                        label:
-                            Text('Week', style: TextStyle(color: Colors.white)),
-                        selected: true,
-                        backgroundColor: Colors.indigo,
-                        selectedColor: Colors.purple,
-                        onSelected: (bool selected) {},
-                      ),
-                      ChoiceChip(
-                        label: Text('Month',
-                            style: TextStyle(color: Colors.white)),
-                        selected: false,
-                        backgroundColor: Colors.indigo,
-                        onSelected: (bool selected) {},
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
+                  Icon(Icons.cloud, color: Colors.purple[300]),
+                  const SizedBox(width: 8),
                   Text(
-                    'Last 7 check-ins',
+                    "Today's check-in",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.purple[300],
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Container(
-                    height: 90,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 7,
-                      itemBuilder: (context, index) {
-                        bool isOccupied = index < moodEntries.length;
-                        Map<String, dynamic>? moodEntry =
-                            isOccupied ? moodEntries[index] : null;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: GestureDetector(
-                            onTap: isOccupied
-                                ? () =>
-                                    _showMoodDetailsModal(context, moodEntry!)
-                                : null,
-                            child: Container(
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: isOccupied
-                                    ? _getMoodColor(moodEntry!['mood'])
-                                    : Colors.white24,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Text(
+                    controller.selectedMood == null
+                        ? 'How you feeling today?'
+                        : "You're feeling ${controller.selectedMood}",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20),
-                  // Check-ins Left Card
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.indigo[800],
-                      borderRadius: BorderRadius.circular(16),
+                  if (controller.selectedMood != null)
+                    IconButton(
+                      icon: const Icon(Icons.edit, color: Colors.white),
+                      onPressed: () {
+                        controller.showMoodSelectionModal(context);
+                      },
                     ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.lock, color: Colors.white, size: 40),
-                        SizedBox(width: 10),
-                        Expanded(
+                ],
+              ),
+              if (controller.selectedMood == null)
+                Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: controller.moods.map((mood) {
+                        return GestureDetector(
+                          onTap: () {
+                            controller.selectMood(
+                                mood['emoticon']!, mood['text']!, context);
+                          },
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              EmoticonFace(emoticonFace: mood['emoticon']!),
+                              const SizedBox(height: 5),
                               Text(
-                                '6 check-ins left',
+                                mood['text']!,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              if (controller.selectedMoodText != null)
+                Text(
+                  controller.selectedMoodText!,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              const SizedBox(height: 20),
+              if (controller.selectedMood != null)
+                Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        controller.showAddNoteBottomSheet(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: Text(
+                          controller.isNoteFilled ? 'Edit Note' : 'Add Note'),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildTrackerHistoryCard() {
+    return Consumer<MoodTrackerController>(
+      builder: (context, controller, child) {
+        return Container(
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Colors.indigo[600],
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ChoiceChip(
+                    label: const Text('Week',
+                        style: TextStyle(color: Colors.white)),
+                    selected: controller.isWeeklyView,
+                    backgroundColor: Colors.indigo,
+                    selectedColor: Colors.purple,
+                    onSelected: (bool selected) {
+                      if (selected) {
+                        controller.setView(true);
+                      }
+                    },
+                  ),
+                  ChoiceChip(
+                    label: const Text('Month',
+                        style: TextStyle(color: Colors.white)),
+                    selected: !controller.isWeeklyView,
+                    backgroundColor: Colors.indigo,
+                    selectedColor: Colors.purple,
+                    onSelected: (bool selected) {
+                      if (selected) {
+                        controller.setView(false);
+                      }
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Mood Check-ins',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              _buildMoodEntriesList(controller),
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.indigo[800],
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  children: [
+                    controller.moodEntries.length < 7
+                        ? Text(
+                            '${controller.remainingCheckIns} check-ins left',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : Column(
+                            children: [
+                              const Text(
+                                'Mood Score',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Text(
-                                'Track your moods a bit longer to unlock the mood score',
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 14,
+                              const SizedBox(height: 10),
+                              Container(
+                                width: 120,
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: controller.moodScoreColor,
+                                    width: 10,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${controller.moodScorePercentage.round()}%',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
+                              const SizedBox(height: 10),
+                              _buildMoodMessage(controller.moodScorePercentage),
                             ],
                           ),
+                    if (controller.moodEntries.length < 7)
+                      const Text(
+                        'Track your moods a bit longer to unlock the mood score',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
                         ),
-                      ],
-                    ),
-                  ),
-                ],
+                      ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Color _getMoodColor(String mood) {
-    switch (mood) {
-      case '😒':
-        return Colors.red;
-      case '😐':
-        return Colors.orange;
-      case '😀':
-        return Colors.green;
-      case '😎':
-        return Colors.blue;
-      default:
-        return Colors.grey;
+  Widget _buildMoodEntriesList(MoodTrackerController controller) {
+    if (controller.isWeeklyView) {
+      return Container(
+        height: 90,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: controller.moodEntries.length,
+          itemBuilder: (context, index) {
+            Map<String, dynamic> moodEntry = controller.moodEntries[index];
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: GestureDetector(
+                onTap: () =>
+                    controller.showMoodDetailsModal(context, moodEntry),
+                child: Container(
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: controller.getMoodColor(moodEntry['mood']),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      return Container(
+        height: 90,
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 10,
+            mainAxisSpacing: 2,
+            crossAxisSpacing: 2,
+          ),
+          itemCount: controller.moodEntries.length,
+          itemBuilder: (context, index) {
+            Map<String, dynamic> moodEntry = controller.moodEntries[index];
+            return GestureDetector(
+              onTap: () => controller.showMoodDetailsModal(context, moodEntry),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: controller.getMoodColor(moodEntry['mood']),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }
+  }
+
+  Widget _buildMoodMessage(double moodScorePercentage) {
+    if (moodScorePercentage < 25) {
+      return const Text(
+        'It seems like you have been feeling down lately. Consider booking a counseling appointment.',
+        style: TextStyle(
+          color: Colors.white70,
+          fontSize: 14,
+        ),
+        textAlign: TextAlign.center,
+      );
+    } else if (moodScorePercentage < 50) {
+      return const Text(
+        'You have been feeling a bit low. Take some time for self-care and reach out to friends and family.',
+        style: TextStyle(
+          color: Colors.white70,
+          fontSize: 14,
+        ),
+        textAlign: TextAlign.center,
+      );
+    } else if (moodScorePercentage < 75) {
+      return const Text(
+        'You have been doing okay. Keep maintaining your well-being and stay positive!',
+        style: TextStyle(
+          color: Colors.white70,
+          fontSize: 14,
+        ),
+        textAlign: TextAlign.center,
+      );
+    } else {
+      return const Text(
+        'Looks like you\'re doing great! Keep up the good work and continue to take care of yourself.',
+        style: TextStyle(
+          color: Colors.white70,
+          fontSize: 14,
+        ),
+        textAlign: TextAlign.center,
+      );
     }
   }
 }

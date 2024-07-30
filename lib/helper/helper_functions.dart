@@ -1,38 +1,65 @@
+// helper_functions.dart
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:validators/validators.dart'; // Add this import
 
 /// Function to display error messages in a dialog
-void displayErrorMessage(String message, BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        backgroundColor: Colors.deepPurple,
-        title: Text(
-          message,
-          style: const TextStyle(color: Colors.white),
-        ),
-      );
-    },
-  );
-}
+// void displayErrorMessage(String message, BuildContext context) {
+//   showDialog(
+//     context: context,
+//     builder: (context) {
+//       return AlertDialog(
+//         backgroundColor: Colors.deepPurple,
+//         title: Text(
+//           message,
+//           style: const TextStyle(color: Colors.white),
+//         ),
+//       );
+//     },
+//   );
+// }
 
 /// Function to validate the first name and last name fields
 bool validateNameFields(
     String firstName, String lastName, BuildContext context) {
   if (firstName.trim().isEmpty) {
-    displayErrorMessage("First name cannot be empty", context);
+    displaySnackBarMessage("First name cannot be empty", context);
     return false;
   }
   if (lastName.trim().isEmpty) {
-    displayErrorMessage("Last name cannot be empty", context);
+    displaySnackBarMessage("Last name cannot be empty", context);
     return false;
   }
   if (firstName.length > 50) {
-    displayErrorMessage("First name cannot exceed 50 characters", context);
+    displaySnackBarMessage("First name cannot exceed 50 characters", context);
     return false;
   }
   if (lastName.length > 50) {
-    displayErrorMessage("Last name cannot exceed 50 characters", context);
+    displaySnackBarMessage("Last name cannot exceed 50 characters", context);
+    return false;
+  }
+  return true;
+}
+
+/// Function to validate the member-specific fields
+bool validateMemberFields({
+  required String email,
+  required String password,
+  required String confirmPassword,
+  required BuildContext context,
+}) {
+  if (email.trim().isEmpty || !isEmail(email)) {
+    displaySnackBarMessage("Please enter a valid email", context);
+    return false;
+  }
+  if (password.trim().isEmpty || !isStrongPassword(password)) {
+    displaySnackBarMessage(
+        "Password must be at least 8 characters long and include a number and special character",
+        context);
+    return false;
+  }
+  if (password != confirmPassword) {
+    displaySnackBarMessage("Passwords do not match", context);
     return false;
   }
   return true;
@@ -40,41 +67,129 @@ bool validateNameFields(
 
 /// Function to validate the counsellor-specific fields
 bool validateCounsellorFields({
+  required String email,
+  required String password,
+  required String confirmPassword,
   required String bio,
   required String education,
   required String city,
   required String country,
+  required String jobTitle,
   required String languages,
   required String experienceYears,
+  required String linkedin,
   required BuildContext context,
 }) {
+  if (email.trim().isEmpty || !isEmail(email)) {
+    displaySnackBarMessage("Please enter a valid email", context);
+    return false;
+  }
+  if (password.trim().isEmpty || !isStrongPassword(password)) {
+    displaySnackBarMessage(
+        "Password must be at least 8 characters long and include a number and special character",
+        context);
+    return false;
+  }
+  if (password != confirmPassword) {
+    displaySnackBarMessage("Passwords do not match", context);
+    return false;
+  }
   if (bio.trim().isEmpty) {
-    displayErrorMessage("Bio cannot be empty", context);
+    displaySnackBarMessage("Bio cannot be empty", context);
     return false;
   }
   if (education.trim().isEmpty) {
-    displayErrorMessage("Education cannot be empty", context);
+    displaySnackBarMessage("Education cannot be empty", context);
     return false;
   }
   if (city.trim().isEmpty) {
-    displayErrorMessage("City cannot be empty", context);
+    displaySnackBarMessage("City cannot be empty", context);
+    return false;
+  }
+  if (jobTitle.trim().isEmpty) {
+    displaySnackBarMessage("Job title cannot be empty", context);
     return false;
   }
   if (country.trim().isEmpty) {
-    displayErrorMessage("Country cannot be empty", context);
+    displaySnackBarMessage("Country cannot be empty", context);
     return false;
   }
-  if (languages.trim().isEmpty) {
-    displayErrorMessage("Languages cannot be empty", context);
+  if (languages.trim().isEmpty || !isLanguagesValid(languages)) {
+    displaySnackBarMessage(
+        "Languages cannot be empty and must be valid", context);
     return false;
   }
-  if (experienceYears.trim().isEmpty) {
-    displayErrorMessage("Years of experience cannot be empty", context);
+  if (experienceYears.trim().isEmpty ||
+      int.tryParse(experienceYears) == null ||
+      int.parse(experienceYears) < 0 ||
+      int.parse(experienceYears) > 50) {
+    displaySnackBarMessage(
+        "Experience years must be a valid number between 0 and 50", context);
     return false;
   }
-  if (int.tryParse(experienceYears) == null) {
-    displayErrorMessage("Years of experience must be a number", context);
+  if (linkedin.trim().isEmpty) {
+    displaySnackBarMessage("LinkedIn cannot be empty", context);
+    return false;
+  }
+  if (linkedin.trim().isNotEmpty &&
+      !isURL(linkedin, protocols: ['http', 'https'])) {
+    displaySnackBarMessage(
+        "Please enter a valid LinkedIn profile URL", context);
     return false;
   }
   return true;
+}
+
+/// Function to display a snack bar message
+void displaySnackBarMessage(String message, BuildContext context,
+    {Color backgroundColor = Colors.red}) {
+  // Clear any existing SnackBar
+  ScaffoldMessenger.of(context).clearSnackBars();
+
+  // Show the new SnackBar
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      backgroundColor: backgroundColor,
+    ),
+  );
+}
+
+// Utility functions
+bool isStrongPassword(String password) {
+  // Password must be at least 8 characters long and include a number and special character
+  final regex =
+      RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$');
+  return regex.hasMatch(password);
+}
+
+bool isLanguagesValid(String languages) {
+  // Check that each language in the list is valid (basic check)
+  List<String> languageList =
+      languages.split(',').map((e) => e.trim()).toList();
+  for (String language in languageList) {
+    if (language.isEmpty || !RegExp(r'^[a-zA-Z\s]+$').hasMatch(language)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/// Utility functions for URLs
+class UrlUtils {
+  static String addHttpIfNeeded(String url) {
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      return 'https://$url';
+    }
+    return url;
+  }
+
+  static Future<void> launchUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+    try {
+      await launchUrl(uri as String);
+    } catch (e) {
+      throw 'Could not launch $uri';
+    }
+  }
 }

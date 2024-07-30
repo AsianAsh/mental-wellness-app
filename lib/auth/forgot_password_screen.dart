@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mental_wellness_app/util/my_button.dart';
-import 'package:mental_wellness_app/util/my_textfield.dart';
+import 'package:mental_wellness_app/widgets/my_button.dart';
+import 'package:mental_wellness_app/widgets/my_textfield.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   @override

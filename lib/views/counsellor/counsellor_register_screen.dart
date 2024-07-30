@@ -758,8 +758,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mental_wellness_app/helper/helper_functions.dart';
 import 'package:mental_wellness_app/services/firestore.dart';
-import 'package:mental_wellness_app/util/my_button.dart';
-import 'package:mental_wellness_app/util/my_textfield.dart';
+import 'package:mental_wellness_app/widgets/my_button.dart';
+import 'package:mental_wellness_app/widgets/my_textfield.dart';
 import 'package:mental_wellness_app/views/counsellor/counsellor_home_screen.dart';
 import 'package:mental_wellness_app/widgets/specialization_selection.dart';
 
@@ -834,12 +834,17 @@ class _CounsellorRegisterScreenState extends State<CounsellorRegisterScreen> {
     }
 
     if (!validateCounsellorFields(
+      email: emailController.text,
+      password: passwordController.text,
+      confirmPassword: confirmPasswordController.text,
       bio: bioController.text,
       education: educationController.text,
       city: cityController.text,
       country: countryController.text,
+      jobTitle: jobTitleController.text,
       languages: languagesController.text,
       experienceYears: experienceYearsController.text,
+      linkedin: linkedinController.text,
       context: context,
     )) {
       return;
@@ -852,56 +857,51 @@ class _CounsellorRegisterScreenState extends State<CounsellorRegisterScreen> {
       ),
     );
 
-    if (passwordController.text != confirmPasswordController.text) {
-      Navigator.pop(context);
-      displayErrorMessage("Passwords don't match", context);
-    } else {
-      try {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      await FirestoreService().createCounsellorDocument(
+        userCredential,
+        selectedTitle,
+        firstNameController.text,
+        lastNameController.text,
+        bioController.text,
+        educationController.text,
+        cityController.text,
+        countryController.text,
+        languagesController.text.split(',').map((e) => e.trim()).toList(),
+        int.parse(experienceYearsController.text),
+        linkedinController.text,
+        selectedSpecializations,
+        jobTitleController.text,
+      );
+
+      if (mounted) {
+        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CounsellorHomeScreen.instance),
         );
-
-        await FirestoreService().createCounsellorDocument(
-          userCredential,
-          selectedTitle,
-          firstNameController.text,
-          lastNameController.text,
-          bioController.text,
-          educationController.text,
-          cityController.text,
-          countryController.text,
-          languagesController.text.split(',').map((e) => e.trim()).toList(),
-          int.parse(experienceYearsController.text),
-          linkedinController.text,
-          selectedSpecializations,
-          jobTitleController.text,
-        );
-
-        if (mounted) {
-          Navigator.pop(context);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CounsellorHomeScreen.instance),
-          );
-        }
-      } on FirebaseAuthException catch (e) {
-        if (mounted) Navigator.pop(context);
-
-        if (e.code == 'weak-password') {
-          displayErrorMessage("The password provided is too weak.", context);
-        } else if (e.code == 'email-already-in-use') {
-          displayErrorMessage(
-              "The account already exists for that email.", context);
-        } else {
-          displayErrorMessage("An error occurred: ${e.message}", context);
-        }
-      } catch (e) {
-        if (mounted) Navigator.pop(context);
-        displayErrorMessage("An error occurred. Please try again.", context);
       }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) Navigator.pop(context);
+
+      if (e.code == 'weak-password') {
+        displaySnackBarMessage("The password provided is too weak.", context);
+      } else if (e.code == 'email-already-in-use') {
+        displaySnackBarMessage(
+            "The account already exists for that email.", context);
+      } else {
+        displaySnackBarMessage("An error occurred: ${e.message}", context);
+      }
+    } catch (e) {
+      if (mounted) Navigator.pop(context);
+      displaySnackBarMessage("An error occurred. Please try again.", context);
     }
   }
 

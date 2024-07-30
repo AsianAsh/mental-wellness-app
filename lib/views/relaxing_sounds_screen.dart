@@ -1336,9 +1336,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mental_wellness_app/auth/auth_screen.dart';
 import 'package:mental_wellness_app/controllers/relaxing_sound_controller.dart';
-import 'package:mental_wellness_app/models/relaxing_sound.dart';
-import 'package:provider/provider.dart';
-import 'package:mental_wellness_app/state/audio_player_state.dart';
+import 'package:mental_wellness_app/widgets/sound_card.dart';
 
 class RelaxingSoundsScreen extends StatefulWidget {
   const RelaxingSoundsScreen({super.key});
@@ -1372,7 +1370,7 @@ class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
             height: MediaQuery.of(context).size.height * 0.28,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/test1.jpg'),
+                image: AssetImage('assets/images/relaxing_sounds_bg.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -1418,7 +1416,7 @@ class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
                             Padding(
                               padding: EdgeInsets.only(left: 4.0),
                               child: Text(
-                                'Help for focus, relax or sleep. \nMix sounds together.',
+                                'Help for focus, relax or sleep.\nImmerse yourself in calming \nnatural sounds.',
                                 style: TextStyle(
                                   color: Colors.white70,
                                   fontSize: 12,
@@ -1430,19 +1428,13 @@ class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
                       ),
                       const SizedBox(
                           width: 10), // Increased space between text and image
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     logout(context);
-                      //   },
-                      //   child: Text("Logout"),
-                      // ),
                       Padding(
                         padding: const EdgeInsets.only(top: 25.0),
                         child: Align(
                           alignment: Alignment.bottomRight,
                           child: Image.asset(
                             'assets/images/relaxing/relaxing_sounds_4.png',
-                            height: 152, // Use original height if needed
+                            height: 164, // Use original height if needed
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -1470,9 +1462,8 @@ class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
                         ),
                         itemCount: _controller.relaxingSounds.length,
                         itemBuilder: (context, index) {
-                          return buildSoundCard(
-                            context,
-                            _controller.relaxingSounds[index],
+                          return SoundCard(
+                            sound: _controller.relaxingSounds[index],
                           );
                         },
                       ),
@@ -1483,45 +1474,6 @@ class _RelaxingSoundsScreenState extends State<RelaxingSoundsScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget buildSoundCard(BuildContext context, RelaxingSound sound) {
-    final audioPlayerState = Provider.of<AudioPlayerState>(context);
-    final isPlaying = audioPlayerState.currentAudio == sound.audioPath;
-
-    return GestureDetector(
-      onTap: () {
-        audioPlayerState.playAudio(sound.audioPath,
-            loop: true); // Enable looping for relaxing sounds
-        audioPlayerState.setCurrentAudioTitle(sound.title);
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: isPlaying
-              ? const Color.fromARGB(255, 0, 23, 34)
-              : const Color.fromARGB(255, 0, 23, 34).withOpacity(0.5),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  sound.title,
-                  style: TextStyle(
-                    color: isPlaying ? Colors.white : Colors.white54,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
