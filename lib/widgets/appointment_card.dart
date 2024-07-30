@@ -55,5 +55,3 @@ class AppointmentCard extends StatelessWidget {
     );
   }
 }
-
-// organized for member appointment details screen:

@@ -48,7 +48,7 @@ class _ConfettiOverlayState extends State<ConfettiOverlay> {
               Colors.yellow,
               Colors.purple,
               Colors.orange,
-            ], // Define a variety of colors for the confetti
+            ],
           ),
         ),
       ],

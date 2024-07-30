@@ -1,23 +1,6 @@
 // helper_functions.dart
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:validators/validators.dart'; // Add this import
-
-/// Function to display error messages in a dialog
-// void displayErrorMessage(String message, BuildContext context) {
-//   showDialog(
-//     context: context,
-//     builder: (context) {
-//       return AlertDialog(
-//         backgroundColor: Colors.deepPurple,
-//         title: Text(
-//           message,
-//           style: const TextStyle(color: Colors.white),
-//         ),
-//       );
-//     },
-//   );
-// }
+import 'package:validators/validators.dart';
 
 /// Function to validate the first name and last name fields
 bool validateNameFields(
@@ -173,23 +156,4 @@ bool isLanguagesValid(String languages) {
     }
   }
   return true;
-}
-
-/// Utility functions for URLs
-class UrlUtils {
-  static String addHttpIfNeeded(String url) {
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-      return 'https://$url';
-    }
-    return url;
-  }
-
-  static Future<void> launchUrl(String url) async {
-    final Uri uri = Uri.parse(url);
-    try {
-      await launchUrl(uri as String);
-    } catch (e) {
-      throw 'Could not launch $uri';
-    }
-  }
 }

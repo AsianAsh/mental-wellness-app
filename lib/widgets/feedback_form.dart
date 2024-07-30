@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mental_wellness_app/services/firestore.dart';
-import 'package:mental_wellness_app/helper/helper_functions.dart'; // Import the helper functions
 
 class FeedbackForm extends StatelessWidget {
   final TextEditingController _feedbackController = TextEditingController();

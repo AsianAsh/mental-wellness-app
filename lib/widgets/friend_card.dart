@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mental_wellness_app/models/friend_profile.dart';
 import 'package:mental_wellness_app/models/nudge.dart';
-import 'package:mental_wellness_app/widgets/friend_profile_overlay.dart';
 
 class FriendCard extends StatelessWidget {
   final String name;

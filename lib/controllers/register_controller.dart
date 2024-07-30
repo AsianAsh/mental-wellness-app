@@ -1,7 +1,6 @@
 // controllers/register_controller.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:mental_wellness_app/helper/helper_functions.dart';
 import 'package:mental_wellness_app/services/firestore.dart';
 import 'package:mental_wellness_app/views/login_screen.dart';

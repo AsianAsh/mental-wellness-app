@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mental_wellness_app/helper/helper_functions.dart';
 import 'package:mental_wellness_app/widgets/detail_row.dart';
 import 'package:url_launcher/url_launcher.dart';
 

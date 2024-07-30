@@ -36,12 +36,3 @@ class MeditationExerciseController extends GetxController {
     }
   }
 }
-
-// Simpler solution
-// class BreathingExerciseController {
-//   final FirestoreService _firestoreService = FirestoreService();
-
-//   Future<List<BreathingExercise>> getBreathingExercises() {
-//     return _firestoreService.getBreathingExercises();
-//   }
-// }

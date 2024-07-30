@@ -1,9 +1,7 @@
 // controllers/routine_controller.dart
-// controllers/routine_controller.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mental_wellness_app/controllers/breathing_exercise_controller.dart';
 import 'package:mental_wellness_app/controllers/meditation_exercise_controller.dart';
 import 'package:mental_wellness_app/controllers/sleep_story_controller.dart';

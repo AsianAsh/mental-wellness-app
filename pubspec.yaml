@@ -28,7 +28,6 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  english_words: ^4.0.0
   flutter:
     sdk: flutter
   google_fonts: ^6.2.1
@@ -45,8 +44,7 @@ dependencies:
   path_provider: ^2.1.3
   audioplayers: ^6.0.0
   provider: ^6.1.2
-  marquee: ^2.2.3
-  table_calendar: ^3.1.2 # for counselling appointments
+  table_calendar: ^3.1.2 # to set counselling appointments
   url_launcher: ^6.3.0
   image_picker: ^1.1.2
   firebase_storage: ^12.1.1
@@ -76,27 +74,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    # - assets/images/relaxing/relaxing_sounds_1.png
-    # - assets/images/relaxing/relaxing_sounds_4.png
-    # - assets/images/relaxing_sounds_bg.jpg
-    # - assets/images/breathing/anger.png
-    # - assets/images/breathing/anxiety.png
-    # - assets/audio/breathing/anger.mp3
-    # - assets/audio/breathing/anxiety.mp3
-    # - assets/images/meditation/
-    # - assets/audio/meditation/
-    # - assets/images/sleep_story/
-    # - assets/audio/sleep_story/
-    # - assets/audio/sleep_music/
-    # - assets/audio/relaxing_sound/
-    # - assets/images/default_image.jpg
-    # - assets/images/default_profile.png
-    # - assets/images/level_up_medal.png
-    # - assets/images/breathing/
-    # - assets/audio/breathing/
-    # - assets/images/achievements/
-    # - assets/helplines.json
-
     - assets/images/
     - assets/images/breathing/
     - assets/images/meditation/

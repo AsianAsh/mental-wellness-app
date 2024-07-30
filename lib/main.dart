@@ -103,7 +103,6 @@ class MyApp extends StatelessWidget {
       providers: [
         // provides AudioPlayerState instance to the entire application
         ChangeNotifierProvider(create: (_) => AudioPlayerState()),
-        // other providers here if needed
       ],
       child: GetMaterialApp(
           theme: ThemeData(
@@ -127,8 +126,5 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           home: const AuthScreen()),
     );
-    // routes:
-    // {}
-    // ;
   }
 }

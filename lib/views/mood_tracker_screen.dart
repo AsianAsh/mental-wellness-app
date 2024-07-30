@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'package:mental_wellness_app/widgets/emote_face.dart';
 import 'package:mental_wellness_app/controllers/mood_tracker_controller.dart';
 
