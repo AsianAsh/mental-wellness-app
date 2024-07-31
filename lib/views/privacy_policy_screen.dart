@@ -5,186 +5,166 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const TextAlign textAlign = TextAlign.justify; // text alignment
+    const TextAlign textAlign = TextAlign.justify;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Terms and Conditions',
+        title: Text('Privacy Policy',
             style: Theme.of(context)
                 .textTheme
                 .headlineSmall
                 ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.indigo, // Distinct app bar color
+        backgroundColor: Colors.indigo,
       ),
       body: Container(
-        color: Colors.white, // Set background color to white
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+        color: Colors.white,
+        child: const SingleChildScrollView(
+          padding: EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Welcome to ZenMate!',
+              Text(
+                'Privacy Policy for ZenMate',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 10),
-              const Text(
-                'These terms and conditions outline the rules and regulations for the use of ZenMate, a mental wellness management application. By accessing this app, we assume you accept these terms and conditions. Do not continue to use ZenMate if you do not agree to take all of the terms and conditions stated on this page.',
+              SizedBox(height: 10),
+              Text(
+                'At ZenMate, accessible from our mobile application, one of our main priorities is the privacy of our users. This Privacy Policy document contains types of information that is collected and recorded by ZenMate and how we use it.',
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'Purpose',
+              SizedBox(height: 20),
+              Text(
+                'Information We Collect',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 10),
-              const Text(
-                'ZenMate is designed to provide mental wellness management through engaging gameplay mechanics and evidence-based interventions. Our goal is to help users achieve better mental health and well-being.',
+              SizedBox(height: 10),
+              Text(
+                'ZenMate collects various types of personal data to enhance the user experience, track progress, and provide personalized feedback and recommendations. The data collected includes:\n\n'
+                '• Unique user identifier\n'
+                '• Email address\n'
+                '• Bio\n'
+                '• Country\n'
+                '• Current level and total points earned\n'
+                '• Daily streak information\n'
+                '• Account creation and last active timestamps\n'
+                '• First and last name\n'
+                '• Profile picture URL\n'
+                '• List of friends\n'
+                '• Earned achievements\n'
+                '• Count of completed meditation exercises\n'
+                '• Count of completed breathing exercises\n'
+                '• Count of completed sound exercises\n'
+                '• Number of friends added\n'
+                '• Number of encouraging messages sent\n'
+                '• Total daily notes\n'
+                '• Total mood entries\n'
+                '• Appointment details, including counsellor information, date, time, reason, and summary\n',
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'User Data',
+              SizedBox(height: 20),
+              Text(
+                'How We Use Your Information',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 10),
-              const Text(
-                'By using ZenMate, you consent to the collection and use of the following types of data:\n\n'
-                'Members Collection:\n'
-                '• memberId (String) - Unique identifier for the member.\n'
-                '• email (String) - Member\'s email address.\n'
-                '• password (String) - Member\'s password (hashed).\n'
-                '• bio (String) - Member bio.\n'
-                '• country (String) - Member\'s country.\n'
-                '• level (Integer) - Member\'s current level.\n'
-                '• points (Integer) - Total points earned.\n'
-                '• dailyStreak (Integer) - Current daily streak.\n'
-                '• created_at (Timestamp)\n'
-                '• friends (Array of Strings) - List of friend userIds.\n'
-                '• achievements (Array of Objects) - List of earned achievements, each containing achievementId and dateEarned.\n'
-                '• rewards (Array of Strings) - List of reward IDs.\n'
-                '• meditationCompleted (Integer) - Count of completed meditation exercises.\n'
-                '• breathingCompleted (Integer) - Count of completed breathing exercises.\n'
-                '• soundCompleted (Integer) - Count of completed sound exercises.\n'
-                '• friendsAdded (Integer) - Count of friends added.\n'
-                '• encouragingMessagesSent (Integer) - Count of encouraging messages sent.\n'
-                '• gratitudeJournalEntries (Integer) - Count of entries in the gratitude journal or daily diary.\n'
-                '• moodEntries (Integer) - Count of mood entries recorded.\n\n'
-                'The data collected is used to enhance the user experience, track progress, and provide personalized feedback and recommendations. We prioritize the security and confidentiality of your data.',
+              SizedBox(height: 10),
+              Text(
+                'ZenMate uses the collected information in various ways, including to:\n\n'
+                '• Provide, operate, and maintain our application\n'
+                '• Improve, personalize, and expand our application\n'
+                '• Understand and analyze how you use our application\n'
+                '• Develop new products, services, features, and functionalities\n'
+                '• Communicate with you, either directly or through one of our partners, including for customer service, to provide you with updates and other information relating to the application, and for marketing and promotional purposes\n'
+                '• Process your transactions and manage your orders\n'
+                '• Send you emails\n'
+                '• Find and prevent fraud\n'
+                '• Monitor and analyze usage and trends to improve your experience with the application\n',
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'User Obligations',
+              SizedBox(height: 20),
+              Text(
+                'How We Protect Your Information',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 10),
-              const Text(
-                'By using ZenMate, you agree to the following obligations:\n\n'
-                '• Provide accurate and complete information during the registration process.\n'
-                '• Keep your account information secure and confidential.\n'
-                '• Use ZenMate in a manner consistent with all applicable laws and regulations.\n'
-                '• Respect the privacy and personal information of other users.',
+              SizedBox(height: 10),
+              Text(
+                'We implement a variety of security measures to maintain the safety of your personal information when you enter, submit, or access your personal information. These security measures include, but are not limited to:\n\n'
+                '• Secure Socket Layer (SSL) technology to ensure that your information is fully encrypted and sent across the Internet securely\n'
+                '• Regular malware scanning\n'
+                '• Secure storage of personal information\n'
+                '• Limited access to personal information by authorized personnel only\n',
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'Age Restrictions',
+              SizedBox(height: 20),
+              Text(
+                'Sharing Your Information',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 10),
-              const Text(
-                'ZenMate is designed for users aged 13 and above. If you are under 13, you are not permitted to use ZenMate.',
+              SizedBox(height: 10),
+              Text(
+                'We do not sell, trade, or otherwise transfer to outside parties your Personally Identifiable Information unless we provide users with advance notice. This does not include website hosting partners and other parties who assist us in operating our application, conducting our business, or serving our users, so long as those parties agree to keep this information confidential. We may also release information when it\'s release is appropriate to comply with the law, enforce our site policies, or protect ours or others\' rights, property or safety.',
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'In-App Interactions',
+              SizedBox(height: 20),
+              Text(
+                'Your Consent',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 10),
-              const Text(
-                'Users can view each other\'s profile information, including bio, level, and achievements. However, sharing information to social media platforms is not permitted.',
+              SizedBox(height: 10),
+              Text(
+                'By using our application, you consent to our privacy policy.',
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'Contact Information',
+              SizedBox(height: 20),
+              Text(
+                'Changes to Our Privacy Policy',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 10),
-              const Text(
-                'If you have any questions or concerns about these terms, please contact us at support@zenmatefyp.com.',
+              SizedBox(height: 10),
+              Text(
+                'If we decide to change our privacy policy, we will post those changes on this page. Policy changes will apply only to information collected after the date of the change.',
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'Changes to Terms',
+              SizedBox(height: 20),
+              Text(
+                'Contacting Us',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: textAlign,
               ),
-              const SizedBox(height: 10),
-              const Text(
-                'We reserve the right to update these terms and conditions at any time. Any changes will be posted on this page, and it is your responsibility to review these terms periodically.',
-                textAlign: textAlign,
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Termination',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: textAlign,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'We may terminate or suspend access to ZenMate immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the terms.',
-                textAlign: textAlign,
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Governing Law',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: textAlign,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'These terms shall be governed and construed in accordance with the laws of the jurisdiction in which ZenMate operates, without regard to its conflict of law provisions.',
+              SizedBox(height: 10),
+              Text(
+                'If there are any questions regarding this privacy policy you may contact us using the information below.\n\n'
+                'Email: zenmate.support@gmail.com',
                 textAlign: textAlign,
               ),
             ],

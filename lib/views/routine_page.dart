@@ -8,7 +8,7 @@ import 'package:mental_wellness_app/controllers/routine_controller.dart';
 import 'package:mental_wellness_app/views/counselling_screen.dart';
 import 'package:mental_wellness_app/views/received_nudge_screen.dart';
 import 'package:mental_wellness_app/views/profile_screen.dart';
-import 'package:mental_wellness_app/controllers/nudge_controller.dart'; // Import the NudgeController
+import 'package:mental_wellness_app/controllers/nudge_controller.dart';
 
 class RoutinePage extends StatefulWidget {
   const RoutinePage({super.key});

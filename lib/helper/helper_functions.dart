@@ -157,3 +157,10 @@ bool isLanguagesValid(String languages) {
   }
   return true;
 }
+
+String addHttpIfNeeded(String url) {
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    return 'https://$url';
+  }
+  return url;
+}

@@ -301,11 +301,18 @@ class FirestoreService {
   /// Method to get a random document ID from a collection
   Future<String> _getRandomDocumentId(String collectionName) async {
     try {
+      // Fetch all documents from the specified collection
       QuerySnapshot querySnapshot =
           await _firestore.collection(collectionName).get();
+
+      // Get the list of documents
       List<DocumentSnapshot> documents = querySnapshot.docs;
+
+      // Generate a random index
       Random random = Random();
       int randomIndex = random.nextInt(documents.length);
+
+      // Return the document ID of the randomly selected document
       return documents[randomIndex].id;
     } catch (e) {
       print('Error getting random document ID: $e');
@@ -313,22 +320,28 @@ class FirestoreService {
     }
   }
 
-  /// Method to update daily routine
+  /// Method to update/generate new daily routine
   Future<void> updateDailyRoutine() async {
+    // Check if the user is logged in
     if (_currentUser != null) {
+      // Reference to the current member's document
       DocumentReference memberRef =
           _firestore.collection('Members').doc(_currentUser!.uid);
 
+      // Fetch the member's document data
       DocumentSnapshot memberSnapshot = await memberRef.get();
       Map<String, dynamic> memberData =
           memberSnapshot.data() as Map<String, dynamic>? ?? {};
 
+      // Get today's date in the specified format
       String todayDate = DateFormat('d MMMM yyyy').format(DateTime.now());
 
       bool allTasksCompleted = true;
 
+      // Check if the routine needs to be updated (either missing or not today's date)
       if (memberData['routine'] == null ||
           memberData['routine']['date'] != todayDate) {
+        // Check if the previous day's tasks were not completed
         if (memberData['routine'] != null) {
           List<dynamic> tasks = memberData['routine']['tasks'];
           for (var task in tasks) {
@@ -338,18 +351,21 @@ class FirestoreService {
             }
           }
 
+          // Reset daily streak if not all tasks were completed
           if (!allTasksCompleted) {
             await memberRef.update({'dailyStreak': 0});
             print('Daily streak reset to 0');
           }
         }
 
+        // Generate new task IDs for the routine
         String newBreathingExerciseId =
             await _getRandomDocumentId('breathing_exercise');
         String newMeditationExerciseId =
             await _getRandomDocumentId('meditation_exercise');
         String newSleepStoryId = await _getRandomDocumentId('sleep_story');
 
+        // Create a new routine map
         Map<String, dynamic> newRoutine = {
           'date': todayDate,
           'streakUpdated': false,
@@ -373,6 +389,7 @@ class FirestoreService {
           ],
         };
 
+        // Update the member's document with the new routine
         await memberRef.update({'routine': newRoutine});
         print('Successfully added new routine: $newRoutine');
       }
@@ -831,24 +848,32 @@ class FirestoreService {
   /// Award points and handle level progression
   Future<void> awardPoints(int points, BuildContext context) async {
     if (_currentUser != null) {
+      // Reference to the current member's document
       DocumentReference memberRef =
           _firestore.collection('Members').doc(_currentUser!.uid);
+
+      // Fetch the member's document data
       DocumentSnapshot memberSnapshot = await memberRef.get();
       Map<String, dynamic> memberData =
           memberSnapshot.data() as Map<String, dynamic>;
 
+      // Retrieve current level, points, and daily streak
       int currentLevel = memberData['level'] ?? 1;
       int currentPoints = memberData['points'] ?? 0;
       int dailyStreak = memberData['dailyStreak'] ?? 0;
 
+      // Calculate points multiplier based on daily streak
       double multiplier = _calculateMultiplier(dailyStreak);
       int totalPoints = (points * multiplier).round();
 
+      // Add the calculated points to the current points
       currentPoints += totalPoints;
 
+      // Calculate the points required for the next level
       int requiredPoints = calculateRequiredPoints(currentLevel);
       bool leveledUp = false;
 
+      // Handle level-up logic
       while (currentPoints >= requiredPoints) {
         currentPoints -= requiredPoints;
         currentLevel++;
@@ -856,13 +881,14 @@ class FirestoreService {
         leveledUp = true;
       }
 
+      // Update the member's document with the new level and points
       await memberRef.update({
         'level': currentLevel,
         'points': currentPoints,
       });
 
+      // Show level-up dialog if the user leveled up
       if (leveledUp && context.mounted) {
-        // Show level-up dialog
         showLevelUpDialog(context, currentLevel);
       }
     } else {
@@ -870,6 +896,7 @@ class FirestoreService {
     }
   }
 
+  /// Calculate points multiplier based on daily streak
   double _calculateMultiplier(int dailyStreak) {
     if (dailyStreak >= 100) return 2.00;
     if (dailyStreak >= 90) return 1.90;
@@ -884,6 +911,7 @@ class FirestoreService {
     return 1.0;
   }
 
+  /// Calculate required points for a given level
   int calculateRequiredPoints(int level) {
     const basePoints = 100; // Base points required for level 1
     int points = (basePoints * pow(level, 1.05)).round();

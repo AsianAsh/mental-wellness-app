@@ -6,7 +6,7 @@ import 'package:mental_wellness_app/views/achievements_screen.dart';
 import 'package:mental_wellness_app/views/friends_list_screen.dart';
 import 'package:mental_wellness_app/views/help_resources_screen.dart';
 import 'package:mental_wellness_app/views/privacy_policy_screen.dart';
-import 'package:mental_wellness_app/views/rewards_screen.dart';
+// import 'package:mental_wellness_app/views/rewards_screen.dart';
 import 'package:mental_wellness_app/views/terms_screen.dart';
 import 'package:mental_wellness_app/views/update_profile_screen.dart';
 import 'package:mental_wellness_app/widgets/profile_menu_widget.dart';
@@ -254,14 +254,14 @@ class ProfileScreen extends StatelessWidget {
                         Get.to(() =>
                             AchievementsScreen()); // Navigate to FriendsListPage
                       }),
-                  ProfileMenuWidget(
-                      title: "Rewards",
-                      icon: Icons.card_giftcard,
-                      textColor: Colors.white,
-                      onPress: () {
-                        Get.to(() =>
-                            const RewardsScreen()); // Navigate to FriendsListPage
-                      }),
+                  // ProfileMenuWidget(
+                  //     title: "Rewards",
+                  //     icon: Icons.card_giftcard,
+                  //     textColor: Colors.white,
+                  //     onPress: () {
+                  //       Get.to(() =>
+                  //           const RewardsScreen()); // Navigate to FriendsListPage
+                  //     }),
                   ProfileMenuWidget(
                       title: "Help Resources",
                       icon: Icons.local_hospital,

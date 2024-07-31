@@ -30,6 +30,7 @@ class MeditationPage extends StatelessWidget {
           ),
         ),
         automaticallyImplyLeading: false, // Remove the back button
+        backgroundColor: Colors.indigo[800],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

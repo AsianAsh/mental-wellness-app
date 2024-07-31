@@ -13,21 +13,22 @@ class LoginController {
     TextEditingController passwordController,
   ) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
 
-      // User? user = userCredential.user;
-      // if (user != null && !user.emailVerified) {
-      //   displaySnackBarMessage(
-      //     'Please verify your email to continue.',
-      //     context,
-      //     backgroundColor: Colors.red,
-      //   );
-      //   await FirebaseAuth.instance.signOut();
-      //   return;
-      // }
+      User? user = userCredential.user;
+      if (user != null && !user.emailVerified) {
+        displaySnackBarMessage(
+          'Please verify your email to continue.',
+          context,
+          backgroundColor: Colors.red,
+        );
+        await FirebaseAuth.instance.signOut();
+        return;
+      }
 
       // Update last active field
       await _firestoreService.updateLastActive();

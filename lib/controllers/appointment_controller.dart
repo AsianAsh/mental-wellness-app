@@ -117,11 +117,6 @@ class AppointmentController extends GetxController {
 
   Future<bool> _appointmentExists(
       String counsellorId, DateTime date, DateTime startTime) async {
-    // print('Checking for existing appointment:');
-    // print('Counsellor ID: $counsellorId');
-    // print('Date: ${date.toIso8601String()}');
-    // print('Start Time: ${startTime.toIso8601String()}');
-
     QuerySnapshot snapshot = await _firestore
         .collection('counsellors')
         .doc(counsellorId)
@@ -130,8 +125,6 @@ class AppointmentController extends GetxController {
         .where('startTime', isEqualTo: startTime)
         .get();
 
-    print('Query results: ${snapshot.docs.length} documents found.');
-
     return snapshot.docs.isNotEmpty;
   }
 
@@ -139,17 +132,22 @@ class AppointmentController extends GetxController {
     return DateTime(date.year, date.month, date.day);
   }
 
+  /// Method to book an appointment with a specific counsellor
   Future<bool> bookAppointment(
       String counsellorId, String date, String slot, String reason) async {
+    // Get the currently logged-in user
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
-      return false;
+      return false; // Return false if no user is logged in
     }
 
+    // Parse the selected date and time slot
     DateTime selectedDate = DateFormat('dd MMMM yyyy').parse(date);
     DateTime startTime = DateFormat('hh:mm a').parse(slot);
     startTime = DateTime(selectedDate.year, selectedDate.month,
         selectedDate.day, startTime.hour, startTime.minute);
+
+    // Query the counsellor's appointments for the specified date and time
     QuerySnapshot snapshot = await _firestore
         .collection('counsellors')
         .doc(counsellorId)
@@ -160,16 +158,18 @@ class AppointmentController extends GetxController {
         .limit(1)
         .get();
 
+    // Check if an open appointment slot is available
     if (snapshot.docs.isNotEmpty) {
+      // If available, book the appointment by updating the document
       var doc = snapshot.docs.first;
       await doc.reference.update({
         'status': 'booked',
         'bookedBy': currentUser.uid,
         'reason': reason,
       });
-      return true;
+      return true; // Return true if the booking is successful
     } else {
-      return false;
+      return false; // Return false if no open slots are available
     }
   }
 

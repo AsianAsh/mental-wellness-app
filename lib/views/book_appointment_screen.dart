@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mental_wellness_app/controllers/appointment_controller.dart';
+import 'package:mental_wellness_app/helper/helper_functions.dart';
 import 'package:mental_wellness_app/models/counsellor.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CounsellorDetailScreen extends StatefulWidget {
   final Counsellor counsellor;
 
-  CounsellorDetailScreen({required this.counsellor});
+  const CounsellorDetailScreen({super.key, required this.counsellor});
 
   @override
   _CounsellorDetailScreenState createState() => _CounsellorDetailScreenState();
@@ -78,8 +79,9 @@ class _CounsellorDetailScreenState extends State<CounsellorDetailScreen> {
           'Appointment booked successfully',
           backgroundColor: Colors.white60,
         );
-        if (mounted)
-          Navigator.pop(context); // Navigate back to CounsellingScreen
+        if (mounted) {
+          Navigator.pop(context);
+        }
       } else {
         Get.snackbar(
           'Error',
@@ -123,7 +125,7 @@ class _CounsellorDetailScreenState extends State<CounsellorDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Appointment'),
+        title: const Text('Appointment'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -131,11 +133,11 @@ class _CounsellorDetailScreenState extends State<CounsellorDetailScreen> {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.black26,
                       blurRadius: 10,
@@ -155,11 +157,11 @@ class _CounsellorDetailScreenState extends State<CounsellorDetailScreen> {
                                 : AssetImage(profilePic) as ImageProvider,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Center(
                       child: Text(
                         '$title. $firstName $lastName',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -183,175 +185,51 @@ class _CounsellorDetailScreenState extends State<CounsellorDetailScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       'Biography',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Text(bio),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     ExpansionTile(
-                      title: Text(
+                      title: const Text(
                         'Additional Information',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      tilePadding: EdgeInsets.symmetric(horizontal: 0.0),
-                      childrenPadding: EdgeInsets.symmetric(vertical: 0.0),
+                      tilePadding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      childrenPadding:
+                          const EdgeInsets.symmetric(vertical: 0.0),
                       children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(Icons.email, color: Colors.grey[700]),
-                            SizedBox(width: 10),
-                            Text(
-                              'Email:',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                email,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(Icons.school, color: Colors.grey[700]),
-                            SizedBox(width: 10),
-                            Text(
-                              'Education:',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                education,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(Icons.language, color: Colors.grey[700]),
-                            SizedBox(width: 10),
-                            Text(
-                              'Languages:',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                languages.join(', '),
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(Icons.work, color: Colors.grey[700]),
-                            SizedBox(width: 10),
-                            Text(
-                              'Years of Experience:',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                '$experienceYears',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(Icons.link, color: Colors.grey[700]),
-                            SizedBox(width: 10),
-                            Text(
-                              'LinkedIn:',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () async {
-                                  final Uri linkedinUrl =
-                                      Uri.parse(_addHttpIfNeeded(linkedin));
-                                  try {
-                                    await launchUrl(linkedinUrl);
-                                  } catch (e) {
-                                    throw 'Could not launch $linkedin';
-                                  }
-                                },
-                                child: Text(
-                                  'View LinkedIn Profile',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.blue,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                  textAlign: TextAlign.right,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        _buildInfoRow(Icons.email, 'Email:', email),
+                        _buildInfoRow(Icons.school, 'Education:', education),
+                        _buildInfoRow(
+                            Icons.language, 'Languages:', languages.join(', ')),
+                        _buildInfoRow(Icons.work, 'Years of Experience:',
+                            '$experienceYears'),
+                        _buildLinkedInRow(linkedin),
                       ],
                     ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       'Available Time',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     DropdownButtonFormField<String>(
-                      hint: Text('Choose day'),
+                      hint: const Text('Choose day'),
                       value: _selectedDate,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -394,7 +272,7 @@ class _CounsellorDetailScreenState extends State<CounsellorDetailScreen> {
                       Padding(
                         padding: const EdgeInsets.only(top: 20.0),
                         child: TextField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Reason',
                           ),
@@ -405,18 +283,18 @@ class _CounsellorDetailScreenState extends State<CounsellorDetailScreen> {
                           maxLines: 3,
                         ),
                       ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: _isBookButtonEnabled ? _bookAppointment : null,
-                      child: Text('Book Appointment'),
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
                         backgroundColor: _isBookButtonEnabled
                             ? Colors.indigo[600]
                             : Colors.grey, // Button color
-                        minimumSize:
-                            Size(double.infinity, 36), // Full width button
+                        minimumSize: const Size(
+                            double.infinity, 36), // Full width button
                       ),
+                      child: const Text('Book Appointment'),
                     ),
                   ],
                 ),
@@ -428,10 +306,67 @@ class _CounsellorDetailScreenState extends State<CounsellorDetailScreen> {
     );
   }
 
-  String _addHttpIfNeeded(String url) {
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-      return 'https://$url';
-    }
-    return url;
+  Widget _buildInfoRow(IconData icon, String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, color: Colors.grey[700]),
+        const SizedBox(width: 10),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            value,
+            style: const TextStyle(
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLinkedInRow(String linkedin) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(Icons.link, color: Colors.grey[700]),
+        const SizedBox(width: 10),
+        const Text(
+          'LinkedIn:',
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: InkWell(
+            onTap: () async {
+              final Uri linkedinUrl = Uri.parse(addHttpIfNeeded(linkedin));
+              try {
+                await launchUrl(linkedinUrl);
+              } catch (e) {
+                throw 'Could not launch $linkedin';
+              }
+            },
+            child: const Text(
+              'View LinkedIn Profile',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.blue,
+                decoration: TextDecoration.underline,
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

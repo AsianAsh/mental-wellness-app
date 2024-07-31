@@ -62,26 +62,24 @@ class TermsScreen extends StatelessWidget {
               const SizedBox(height: 10),
               const Text(
                 'By using ZenMate, you consent to the collection and use of the following types of data:\n\n'
-                'Members Collection:\n'
-                '• memberId (String) - Unique identifier for the member.\n'
-                '• email (String) - Member\'s email address.\n'
-                '• password (String) - Member\'s password (hashed).\n'
-                '• bio (String) - Member bio.\n'
-                '• country (String) - Member\'s country.\n'
-                '• level (Integer) - Member\'s current level.\n'
-                '• points (Integer) - Total points earned.\n'
-                '• dailyStreak (Integer) - Current daily streak.\n'
-                '• created_at (Timestamp)\n'
-                '• friends (Array of Strings) - List of friend userIds.\n'
-                '• achievements (Array of Objects) - List of earned achievements, each containing achievementId and dateEarned.\n'
-                '• rewards (Array of Strings) - List of reward IDs.\n'
-                '• meditationCompleted (Integer) - Count of completed meditation exercises.\n'
-                '• breathingCompleted (Integer) - Count of completed breathing exercises.\n'
-                '• soundCompleted (Integer) - Count of completed sound exercises.\n'
-                '• friendsAdded (Integer) - Count of friends added.\n'
-                '• encouragingMessagesSent (Integer) - Count of encouraging messages sent.\n'
-                '• gratitudeJournalEntries (Integer) - Count of entries in the gratitude journal or daily diary.\n'
-                '• moodEntries (Integer) - Count of mood entries recorded.\n\n'
+                '• Email address.\n'
+                '• Bio.\n'
+                '• Country.\n'
+                '• Current level and total points earned.\n'
+                '• Daily streak information.\n'
+                '• Account creation and last active timestamps.\n'
+                '• First and last name.\n'
+                '• Profile picture URL.\n'
+                '• List of friends.\n'
+                '• Earned achievements.\n'
+                '• Count of completed meditation exercises.\n'
+                '• Count of completed breathing exercises.\n'
+                '• Count of completed sound exercises.\n'
+                '• Number of friends added.\n'
+                '• Number of encouraging messages sent.\n'
+                '• Total daily notes.\n'
+                '• Total mood entries.\n'
+                '• Appointment details, including counsellor information, date, time, reason, and summary.\n\n'
                 'The data collected is used to enhance the user experience, track progress, and provide personalized feedback and recommendations. We prioritize the security and confidentiality of your data.',
                 textAlign: textAlign,
               ),
@@ -142,7 +140,7 @@ class TermsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               const Text(
-                'If you have any questions or concerns about these terms, please contact us at support@zenmatefyp.com.',
+                'If you have any questions or concerns about these terms, please contact us at zenmate.support@gmail.com.',
                 textAlign: textAlign,
               ),
               const SizedBox(height: 20),

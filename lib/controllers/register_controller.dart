@@ -50,8 +50,8 @@ class RegisterController {
             TextButton(
               onPressed: () async {
                 Navigator.pop(context);
-                // User? user = userCredential.user;
-                // await user?.sendEmailVerification();
+                User? user = userCredential.user;
+                await user?.sendEmailVerification();
 
                 await _firestoreService.createMemberDocument(
                     userCredential,
